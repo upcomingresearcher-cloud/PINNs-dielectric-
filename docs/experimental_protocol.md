@@ -1,4 +1,4 @@
-# Experimental Protocol v1.0.0: PINNs Across Dielectric Interfaces
+# Experimental Protocol v1.1.0: PINNs Across Dielectric Interfaces
 
 **Frozen:** 2026-10-16. The machine-readable copy is `configs/protocol_v1.yaml`; where the two differ, the YAML wins and the difference is a bug to log. The only setting the pilot may change is the shared Adam initial learning rate (Section 6.4). Every other change goes in `docs/protocol_change_log.md` with date, reason, affected experiments and required reruns.
 
@@ -17,7 +17,7 @@ Every hypothesis below was written before any training run. Thresholds are fixed
 | H3 | RQ3 | Among soft-coupled formulations, failures come from violating flux continuity, not potential continuity. | F2, F6 primary runs | ≥80% of failing F2/F6 runs have \|[D_n]\|/D > 5% while \|[φ]\|/V < 1% | Fewer than 50% of failing runs show the flux-dominant pattern | Relative D jump; relative φ jump |
 | H4 | RQ4 | F1 failures are loss-visibility failures: the loss cannot distinguish right from wrong. F2 failures at high κ are optimisation failures: representation and visibility are adequate. | Regression baseline; loss-visibility test; Interventions A/B | Regression baseline < 1% band field error for every architecture and κ. L_F1(wrong) ≤ L_F1(exact) at every κ. L(wrong)/L(exact) > 10 for F2–F6. A or B removes ≥3 F2 failures at some κ where the F2 baseline fails ≥4/5 (10-seed intervention set). | Regression fails (>5%) where F2 fails, which means a representation limit; or interventions change no F2 outcome | Regression error; loss ratio; matched failure counts |
 | H5 | RQ5 | Each intervention moves failure in a stated direction (see Section 10). | Interventions A–E, matched seeds | Predicted sign holds in ≥9/10 seeds (sign test p≈0.02) for the pre-specified configuration | Predicted sign holds in ≤5/10 seeds, or the opposite sign holds in ≥9/10 | Per-seed paired differences |
-| H6 | RQ6 | Formulation rankings and the H2 masking effect are not artefacts of one setting. | Robustness variations (Section 11) | Kendall τ ≥ 0.6 between baseline and varied formulation ranking (by failure count) in ≥5/7 variations; H2 median R>3 in ≥5/7 | τ < 0.6 in ≥3/7 variations | Kendall τ; R |
+| H6 | RQ6 | Formulation rankings and the H2 masking effect are not artefacts of one setting. | Robustness variations (Section 11) | Kendall τ ≥ 0.6 between baseline and varied formulation ranking (by failure count) in ≥6/8 variations; H2 median R>3 in ≥6/8 | τ < 0.6 in ≥3/8 variations | Kendall τ; R |
 | H7 | RQ7 | Interface-conforming FEM reaches a given field accuracy at much lower cost than PINNs, and is more accurate at equal wall-clock. | Remedy comparison on P2 and P5 (P1 is degenerate, Section 9) | For every formulation, FEM time-to-1% band field error is ≥10× smaller than the PINN median, or the PINN never reaches 1%. FEM error at the PINN median wall-clock is lower. | Any PINN formulation's median time-to-target is within 10× of FEM | Wall-clock; time-to-target; error at equal cost |
 | H8 | RQ8 | P1 conclusions transfer to curved and singular geometries. | P2–P5 | Kendall τ ≥ 0.6 between P1 and P2 formulation rankings on the shared κ grid; H2 median R > 3 on each of P2–P5 | τ < 0.6, or R ≤ 1 on any of P2–P5 | τ; R |
 | H9 | RQ9 | The evaluator is reusable: new problems need only a problem module. | P2–P5 implementation | No edits to `src/evaluator/` core functions after the P1 freeze except additive, documented metrics | A core metric function has to be rewritten | Git diff of evaluator core |
@@ -223,7 +223,7 @@ A successful intervention is evidence about a mechanism for these problems. It i
 
 ## 11. Robustness (P1; one factor at a time; baseline retained)
 
-Seven variations, each run for all formulations, κ ∈ {1, 80, 2000}, 5 seeds:
+Eight variations, each run for all formulations, κ ∈ {1, 80, 2000}, 5 seeds:
 
 1. Width 16
 2. Width 64
@@ -232,8 +232,9 @@ Seven variations, each run for all formulations, κ ∈ {1, 80, 2000}, 5 seeds:
 5. Interior points 32 per material
 6. Interior points 512 per material
 7. Learning rate 3×10⁻³ with cosine decay
+8. Training budget 12,000 gradient evaluations (added in v1.1.0 after the pilot, before the primary sweep; see change log)
 
-Also run: the parameter-matched two-network variant, and 16 extra band points per side (interface sampling). In 1D, boundary sampling is fixed at the two endpoints, so it cannot be varied and is reported as not applicable. Precision and optimiser are covered by Interventions C and E. Total: 630 runs plus the extras.
+Also run: the parameter-matched two-network variant, and 16 extra band points per side (interface sampling). In 1D, boundary sampling is fixed at the two endpoints, so it cannot be varied and is reported as not applicable. Precision and optimiser are covered by Interventions C and E. Total: 720 runs plus the extras.
 
 ---
 

@@ -1,6 +1,6 @@
 # Frozen experimental protocol, version 1.0.0
 # Human-readable rationale: docs/experimental_protocol.md. Any change -> docs/protocol_change_log.md.
-protocol_version: "1.0.1"
+protocol_version: "1.1.0"
 frozen_on: "2026-10-16"
 status: frozen   # pilot results may revise only the items listed under pilot.may_revise
 
@@ -105,10 +105,26 @@ pilot:
   may_revise: [training.learning_rate.init]    # one shared value for all formulations
   rule: "choose the value with the lower total pilot failure count over all formulations; tie -> 1e-3"
 
+pilot_decision: {learning_rate_init: 1.0e-3, failures: {lr1e-3: 12, lr3e-3: 12}, rule_applied: tie_break}
+
+robustness_p1:
+  kappas: [1, 80, 2000]
+  seeds: [0, 1, 2, 3, 4]
+  variations:
+    - {id: width16, width: 16}
+    - {id: width64, width: 64}
+    - {id: depth2, depth: 2}
+    - {id: depth5, depth: 5}
+    - {id: n32, n_interior: 32}
+    - {id: n512, n_interior: 512}
+    - {id: lr3e-3, lr_init: 3.0e-3}
+    - {id: steps12000, steps: 12000}       # added v1.1.0 after pilot, before primary sweep
+  extras: [param_matched_twonet_width22, extra_band_points_16_per_side]
+
 budget_estimate_p1:
   measured_ms_per_gradient_eval_float32: 1.8
   primary_runs: 180
   extension_runs: 30
   regression_baseline_runs: 120
   float64_replica_runs: 210
-  robustness_runs: 630
+  robustness_runs: 720

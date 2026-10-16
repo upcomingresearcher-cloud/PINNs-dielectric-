@@ -1,0 +1,17 @@
+[    8.4s] P1-F1-k1-s100-pilot-lr1e-3 status=complete primary=0.0003299800783345766
+[   10.4s] P1-F1-k1-s101-pilot-lr1e-3 status=complete primary=0.0002791998173865056
+[   12.5s] P1-F1-k1-s102-pilot-lr1e-3 status=complete primary=0.00016766381121237323
+[   14.4s] P1-F1-k80-s100-pilot-lr1e-3 status=complete primary=27.609883288143852
+[   16.4s] P1-F1-k80-s101-pilot-lr1e-3 status=complete primary=27.82899508290337
+[   18.5s] P1-F1-k80-s102-pilot-lr1e-3 status=complete primary=27.902123612644637
+[   27.4s] P1-F2-k1-s100-pilot-lr1e-3 status=complete primary=2.90723710776286e-05
+[   30.1s] P1-F2-k1-s101-pilot-lr1e-3 status=complete primary=3.2941694204026365e-05
+[   32.7s] P1-F2-k1-s102-pilot-lr1e-3 status=complete primary=3.077621078060591e-05
+[   35.4s] P1-F2-k80-s100-pilot-lr1e-3 status=complete primary=0.007650206539617092
+[   38.2s] P1-F2-k80-s101-pilot-lr1e-3 status=complete primary=0.03329585366234954
+[   40.9s] P1-F2-k80-s102-pilot-lr1e-3 status=complete primary=0.04886835505706323
+[   49.3s] P1-F3-k1-s100-pilot-lr1e-3 status=complete primary=0.00012330880672663727
+[   51.7s] P1-F3-k1-s101-pilot-lr1e-3 status=complete primary=3.047219923063907e-05
+[   54.1s] P1-F3-k1-s102-pilot-lr1e-3 status=complete primary=4.0256762816170583e-05
+[   56.4s] P1-F3-k80-s100-pilot-lr1e-3 status=complete primary=0.4126380845371662
+[   58.6s] P1-F3-k80-s101-pilot-lr1e-3 status=complete primary=0.2384953033452011
