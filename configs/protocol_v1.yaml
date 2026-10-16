@@ -1,0 +1,114 @@
+# Frozen experimental protocol, version 1.0.0
+# Human-readable rationale: docs/experimental_protocol.md. Any change -> docs/protocol_change_log.md.
+protocol_version: "1.0.0"
+frozen_on: "2026-10-16"
+status: frozen   # pilot results may revise only the items listed under pilot.may_revise
+
+units: nondimensional   # x in units of gap length L; phi in units of applied voltage V; eps in units of eps_1*eps_0
+
+seeds:
+  primary: [0, 1, 2, 3, 4]                 # init + collocation jitter
+  interventions: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]   # 10 seeds so a sign test can reach p=0.002
+  pilot: [100, 101, 102]                   # disjoint from all reported runs
+
+contrasts:
+  primary: [1, 5, 20, 80, 400, 2000]
+  extension_preregistered: [10000]         # run after the primary sweep, reported separately
+  refinement: "post-hoc values between adjacent grid points bracketing a change in failure rate; labelled 'refinement'"
+  inverse_2d: [0.2, 0.05, 0.0125, 0.0025, 0.0005]   # P2 only, full-sweep formulations
+
+problems:
+  P1:
+    name: layered_capacitor_1d
+    domain: [0.0, 1.0]
+    interface: 0.5
+    eps_left: 1.0
+    eps_right: kappa
+    bc: {phi_0: 1.0, phi_1: 0.0}
+    reference: analytical          # D = 1/(a + (1-a)/kappa); verified symbolically
+    interface_band_halfwidth: 0.05
+    fem_crosscheck: {elements: [2, 4, 20, 200], conforming_node_at_interface: true}
+    note: "Exact solution is piecewise linear, so conforming P1 FEM reproduces it exactly; P1 FEM cost comparison is degenerate (see protocol Sec. 9)."
+  P2: {name: dielectric_cylinder_2d, status: specified_in_protocol_sec_8, detailed_config_before_phase: 7}
+  P3: {name: line_charge_planar_interface_2d, status: specified_in_protocol_sec_8, detailed_config_before_phase: 8}
+  P4: {name: two_material_corner_2d, status: specified_in_protocol_sec_8, detailed_config_before_phase: 9}
+  P5: {name: thin_high_eps_film_2d, status: specified_in_protocol_sec_8, detailed_config_before_phase: 10}
+
+architecture:
+  hidden_layers: 3
+  width: 32
+  activation: tanh
+  init: glorot_normal_weights_zero_bias
+  parameter_matched_twonet_width: 22    # 2 x 1079 = 2158 vs 2209 single-net (robustness only)
+
+formulations: [F1, F2, F3, F4, F5, F6]   # definitions: protocol Sec. 5
+
+F6_weights:   # frozen BEFORE any training; must not be tuned
+  flux_scale: "D_s = eps_h * V / L,  eps_h = 2*eps1*eps2/(eps1+eps2)"
+  pde_residual_divisor: "D_s / L"
+  bc_divisor: "V"
+  continuity_divisor: "V"
+  flux_divisor: "D_s"
+  property: "identical to F2 when eps1 == eps2"
+
+training:
+  optimiser: adam
+  adam: {b1: 0.9, b2: 0.999, eps: 1.0e-8}
+  learning_rate: {schedule: cosine_decay, init: 1.0e-3, final: 1.0e-4, steps: 3000}
+  gradient_evaluations: 3000            # Adam: one evaluation per step
+  precision: float32                    # float64 is Intervention C
+  full_batch: true
+
+collocation:
+  interior_per_material: 128
+  sampling: stratified_jitter_fixed_per_seed   # one uniform point in each of 128 equal strata per material; not resampled
+  boundary_points: 2
+  interface_points: 1                   # x = a; F1 uses none by definition
+
+evaluation:
+  grid: gauss_legendre_panels
+  panel_max_length: 0.05
+  points_per_panel: 16                  # panels aligned with 0, a-0.05, a, a+0.05, 1 -> 320 points
+  regions: [global, material_1, material_2, interface_band, band_material_1, band_material_2]
+  metric_log_interval_steps: 250
+
+gradient_logging:
+  interval_steps: 25                    # plus step 0 and final step -> 122 records per run
+  record: [step, term, loss_value, grad_norm_unweighted, grad_norm_weighted, weight, learning_rate, precision, nonfinite, effectively_zero]
+  effectively_zero_rule: "norm < 1e-12 * max term norm at that step"
+  ratio: "max / min over terms with finite norm above the effectively-zero rule"
+
+failure:
+  primary: "max(relL2_E_band, relL2_D_band) > 0.05"
+  strict_secondary: "max over the two half-bands of the per-material relative L2 field error > 0.05"
+  potential_reported_separately: "relL2_phi_global > 0.05"
+  secondary_indicators:
+    effective_contrast: "|ln(kappa_eff/kappa)| > ln(2)  (off by more than a factor of 2 either way)"
+    displacement_jump: "|[D_n]| / D_exact > 0.05"
+  nonfinite: "any NaN/Inf in loss or evaluation outputs -> run marked failed and flagged nonfinite"
+  configuration_fails_if: "failed seeds >= 3 of 5"
+  critical_contrast: "smallest kappa in the primary grid whose configuration fails; if any larger kappa passes, report 'non-monotone'"
+
+statistics:
+  per_configuration: [n_seeds, n_failed, failure_rate, clopper_pearson_95, median, q25, q75, min, max]
+  paired_interventions: "per-seed signed differences; sign test (10 seeds); bootstrap 95% CI of median difference (10000 resamples, seed 12345)"
+  correlations: "Spearman rho with 10000-resample bootstrap CI"
+  classifier_quality: "ROC AUC with bootstrap CI"
+  no_best_seed_reporting: true
+
+pilot:
+  purpose: "check code and confirm that the baseline settings do not make the benchmark invalid"
+  contrasts: [1, 80]
+  formulations: all
+  trials_per_formulation: 2              # identical for all formulations
+  search_space: {learning_rate_init: [1.0e-3, 3.0e-3]}
+  may_revise: [training.learning_rate.init]    # one shared value for all formulations
+  rule: "choose the value with the lower total pilot failure count over all formulations; tie -> 1e-3"
+
+budget_estimate_p1:
+  measured_ms_per_gradient_eval_float32: 1.8
+  primary_runs: 180
+  extension_runs: 30
+  regression_baseline_runs: 120
+  float64_replica_runs: 210
+  robustness_runs: 630

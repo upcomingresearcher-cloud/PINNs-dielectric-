@@ -16,5 +16,5 @@
     "jaxlib": "0.11.2",
     "torch": "unavailable (ModuleNotFoundError)"
   },
-  "git_commit": "54b504659b9c1f4e3852f5fd3b8ad76a55902a96"
+  "git_commit": "cc8c84e8ffa9b8bfb4f20e1f010fff04f549c2c2"
 }

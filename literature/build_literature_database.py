@@ -293,6 +293,45 @@ add(id="L30", title="The Deep Ritz Method: a deep learning-based numerical algor
     source="additional (background knowledge)", verification_level="not verified this session - verify in Phase 2",
     relevance_to_project="F5 energy formulation", review_audit_notes="Included because F5 depends on it; bibliographic details must be verified.")
 
+# ---------------- Phase 2 targeted-search additions (2026-10-16) ----------------
+add(id="L31", title="FP64 is All You Need: Rethinking Failure Modes in Physics-Informed Neural Networks",
+    authors="C. Xu, D. Liu, A. Nassereldine, J. Xiong", year="2025", doi_or_url="arXiv:2505.10949; NeurIPS 2025 poster",
+    source="additional (Phase 2 search)", verification_level="abstract_snippets",
+    optimisation="L-BFGS (failure attributed to FP32 premature convergence test)",
+    main_findings_author="With FP32, L-BFGS satisfies its convergence test prematurely and stalls in a failure phase; FP64 removes known failure modes for vanilla PINNs",
+    limitations_team_inferred="Effect demonstrated under L-BFGS; interface contrasts not studied",
+    relevance_to_project="Motivates Intervention C and requires precision to be crossed with optimiser")
+add(id="L32", title="Optimizer or Precision? Understanding Optimizer-Precision Interactions in PINNs",
+    authors="M. Tarekegn, C. Wu, T. Sharma, S. Garg", year="2026", doi_or_url="NeurIPS 2026 (virtual poster 161445)",
+    source="additional (Phase 2 search)", verification_level="abstract_snippets", seeds_reported="32 runs over 8 configurations, 4 benchmarks",
+    main_findings_author="Doubling precision changes Adam error by at most 1.25x but up to 17.7x under L-BFGS; low-error runs end in L-BFGS",
+    limitations_team_inferred="No interface problems",
+    relevance_to_project="Pre-registered prediction for Intervention C under Adam (small effect) vs L-BFGS (large); 2x2 design")
+add(id="L33", title="A deep learning method for multi-material diffusion problems based on physics-informed neural networks",
+    authors="Y. Yao, J. Guo, T. Gu", year="2023", doi_or_url="Comput. Methods Appl. Mech. Engrg. 417 (2023) 116395; arXiv:2305.09125",
+    source="additional (Phase 2 search)", verification_level="abstract_snippets", seeds_reported="mean +/- spread reported",
+    main_findings_author="Standard PINN fails (error ~1.33) on thin-insulating-layer jump problem; domain-scaling DS-PINN/nDS-PINN succeed; interface loss normalised by known jump functions",
+    relevance_to_project="Thin-layer (P5) precedent and residual-normalisation precedent (Intervention B)")
+add(id="L34", title="Solving Poisson Problems in Polygonal Domains with Singularity Enriched Physics Informed Neural Networks",
+    authors="T. Hu, B. Jin, Z. Zhou", year="2023", doi_or_url="arXiv:2308.16429", source="additional (Phase 2 search)",
+    verification_level="abstract_snippets", main_findings_author="PINN accuracy degrades near point sources and corner singularities; singular-function enrichment restores it",
+    relevance_to_project="P3/P4 singularity treatment precedent (single material)")
+add(id="L35", title="Physics informed neural network for charged particles surrounded by conductive boundaries",
+    authors="F. Hafezianzade, M. Biagooi, S. Nedaaee Oskoee", year="2023", doi_or_url="Sci. Rep. (2023) doi:10.1038/s41598-023-40477-y; arXiv:2301.02191",
+    source="additional (Phase 2 search)", verification_level="abstract_snippets",
+    main_findings_author="Potential split into singular and smooth parts; PINN learns smooth part; faster than FEM at evaluation",
+    limitations_team_inferred="Conducting walls, no dielectric interface",
+    relevance_to_project="Singular-part subtraction precedent for P3")
+add(id="L36", title="INI-VPINN: A Variational PINN with Implicit Neumann and Interface Handling for Multi-Material Domains with Geometric Singularities",
+    authors="to verify", year="2026", doi_or_url="arXiv:2606.18032", source="additional (Phase 2 search)", verification_level="abstract_snippets",
+    main_findings_author="Variational PINN handles material discontinuities and corners; compared with vanilla PINN and cPINN",
+    relevance_to_project="Multi-material corner (P4) precedent")
+add(id="L37", title="Physics-Informed Tailored Finite Point Operator Network for Parametric Interface Problems",
+    authors="to verify", year="2024", doi_or_url="arXiv:2409.10284", source="additional (Phase 2 search)", verification_level="abstract_snippets",
+    material_contrast="1D high-contrast case with 0<a(x)<<1 in one region",
+    main_findings_author="High contrast produces inner layers; operator network captures thin layers at coarse resolution",
+    relevance_to_project="Thin-layer / high-contrast layer precedent (P5)")
+
 out = pathlib.Path(__file__).with_name("literature_database.csv")
 with out.open("w", newline="", encoding="utf-8") as f:
     w = csv.DictWriter(f, fieldnames=COLS); w.writeheader(); w.writerows(R)

@@ -1,0 +1,21 @@
+PASS  P1 BC phi1(0)=1
+PASS  P1 BC phi2(1)=0
+PASS  P1 potential continuity at a
+PASS  P1 flux continuity eps1*phi1'=kappa*phi2' at a
+PASS  P1 PDE in each material (phi''=0)
+PASS  P1 E=-phi' gives D=eps*E=D_exact in mat1
+PASS  P1 D in mat2 equals D_exact
+PASS  P1 energy capacitance 2W/V^2 equals flux capacitance D (V=1)
+PASS  F6 scale eps_h*V/L equals D_exact for a=1/2
+INFO  kappa=80: D_exact=1.975309; uniform-eps E1=1 -> rel. error 0.4938
+PASS  F4-full buffer determinant = +(a*e2+(1-a)*e1) > 0 (hand derivation had sign error, corrected)
+PASS  P2 Laplace inside
+PASS  P2 Laplace outside
+PASS  P2 potential continuity at r=R
+PASS  P2 normal-D continuity at r=R
+PASS  P2 interior field magnitude 2*eps_out/(eps_in+eps_out)*E0
+PASS  P3 harmonic above (away from source)
+PASS  P3 harmonic below
+PASS  P3 potential continuity on y=0
+PASS  P3 normal-D continuity on y=0
+PASS  P3 free-space term encloses charge lam
