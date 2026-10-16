@@ -1,6 +1,6 @@
 # Frozen experimental protocol, version 1.0.0
 # Human-readable rationale: docs/experimental_protocol.md. Any change -> docs/protocol_change_log.md.
-protocol_version: "1.1.0"
+protocol_version: "1.6.0"   # P1 training settings unchanged since 1.1.0; 1.6.0 = Phase 11 operationalisation (change log)
 frozen_on: "2026-10-16"
 status: frozen   # pilot results may revise only the items listed under pilot.may_revise
 

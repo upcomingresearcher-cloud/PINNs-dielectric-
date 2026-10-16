@@ -9,7 +9,8 @@ from src.problems.p1 import P1Problem
 
 CFG = yaml.safe_load(open(pathlib.Path(__file__).resolve().parents[1] / "configs/protocol_v1.yaml"))
 KAPPAS = [1.0, 80.0, 2000.0]
-EXPECTED_PARAMS = {"F1": 2209, "F2": 4418, "F3": 2241, "F4": 4418, "F5": 2241, "F6": 4418, "F4full": 4418}
+EXPECTED_PARAMS = {"F1": 2209, "F2": 4418, "F3": 2241, "F4": 4418, "F5": 2241, "F6": 4418, "F4full": 4418,
+                   "F1norm": 2209, "F2norm": 4418}
 EXPECTED_PARAMS.update({f"{p}_{b}": EXPECTED_PARAMS[b] for b in ("F1", "F2", "F3", "F4") for p in ("REG", "REGD")})   # same architecture as parent
 
 
@@ -23,7 +24,7 @@ def test_param_counts(f):
     assert n_params(params) == EXPECTED_PARAMS[f]
 
 
-@pytest.mark.parametrize("f", PRIMARY)
+@pytest.mark.parametrize("f", PRIMARY + ("F1norm", "F2norm"))
 @pytest.mark.parametrize("k", KAPPAS)
 def test_loss_at_exact_solution(f, k):
     p, d = _data(k)
@@ -34,14 +35,14 @@ def test_loss_at_exact_solution(f, k):
         assert L < 1e-20, terms
 
 
-@pytest.mark.parametrize("f", PRIMARY)
+@pytest.mark.parametrize("f", PRIMARY + ("F1norm", "F2norm"))
 @pytest.mark.parametrize("k", KAPPAS)
 def test_loss_at_wrong_solution(f, k):
     p, d = _data(k); fn = analytic_fns(p)
     Lw, terms = loss_of(f, fn["wrong_uniform"], d); Le, _ = loss_of(f, fn["exact"], d)
     if k == 1.0:
         assert abs(Lw - Le) < 1e-12, (Lw, Le)       # at kappa=1 the 'wrong' solution IS the exact one
-    elif f == "F1":
+    elif f in ("F1", "F1norm"):
         assert Lw < 1e-20, terms                    # F1 cannot see the interface (zero loss for the wrong answer)
     else:
         assert Lw > Le + 1e-6, (Lw, Le, terms)       # interface-aware losses must prefer the exact solution

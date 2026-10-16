@@ -147,7 +147,31 @@ class F4Full(Formulation):
         p1, p2 = pde_terms(f, d); return dict(pde1=p1, pde2=p2)
 
 
-REGISTRY = {c.name: c() for c in (F1, F2, F3, F4, F5, F6, F4Full)}
+def pde_terms_resnorm(phi_fn, d):
+    """Intervention B: material-i strong-form residual divided by eps_i, r_i/eps_i = phi''."""
+    r1 = jax.vmap(_d2(phi_fn, 1))(d["x1"]); r2 = jax.vmap(_d2(phi_fn, 2))(d["x2"])
+    return jnp.mean(r1**2), jnp.mean(r2**2)
+
+
+class F1Norm(F1):
+    """Intervention B on F1: PDE residuals r_i/eps_i; BCs unchanged (F1 has no interface terms)."""
+    name = "F1norm"
+    def terms(self, f, d):
+        p1, p2 = pde_terms_resnorm(f, d); b0, b1 = bc_terms(f, d)
+        return dict(pde1=p1, pde2=p2, bc_left=b0, bc_right=b1)
+
+
+class F2Norm(F2):
+    """Intervention B on F2: PDE residuals r_i/eps_i. Continuity and flux are interface residuals not indexed
+    by a single material and are left unchanged (decision logged, protocol change log v1.6.0)."""
+    name = "F2norm"
+    def terms(self, f, d):
+        p1, p2 = pde_terms_resnorm(f, d); b0, b1 = bc_terms(f, d)
+        return dict(pde1=p1, pde2=p2, bc_left=b0, bc_right=b1, cont=cont_term(f, d), flux=flux_term(f, d))
+
+
+REGISTRY = {c.name: c() for c in (F1, F2, F3, F4, F5, F6, F4Full, F1Norm, F2Norm)}
+INTERVENTION_B = ("F1norm", "F2norm")
 PRIMARY = ("F1", "F2", "F3", "F4", "F5", "F6")
 
 
