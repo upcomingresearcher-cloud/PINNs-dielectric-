@@ -90,3 +90,4 @@ Pending decisions already scheduled by the protocol (not changes):
 | 2026-10-16 | 1.5.0 | Thickness study | F2, F6 x t in {0.1, 0.005} x kappa {1, 80, 2000} x 5 seeds (t = 0.02 from main sweep) |
 | 2026-10-16 | 1.5.0 | Sampling-density study | F2, F6 x film points {128, 2048} (baseline 512) x kappa {80, 2000} x 5 seeds, t = 0.02 |
 | 2026-10-16 | 1.5.0 | Gate 3 for P5 | exact-loss check only at kappa = 1 (closed form -E0 y); kappa != 1 has no closed form |
+| 2026-10-16 | 1.5.0 | 2D self-tests made reference-aware: T6 expectations computed from the reference itself (exact for analytic refs); FEM-referenced problems (P5) use T1 tol 1e-7 and T7 tol 1e-4 (reference round-off ~1e-8..1e-11; FEM kinks inside quadrature cells -> ~1.4e-5). P2-P5 all 17/17 after the change. | Previous tolerances assumed an exact reference with zero interface jumps | self-tests only | none |

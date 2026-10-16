@@ -1,0 +1,4 @@
+reference t/8 dofs 295661
+h_in=t*0.5: dofs=19321 band diff vs t/8 = 5.53e-04
+h_in=t*0.25: dofs=77713 band diff vs t/8 = 1.34e-04
+estimated error of t/8 reference (order-2 extrapolation, diff/3): 4.47e-05

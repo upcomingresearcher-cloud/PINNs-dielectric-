@@ -9,6 +9,8 @@ elif name == "P3":
     rows = selftests2d.run(p2d.P3LineCharge, [1.0, 0.0005, 80.0, 2000.0], lambda occ: [occ.addRectangle(-1, -1, 0, 2, 1)])
 elif name == "P4":
     rows = selftests2d.run(p2d.P4Corner, [1.0, 0.0005, 80.0, 2000.0], lambda occ: [occ.addRectangle(0, 0, 0, 1, 1)])
+elif name == "P5":
+    rows = selftests2d.run(p2d.P5Film, [1.0, 0.0005, 80.0, 2000.0], p2d.P5Film(80).geometry())
 out = root / f"results/validation/evaluator_selftests_{name}.csv"
 with open(out, "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)

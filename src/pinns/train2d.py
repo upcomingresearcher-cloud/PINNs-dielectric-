@@ -68,7 +68,9 @@ def train_run(fname, prob_cls, kappa, seed, cfg2d, run_type="pinn", variant="bas
     width = int(o.get("width", cfg2d["width"])); depth = int(o.get("depth", cfg2d["depth"]))
     precision = o.get("precision", cfg2d["precision"]); dtype = jnp.float32 if precision == "float32" else jnp.float64
     npm = int(o.get("n_interior", cfg2d["n_interior"])); ni = int(cfg2d["n_interface"]); ne = int(cfg2d["n_edge"])
-    prob = prob_cls(kappa); S = prob.sample(seed, npm, ni, ne); d = make_data(prob, S, dtype)
+    prob = prob_cls(kappa)
+    S = prob.sample(seed, npm, ni, ne, n_film=int(o["n_film"])) if "n_film" in o else prob.sample(seed, npm, ni, ne)
+    d = make_data(prob, S, dtype)
     F, opt, update, term_grads, phi_grad, sched = compiled_fns(fname, prob_cls, lr_init, lr_final, steps)
     w = F.weights(d); params = F.init(jax.random.PRNGKey(seed), width, depth, dtype); st = opt.init(params)
     rid = R.run_id(prob.problem_id, fname, float(kappa), seed, run_type, variant)

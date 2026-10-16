@@ -394,7 +394,7 @@ class P5Film(Problem2D):
     corners are excluded from all metrics (90-degree high-eps corners are singular, cf. P4). Band = |x| < 0.55 and
     |y| < t/2 + 0.05 (max-norm dilation of the film by 0.05; contains the whole film). Interface metrics on the long
     faces only (the short faces lie inside the corner exclusion)."""
-    problem_id = "P5"; E0 = 1.0; Lc = 2.0; geometry_label = "2d_thin_film"; refined_quadrature = dict(n=10); T = 0.02
+    problem_id = "P5"; reference_type = "fem"; E0 = 1.0; Lc = 2.0; geometry_label = "2d_thin_film"; refined_quadrature = dict(n=12); T = 0.02
     REF_LEVEL = dict(h_far=0.05, frac_in=1 / 8)
     def __init__(self, kappa):
         super().__init__(kappa); self.t = self.T; self.e = self.t / 2; self._ref = None; self._memo = {}

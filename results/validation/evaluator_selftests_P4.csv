@@ -9,10 +9,10 @@ T4_threshold,kappa=1: 6% perturbation,0.05999999999999999,fail==True,True
 T4_threshold,kappa=2000: 4% perturbation,0.04,fail==False,True
 T4_threshold,kappa=2000: 6% perturbation,0.060000000000000005,fail==True,True
 T5_nonfinite,NaN flagged,True,True,True
-T6_interface,[phi]=0.001,0.0010000000000001358,== 0.001/Vc,True
-T6_interface,[phi]=0.02,0.020000000000000136,== 0.02/Vc,True
+T6_interface,[phi]=0.001,0.0010000000000001358,== 0.001,True
+T6_interface,[phi]=0.02,0.020000000000000136,== 0.02,True
 T6_interface,[D_n] scale 0.01,0.009999999999995618,== 0.01; flag==False,True
 T6_interface,[D_n] scale 0.1,0.09999999999995644,== 0.1; flag==True,True
-T7_quadrature,default vs doubled quadrature (smooth perturbation),1.7153512214662676e-11,< 1e-8,True
+T7_quadrature,default vs refined quadrature (smooth perturbation),1.7153512214662676e-11,< 1e-08,True
 T2_fem_conforming,"band field errors ['1.05e-01', '7.94e-02', '4.22e-02', '1.42e-02']; order",0.9588761002976779,"decreasing, order > 0.8",True
 T8_fem_nonconforming,"band field errors ['5.29e+02', '1.30e+02', '5.65e+01', '2.62e+01']; order",1.4211770439139289,reported; must decrease,True

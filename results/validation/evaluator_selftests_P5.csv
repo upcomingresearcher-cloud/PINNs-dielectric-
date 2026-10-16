@@ -1,0 +1,18 @@
+test,check,value,criterion,passed
+T1_exact,kappa=1: max error metric,0.0,< 1e-07,True
+T1_exact,kappa=0.0005: max error metric,1.1325347562357208e-08,< 1e-07,True
+T1_exact,kappa=80: max error metric,8.94123353393205e-11,< 1e-07,True
+T1_exact,kappa=2000: max error metric,3.7131756060616924e-11,< 1e-07,True
+T3_wrong_uniform,kappa=80 primary,30.00206421894387,flagged,True
+T4_threshold,kappa=1: 4% perturbation,0.04000000000000001,fail==False,True
+T4_threshold,kappa=1: 6% perturbation,0.060000000000000005,fail==True,True
+T4_threshold,kappa=2000: 4% perturbation,0.039999999999999994,fail==False,True
+T4_threshold,kappa=2000: 6% perturbation,0.05999999999999999,fail==True,True
+T5_nonfinite,NaN flagged,True,True,True
+T6_interface,[phi]=0.001,0.0004999999976505746,== 0.0005,True
+T6_interface,[phi]=0.02,0.009999999997650572,== 0.01,True
+T6_interface,[D_n] scale 0.01,0.009999384576580634,== 0.00999938; flag==False,True
+T6_interface,[D_n] scale 0.1,0.09999384576580642,== 0.0999938; flag==True,True
+T7_quadrature,default vs refined quadrature (smooth perturbation),1.4489731686983584e-05,< 0.0001,True
+T2_fem_conforming,"band field errors ['6.38e-02', '4.42e-02', '2.78e-02', '1.15e-02']; order",0.8071747902159535,"decreasing, order > 0.8",True
+T8_fem_nonconforming,"band field errors ['7.59e+02', '7.59e+02', '7.59e+02', '4.00e+02']; order",0.2770714765856274,reported; must decrease,True
