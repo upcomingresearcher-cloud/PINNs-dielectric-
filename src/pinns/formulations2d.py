@@ -39,7 +39,7 @@ class Form2D:
         e1 = jax.vmap(lambda z: f(z, 1))(d["XB1"]) - d["HB1"]; e2 = jax.vmap(lambda z: f(z, 2))(d["XB2"]) - d["HB2"]
         return (jnp.sum(e1**2) + jnp.sum(e2**2)) / (e1.shape[0] + e2.shape[0])
     def cont(self, f, d):
-        return jnp.mean((jax.vmap(lambda z: f(z, 1))(d["XI"]) - jax.vmap(lambda z: f(z, 2))(d["XI"]))**2)
+        return jnp.mean((jax.vmap(lambda z: f(z, 1))(d["XI"]) - jax.vmap(lambda z: f(z, 2))(d["XI"]) + d["PI"])**2)
     def flux(self, f, d):
         g1 = jax.vmap(_grad(f, 1))(d["XI"]); g2 = jax.vmap(_grad(f, 2))(d["XI"])
         r = d["eps1"] * jnp.sum(g1 * d["NI"], 1) - d["eps2"] * jnp.sum(g2 * d["NI"], 1) - d["QI"]

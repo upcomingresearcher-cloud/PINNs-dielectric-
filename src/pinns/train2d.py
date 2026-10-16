@@ -16,10 +16,10 @@ def make_data(prob, S, dtype):
     c = lambda v: jnp.asarray(v, dtype)
     sb = S["sideB"]; jp = prob.jax_params()
     XB1, XB2 = S["XB"][sb == 1], S["XB"][sb == 2]
-    y1 = prob.exact(S["X1"], np.ones(len(S["X1"]), int))[0]; y2 = prob.exact(S["X2"], np.full(len(S["X2"]), 2))[0]
-    return dict(X1=c(S["X1"]), X2=c(S["X2"]), XB1=c(XB1.reshape(-1, 2)), HB1=c(prob.h_np(XB1) if len(XB1) else np.zeros(0)),
-                XB2=c(XB2.reshape(-1, 2)), HB2=c(prob.h_np(XB2) if len(XB2) else np.zeros(0)),
-                XI=c(S["XI"]), NI=c(S["NI"]), QI=c(S["QI"]), Y1=c(y1), Y2=c(y2),
+    y1 = prob.exact_train(S["X1"], np.ones(len(S["X1"]), int))[0]; y2 = prob.exact_train(S["X2"], np.full(len(S["X2"]), 2))[0]
+    return dict(X1=c(S["X1"]), X2=c(S["X2"]), XB1=c(XB1.reshape(-1, 2)), HB1=c(prob.h_train_np(XB1) if len(XB1) else np.zeros(0)),
+                XB2=c(XB2.reshape(-1, 2)), HB2=c(prob.h_train_np(XB2) if len(XB2) else np.zeros(0)),
+                XI=c(S["XI"]), NI=c(S["NI"]), QI=c(S["QI"]), PI=c(S.get("PI", np.zeros(len(S["XI"])))), Y1=c(y1), Y2=c(y2),
                 eps1=c(prob.eps1), eps2=c(prob.eps2), Vc=c(prob.Vc), Lc=c(prob.Lc), A1=c(S["A1"]), A2=c(S["A2"]),
                 LG=c(S["LG"]), pp=c(jp["pp"]), hp=c(jp["hp"]))
 
@@ -51,14 +51,14 @@ def compiled_fns(fname, prob_cls, lr_init, lr_final, steps):
 _AOT = {}
 
 
-def make_pred(phi_grad, p, d, dtype):
+def make_pred(phi_grad, p, d, dtype, prob=None):
     def pred(X, side):
         X = np.asarray(X, np.float64); side = np.asarray(side); phi = np.empty(len(X)); g = np.empty((len(X), 2))
         for s in (1, 2):
             m = side == s
             if m.any():
                 a, b = phi_grad(p, jnp.asarray(X[m], dtype), s, d); phi[m] = np.asarray(a, np.float64); g[m] = np.asarray(b, np.float64)
-        return phi, g
+        return prob.to_physical(X, phi, g, side) if prob is not None else (phi, g)
     return pred
 
 
@@ -85,7 +85,7 @@ def train_run(fname, prob_cls, kappa, seed, cfg2d, run_type="pinn", variant="bas
                             learning_rate=float(sched(step)), precision=precision, nonfinite=not (np.isfinite(nrm[i]) and np.isfinite(v[i])),
                             effectively_zero=bool(np.isfinite(nrm[i]) and nrm[i] < 1e-12 * mx)))
     def log_m(step, p):
-        m = evaluate(prob, make_pred(phi_grad, p, d, dtype), quad)
+        m = evaluate(prob, make_pred(phi_grad, p, d, dtype, prob), quad)
         tr_.append(dict(step=step, **{k: m[k] for k in ("primary_field_error", "strict_field_error", "relL2_phi_global", "relL2_E_global",
                                                          "D_jump_rel", "phi_jump_rel", "nonfinite")}))
     gli, mli = int(cfg2d["grad_log_interval"]), int(cfg2d["metric_log_interval"])
@@ -95,7 +95,7 @@ def train_run(fname, prob_cls, kappa, seed, cfg2d, run_type="pinn", variant="bas
         if step % gli == 0 or step == steps: log_g(step, params)
         if step % mli == 0 or step == steps: log_m(step, params)
     vals = np.asarray(tg(params, d)[0], np.float64)
-    m = evaluate(prob, make_pred(phi_grad, params, d, dtype), quad)
+    m = evaluate(prob, make_pred(phi_grad, params, d, dtype, prob), quad)
     npts = 2 * npm + 4 * ne + ni
     row = dict(run_id=rid, run_type=run_type, status=R.STATUS_COMPLETE, problem_id=prob.problem_id, geometry=prob.geometry_label,
                formulation=fname, variant=variant, kappa=float(kappa), seed=int(seed),

@@ -51,3 +51,15 @@ Pending decisions already scheduled by the protocol (not changes):
 | 2026-10-16 | 1.2.0 | Database | 2D runs in results/raw/runs_2d.csv (2D metric schema), logs as in P1 |
 | 2026-10-16 | 1.2.0 | CORRECTION of a stated property (rule unchanged): "F6 identical to F2 when eps1 == eps2" holds only when V_c = L_c = 1 (P1). In P2 the frozen divisors give weights (4, 4, 1/4, 1/4, 1) at kappa = 1. F6 is applied exactly as frozen; the property claim in protocol_v1.yaml/Sec. 5 is P1-specific. | Caught by the 2D Gate 3 test | interpretation of F6 vs F2 at kappa=1 in 2D | none |
 | 2026-10-16 | 1.2.0 | P2 executed as frozen. Pilot-labelled bug check (F2, kappa=5, float64, 20000 steps) + loss-consistency test (BFGS on exact-containing family) recorded; no changes made to formulations or settings. | Verify P2 failures are not implementation errors | none | none |
+
+## Phase 8 (P3) configuration — frozen before any P3 run
+| Date | Version | Item | Value / rule |
+|---|---|---|---|
+| 2026-10-16 | 1.3.0 | Geometry | box [-1,1]^2, interface y = 0; material 1 (eps 1) y > 0 contains line charge lambda = 2*pi at (0, 0.25); material 2 (eps kappa) y < 0. 2D per-unit-length problem |
+| 2026-10-16 | 1.3.0 | Singularity | subtract phi_s = -ln r1 everywhere; train w = phi - phi_s (smooth; continuous; flux jump Q = H(eps1-eps2)/(x^2+H^2), verified symbolically: results/validation/p3_decomposition_checks.txt). Evaluate physical phi = w + phi_s |
+| 2026-10-16 | 1.3.0 | Regions | excluded disc r1 < 0.05; near-source ring 0.05 <= r1 < 0.15 and far field reported separately; band |y| < 0.05 |
+| 2026-10-16 | 1.3.0 | Scales | V_c = lambda/(2 pi eps1) = 1, L_c = 2; F6 D_s = eps_h V_c/L_c |
+| 2026-10-16 | 1.3.0 | Points, training, contrasts, sweep design | identical to P2 (512/material, 128 interface, 256 boundary; 3000 Adam; F1/F2/F6 full incl. inverse; F3/F4/F5 {1,80,2000}; regression at {1,80,2000}) |
+| 2026-10-16 | 1.3.0 | FEM cross-check | body-fitted P2-FEM for w with interface load int_Gamma Q v ds; wrong reference = uniform-eps answer phi_s alone |
+| 2026-10-16 | 1.3.0 | Pre-run finding: with global subtraction the physical field in material 2 (~2/(1+kappa)) is a cancellation of O(1) terms w and phi_s, amplifying absolute errors ~kappa/2 (FEM band error 0.53 at h=0.025, kappa=2000, order 1.87). DECISION: keep global subtraction as primary (uniform across formulations, common practice). ADD pre-registered sensitivity: F2 with material-wise subtraction (class P3MatSub, variant "matsub") at kappa {80, 2000, 0.0125}, 5 seeds. Continuity residual generalised to w1 - w2 + PI (PI = 0 except matsub). | Avoid a decomposition-driven confound going unexamined | P3 | none (no P3 runs yet) |
+| 2026-10-16 | 1.3.0 | Self-test 8 informational for problems with an interface load (non-conforming mesh has no interface edges; load cannot be applied) | Explained discrepancy, not a pass/fail property | P3 self-tests | none |

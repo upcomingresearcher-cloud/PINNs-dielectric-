@@ -1,0 +1,18 @@
+test,check,value,criterion,passed
+T1_exact,kappa=1: max error metric,0.0,< 1e-12,True
+T1_exact,kappa=0.0005: max error metric,0.0,< 1e-12,True
+T1_exact,kappa=80: max error metric,0.0,< 1e-12,True
+T1_exact,kappa=2000: max error metric,0.0,< 1e-12,True
+T3_wrong_uniform,kappa=80 primary,30.588352125009198,flagged,True
+T4_threshold,kappa=1: 4% perturbation,0.039999999999999994,fail==False,True
+T4_threshold,kappa=1: 6% perturbation,0.06,fail==True,True
+T4_threshold,kappa=2000: 4% perturbation,0.03999999999999999,fail==False,True
+T4_threshold,kappa=2000: 6% perturbation,0.05999999999999999,fail==True,True
+T5_nonfinite,NaN flagged,True,True,True
+T6_interface,[phi]=0.001,0.001,== 0.001/Vc,True
+T6_interface,[phi]=0.02,0.02,== 0.02/Vc,True
+T6_interface,[D_n] scale 0.01,0.010000000000000212,== 0.01; flag==False,True
+T6_interface,[D_n] scale 0.1,0.10000000000000221,== 0.1; flag==True,True
+T7_quadrature,default vs doubled quadrature (smooth perturbation),2.621922683590183e-13,< 1e-8,True
+T2_fem_conforming,"band field errors ['2.62e+01', '7.19e+00', '2.03e+00', '5.35e-01']; order",1.8661046443754647,"decreasing, order > 0.8",True
+T8_fem_nonconforming,"band field errors ['8.09e+02', '8.15e+02', '8.13e+02', '8.12e+02'] (INFORMATIONAL: no interface edges -> interface load cannot be applied -> converges to a different problem)",-0.001385066896038295,reported,True

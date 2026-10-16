@@ -70,10 +70,16 @@ def solve(problem, h, order=2, conforming=True, geometry=None):
         Ki = epsv * skfem.asm(_lap, skfem.Basis(mesh, e, elements=el))
         K = Ki if K is None else K + Ki
     D = basis.get_dofs().all() if hasattr(basis.get_dofs(), "all") else basis.get_dofs().nodal["u"]
-    x = np.zeros(basis.N); x[D] = problem.h_np(basis.doflocs[:, D].T)
-    u = skfem.solve(*skfem.condense(K, np.zeros(basis.N), x=x, D=D))
+    x = np.zeros(basis.N); x[D] = problem.h_train_np(basis.doflocs[:, D].T)
+    b = np.zeros(basis.N)
+    if hasattr(problem, "interface_load"):          # weak form: int eps grad w . grad v = int_Gamma Q v ds
+        fac = problem.interface_facets(mesh)
+        if len(fac):
+            fb = skfem.FacetBasis(mesh, e, facets=fac)
+            b = skfem.asm(skfem.LinearForm(lambda v, w: problem.interface_load(w.x) * v), fb)
+    u = skfem.solve(*skfem.condense(K, b, x=x, D=D))
     t_solve = time.perf_counter() - t1
-    return FEM2DSolution(mesh, basis, u, M, conforming, order, t_mesh, t_solve)
+    sol = FEM2DSolution(mesh, basis, u, M, conforming, order, t_mesh, t_solve); sol.problem = problem; return sol
 
 
 class FEM2DSolution:
@@ -122,4 +128,5 @@ class FEM2DSolution:
         out = el < 0
         if out.any():
             tree = cKDTree(self.mesh.p[:, self.mesh.t].mean(1).T); el[out] = tree.query(X[out])[1]
-        return self._eval_in(X, el)
+        phi, g = self._eval_in(X, el)
+        return self.problem.to_physical(X, phi, g, side) if hasattr(self, "problem") else (phi, g)

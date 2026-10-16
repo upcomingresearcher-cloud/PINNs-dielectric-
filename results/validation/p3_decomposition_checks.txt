@@ -1,0 +1,5 @@
+w_up = -(eps1 - eps2)*log(X**2 + (Y + h)**2)/(2*eps1 + 2*eps2)  | w_dn - (-K ln r1) = 0
+[w] on y=0: 0
+[eps dphi/dy] on y=0 (physical, must be 0): 0
+QI = h*(eps1 - eps2)/(X**2 + h**2)  equals (eps2-eps1)*dphis/dn?  True
+w harmonic up/down: 0 0
