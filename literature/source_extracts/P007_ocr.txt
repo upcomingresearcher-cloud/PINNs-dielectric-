@@ -1,0 +1,310 @@
+4,08.2026 21:55
+
+Copy PINs Literature Review Extraction Template.docx - Google Docs
+
+PINNs & Dielectrics: Comprehensive
+Literature Review Database
+
+Paper Meta Data
+Field / Parameter Value / Description
+Paper Title Parallel Physics-Informed Neural Networks with Bidirectional
+
+Balance
+
+Authors & Year
+
+Yuhao Huang, 2021
+
+DOI/URL
+
+arXiv:211 1.05641v1
+
+5 (Code is publicly available on Githlub:
+[https://github.com/Haodayu/Parallel-PINNs-with-Bidirect
+ional-Balance] (https: //github.com/Haodayu/Parallel-PINNs
+-with-Bidirectional-Balance))
+
+Physics & Domain Definition
+
+Field / Parameter
+
+Value / Description
+
+Governing Equation
+
+1D transient heat conduction equations in multilayer fabrics:
+
+https://docs. google. com/documentid/teN4P45ndlys3XOnAwgRAWV2m4RII7FtA/edit
+
+116
+4,08.2026 21:55
+
+Copy PINs Literature Review Extraction Template.docx - Google Docs
+
+Field / Parameter
+
+Value / Description
+
+(Exact PDE)
+
+CshlAataTshl=kshldx202Tshl
+CmsrAdTmsrdt=kmsrd2Tmsrx2C_{msr) {A )\frac (\partial
+‘T_{msr}}{\partial t} = k_{msr)\frac (\partial42
+
+T_{msr} }{\partial x42}CmsrAatdTmsr=kmsrdx202Tmsr
+ClinAdTlindt=klind2Tlindx2C_{lin}*{A )\frac {\partial
+‘T_{lin}}{\partial t) = k_{lin )\frac {\partial42
+
+T_{lin} }(\partial x*2)ClinAatdTlin=klindx202TIin
+
+Dimension & Geometry
+
+1D time-dependent (transient), multilayer planar geometry (x and t
+dimensions)
+
+Boundary Conditions
+(BCs)
+
+Initial Condition: $T_{sh1}\wert{}_{t=0} = T_{msr}\ert{}__{t=0)
+‘T_{lin}Wwert{}_{t=0} = T_O = 310.15\text{ K}
+
+Outer Boundary Conditions (Neumann/Robin - Newton's
+Law of Cooling):
+
+© Outer layer (flash fire exposure side): $-k_{shl}
+\frac{\partial T_{shl}}{\partial x)\BiglvertQ}_{x=0} = h_g
+(T_g - T_{sh0)\Big\vert(}_{x=0})$
+
+© Inner layer (ambient ait/human body side): $-k_{lin}
+\frac{\partial T_{lin}}{\partial x)\Big\vert{}_{x=L_{fab}} =
+h_{air} (T_{lin)\Biglvert}_{x=L_{fab)} - T_0)$
+
+Interface Conditions
+(Exact Math)
+
+Temperature Continuity: $T_{shl}\vert)_{x=L_{shi}} =
+T_{msr)\vert{}_{x=L_{shl}}$, ST_{msr}\vert}_{x=L_{msr}} =
+T_flin)\vert_{x=L_{msr}}$
+
+https://docs. google. com/documentid/eN4P45ndlys3XOnAwgRAWV2m4RIITFI edit
+
+216
+4,08.2026 21:55
+
+Copy PINs Literature Review Extraction Template.docx - Google Docs
+
+Field / Parameter
+
+Value / Description
+
+Heat Flux Continuity: $-k_{shl)\frac{\partial T_{shl}}{\partial
+x)\Big\vert()_{x=L_{shl}} = -k_{msr}\frac{\partial T_{msr)}{\partial
+x)\Big\vert{}_{x=L_{shl}}$, $-k_{msr}\frac{\partial
+T_{msr}}{\partial x)\Biglvert(}_{x=L_{msr}} = -k_{lin}\fracf\partial
+T_{lin}}{\partial x)\BiglvertQ_{x=L_{msr}}$
+
+Maximum Dielectric
+Contrast
+
+Thermophysical properties differ significantly across layers (e.g.,
+Density: $74.2 - 862\text{ kg/m )43$, Thermal Conductivity: $0.045 -
+0.37\text{ W/(m \edot\text{K) }$).
+
+Number of Interfaces
+
+2 interfaces (3 layers: Outer Shell, Moisture Barrier, Thermal Liner).
+
+Network Architecture & Training Data
+
+Field / Parameter
+
+Value / Description
+
+PINN Architecture Used
+
+Parallel Solving Framework (PSF) — Independent MLPs (Net,
+Net2, Net3) are trained in parallel for each layer and communicate
+
+via interface conditions
+
+ActivationNetwork
+Capacity &
+
+4 hidden layers, 10 neurons (channels) per layer, Tanh activation
+
+function,
+
+Collocation / Boundary
+Points
+
+Grid size of $300 \times 3208 (Temporal: 300, Spatial: 50 + 70 +
+200 = 320 segments).
+
+https://docs. google. com/documentid/teN4P45ndlys3XOnAwgRAWV2m4RII7FtA/edit
+
+316
+4,08.2026 21:55
+
+Copy PINs Literature Review Extraction Template.docx - Google Docs
+
+Field / Parameter
+
+Value / Description
+
+Sampling Strategy
+
+Uniform grid sampling
+
+Optimizer(s) Used
+
+Adam optimizer.
+
+Learning Rate & Epochs
+
+LR = I\times 104{-3}S, 20,000 Epochs (in ablation experiments)
+
+Loss Function
+
+PDE Loss (governing equation residuals for each layer)
+
+Components Initial Condition Loss
+
+Outer Boundary Condition Loss
+
+Interface Continuity Losses (temperature and heat flux)
+Dynamic Weighting Used? | Yes, Backward Balance Module (BBM). Loss terms are
+
+categorized and balanced using dynamic/scaling coefficients
+(S\alpha=10{-2)8, S\beta \approx 1.27\times 10*(-4)8,
+S\gamma \approx 4.72\times 10%{-8)$) based on an
+Intersection over Union (IOU) metric. In addition, the Forward
+Balance Module (FBM) transforms input/output physical base
+units
+
+Computational Cost /
+Hardware
+
+Intel Xeon processor, 64GB RAM, NVIDIA RTX 2080Ti GPU.
+
+Evaluation & Critical Analysis
+
+https://docs. google. com/documentid/teN4P45ndlys3XOnAwgRAWV2m4RII7FtA/edit
+
+416
+4,08.2026 21:55
+
+Copy PINs Literature Review Extraction Template.docx - Google Docs
+
+Field / Parameter
+
+Value / Description
+
+Error Metrics Reported
+
+Finite Difference Method (FDM) numerical solutions are used as
+ground truth, and Mean Squared Error (MSE) is reported.
+
+Main Contribution
+
+Parallel Solving Framework (PSF) to fit coupled multi-physics
+equations.
+
+Forward Balance Module (FBM) to resolve data scale
+imbalances.
+
+Backward Balance Module (BBM) to balance gradient flows
+during backpropagation using [OU-based loss scaling.
+
+Strengths (What Worked)
+
+Combined use of FBM and BBM (Bidirectional Balance) eliminated
+severe magnitude imbalances and gradient pathologies that cause
+‘al PINNs to fail.
+
+clas
+
+Parallel sub-networks (PSF) effectively captured sudden derivative
+jumps at the interface boundaries
+
+Weaknesses (What Didn't
+Work)
+
+Using FBM or BBM in isolation yields poor performance; their
+coexistence is necessary for successful training,
+
+Only standard fully connected architectures were tested; advanced
+architectures like CNNs or Attention mechanisms were not explored,
+
+Mechanism of Failure
+
+In the forward pass, large numerical discrepancies between inputs and
+outputs (mm vs. K) destabilize fitting; in the backward pass,
+
+unbalanced r
+
+dual magnitudes cause gradient flows to be dominated
+
+by larger loss terms, leading to training failure.
+
+Research Gap
+
+Evaluated solely on 1D heat transfer; empirical validation on 2D/3D
+
+complex geometries or multi-physics problems beyond heat transfer
+
+https://docs. google. com/documentid/teN4P45ndlys3XOnAwgRAWV2m4RII7FtA/edit
+
+5I6
+4,08.2026 21:55
+
+Copy PINs Literature Review Extraction Template.docx - Google Docs
+
+Field / Parameter
+
+Value / Description
+
+remains unverified,
+
+Project Alignment (Ideas for Our Paper)
+
+Field / Parameter
+
+Value / Description
+
+‘What can we adopt?
+
+Adopt the bidirectional balance methodology (unit transformation via
+FBM and IOU-based gradient scaling via BBM) alongside the Parallel
+
+Solving Framework (PSF) for layered media. or interface loss term]
+
+‘What should we improve
+
+Extend the approach to 2D/3D domains, incorporate hybrid
+optimizers (e.g., L-BFGS after Adam), or test
+‘Transformer/Attention-based PINN backbones.
+
+Direct Comparison?
+
+No (the paper tests ID multi-layer fabric heat transfer rather than 1D
+dielectric parallel plates)
+
+Our Addressed Gap
+
+Applying this bidirectional balancing strategy to mul
+
+layered,
+high-contrast domains outside heat transport (e.g., complex
+electrostatics/dielectrics).
+
+Missing Parameters /
+Limitations
+
+Error rates increase over longer temporal spans (¢.g., >120s), and
+
+linear search overhead for BBM scaling coefficients may scale poorly
+in higher dimensions.
+
+https://docs. google. com/documentid/teN4P45ndlys3XOnAwgRAWV2m4RII7FtA/edit
+
+66
