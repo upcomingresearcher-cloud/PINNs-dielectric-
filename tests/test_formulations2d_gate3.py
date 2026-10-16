@@ -43,3 +43,16 @@ def test_F6_weights_follow_frozen_rule():
         p, d = _d(k); eh = 2 * k / (1 + k); Ds = eh * p.Vc / p.Lc
         exp = [(p.Lc / Ds)**2] * 2 + [1 / p.Vc**2] * 2 + [1 / Ds**2]
         assert np.allclose(np.asarray(make("F6", P2Cylinder).weights(d)), exp)
+
+
+@pytest.mark.parametrize("cls_name,forms", [("P3LineCharge", FORMS), ("P3MatSub", ["F2"])])
+@pytest.mark.parametrize("k", [80.0, 2000.0, 0.0125])
+def test_p3_exact_training_variable_has_zero_strong_form_loss(cls_name, forms, k):
+    from src.problems import p2d
+    cls = getattr(p2d, cls_name); p = cls(k); d = T.make_data(p, p.sample(0), jnp.float64)
+    for f in forms:
+        if f == "F5": continue
+        F = make(f, cls); assert float(jnp.sum(F.weights(d) * F.term_vector(p.exact_jax, d))) < 1e-20, (cls_name, f, k)
+    X = p.quadrature()["X"]; s = p.side_of(X)
+    ph, g = p.to_physical(X, *p.exact_train(X, s), s); pe, ge = p.exact(X, s)
+    assert np.allclose(ph, pe, atol=1e-12) and np.allclose(g, ge, atol=1e-10)

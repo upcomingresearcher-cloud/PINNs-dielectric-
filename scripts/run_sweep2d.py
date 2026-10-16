@@ -9,12 +9,12 @@ from src.problems import p2d
 ap = argparse.ArgumentParser()
 for a_ in ("--problem", "--run-type", "--formulations", "--kappas", "--seeds"): ap.add_argument(a_, required=True)
 ap.add_argument("--variant", default="base"); ap.add_argument("--override", action="append", default=[])
-ap.add_argument("--max-seconds", type=float, default=255.0)
+ap.add_argument("--max-seconds", type=float, default=255.0); ap.add_argument("--problem-class", default=None)
 a = ap.parse_args()
 PROBS = {"P2": p2d.P2Cylinder}
 for nm in ("P3LineCharge", "P4Corner", "P5Film"):
     if hasattr(p2d, nm): PROBS[getattr(p2d, nm).problem_id] = getattr(p2d, nm)
-cls = PROBS[a.problem]; cfg = yaml.safe_load(open(root / f"configs/{a.problem.lower()}.yaml"))
+cls = getattr(p2d, a.problem_class) if a.problem_class else PROBS[a.problem]; cfg = yaml.safe_load(open(root / f"configs/{a.problem.lower()}.yaml"))
 ov = {}
 for s in a.override:
     k, v = s.split("="); ov[k] = v if k == "precision" else float(v)

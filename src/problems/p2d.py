@@ -267,5 +267,5 @@ class P3MatSub(P3LineCharge):
     def sample(self, seed, *a, **k):
         S = super().sample(seed, *a, **k); xi = S["XI"][:, 0]
         S["PI"] = -0.5 * np.log(xi**2 + self.H**2)                     # phi_s on y = 0
-        S["QI"] = -self.eps1 * self.H / (xi**2 + self.H**2)            # -eps1 dphi_s/dn, n = (0,-1)
+        S["QI"] = self.eps1 * self.H / (xi**2 + self.H**2)             # -eps1 dphi_s/dn with dphi_s/dn = -H/r^2 at y=0, n = (0,-1)
         return S
