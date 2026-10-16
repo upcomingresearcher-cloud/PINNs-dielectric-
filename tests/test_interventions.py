@@ -134,3 +134,22 @@ def test_rebalanced_training_matches_independent_reference():
     row, _ = T.train_run("F2", 1.0, 0, CFG, overrides=dict(steps=N, rebalance=1))
     lt = json.loads(row["notes"].split("final_lambda=")[1])
     assert np.allclose(lam, [lt[t] for t in F.TERMS], rtol=1e-5)
+
+
+@pytest.mark.parametrize("f", ["F1", "F2", "F3", "F4", "F5", "F6", "F4full", "F1norm", "F2norm"])
+def test_float64_init_equals_float32_init(f):
+    """Regression (bug 2026-10-16): precision must not change the initial weights."""
+    F = REGISTRY[f]
+    a = jax.tree_util.tree_leaves(F.init(jax.random.PRNGKey(7), 32, 3, jnp.float32))
+    b = jax.tree_util.tree_leaves(F.init(jax.random.PRNGKey(7), 32, 3, jnp.float64))
+    assert all(y.dtype == jnp.float64 for y in b)
+    assert all(np.array_equal(np.asarray(x, np.float64), np.asarray(y)) for x, y in zip(a, b))
+
+
+def test_float32_init_unchanged_by_fix():
+    """The fix must leave float32 draws bit-identical (the primary data)."""
+    net_key = jax.random.split(jax.random.PRNGKey(0), 1)[0]          # Formulation.init: one key per network
+    k = jax.random.split(net_key)[1]                                  # init_mlp: first layer key
+    old = jax.random.normal(k, (1, 32), jnp.float32) * jnp.sqrt(2.0 / (1 + 32)).astype(jnp.float32)
+    new = REGISTRY["F1"].init(jax.random.PRNGKey(0), 32, 3, jnp.float32)["net0"][0][0]
+    assert np.array_equal(np.asarray(old), np.asarray(new))
