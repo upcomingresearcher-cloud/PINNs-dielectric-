@@ -1,6 +1,6 @@
 # Frozen experimental protocol, version 1.0.0
 # Human-readable rationale: docs/experimental_protocol.md. Any change -> docs/protocol_change_log.md.
-protocol_version: "1.0.0"
+protocol_version: "1.0.1"
 frozen_on: "2026-10-16"
 status: frozen   # pilot results may revise only the items listed under pilot.may_revise
 

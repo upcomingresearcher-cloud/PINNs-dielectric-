@@ -1,0 +1,99 @@
+test,check,value,criterion,passed
+T1_exact,kappa=1: max error metric,0.0,< 1e-12,True
+T1_exact,kappa=1: |ln(kappa_eff/kappa)|,0.0,< 1e-10,True
+T1_exact,kappa=1: not flagged,False,False,True
+T1_exact,kappa=5: max error metric,1.3322676295501878e-16,< 1e-12,True
+T1_exact,kappa=5: |ln(kappa_eff/kappa)|,3.33066907387547e-16,< 1e-10,True
+T1_exact,kappa=5: not flagged,False,False,True
+T1_exact,kappa=20: max error metric,5.551115123125783e-17,< 1e-12,True
+T1_exact,kappa=20: |ln(kappa_eff/kappa)|,0.0,< 1e-10,True
+T1_exact,kappa=20: not flagged,False,False,True
+T1_exact,kappa=80: max error metric,5.724587470723463e-17,< 1e-12,True
+T1_exact,kappa=80: |ln(kappa_eff/kappa)|,2.220446049250313e-16,< 1e-10,True
+T1_exact,kappa=80: not flagged,False,False,True
+T1_exact,kappa=400: max error metric,1.1129985821867194e-16,< 1e-12,True
+T1_exact,kappa=400: |ln(kappa_eff/kappa)|,0.0,< 1e-10,True
+T1_exact,kappa=400: not flagged,False,False,True
+T1_exact,kappa=2000: max error metric,5.421010862427522e-18,< 1e-12,True
+T1_exact,kappa=2000: |ln(kappa_eff/kappa)|,2.220446049250313e-16,< 1e-10,True
+T1_exact,kappa=2000: not flagged,False,False,True
+T2_fem_conforming,"kappa=1, N=2: max error metric",0.0,< 1e-10,True
+T2_fem_conforming,"kappa=1, N=4: max error metric",0.0,< 1e-10,True
+T2_fem_conforming,"kappa=1, N=20: max error metric",1.0880185641326534e-14,< 1e-10,True
+T2_fem_conforming,"kappa=1, N=200: max error metric",4.18554080283684e-13,< 1e-10,True
+T2_fem_conforming,"kappa=5, N=2: max error metric",2.6645352591003756e-16,< 1e-10,True
+T2_fem_conforming,"kappa=5, N=4: max error metric",2.6645352591003756e-16,< 1e-10,True
+T2_fem_conforming,"kappa=5, N=20: max error metric",1.0125233984581428e-14,< 1e-10,True
+T2_fem_conforming,"kappa=5, N=200: max error metric",2.8537172624965025e-13,< 1e-10,True
+T2_fem_conforming,"kappa=20, N=2: max error metric",8.422673035880345e-17,< 1e-10,True
+T2_fem_conforming,"kappa=20, N=4: max error metric",4.529068669679964e-16,< 1e-10,True
+T2_fem_conforming,"kappa=20, N=20: max error metric",9.559020242022599e-15,< 1e-10,True
+T2_fem_conforming,"kappa=20, N=200: max error metric",1.8022250358740168e-13,< 1e-10,True
+T2_fem_conforming,"kappa=80, N=2: max error metric",1.6328082268315285e-15,< 1e-10,True
+T2_fem_conforming,"kappa=80, N=4: max error metric",9.917811661751167e-16,< 1e-10,True
+T2_fem_conforming,"kappa=80, N=20: max error metric",9.892087149410144e-15,< 1e-10,True
+T2_fem_conforming,"kappa=80, N=200: max error metric",2.0447393778155742e-13,< 1e-10,True
+T2_fem_conforming,"kappa=400, N=2: max error metric",1.3211552314601292e-16,< 1e-10,True
+T2_fem_conforming,"kappa=400, N=4: max error metric",1.4717554087856854e-15,< 1e-10,True
+T2_fem_conforming,"kappa=400, N=20: max error metric",1.780797731498751e-15,< 1e-10,True
+T2_fem_conforming,"kappa=400, N=200: max error metric",1.9655554961417465e-13,< 1e-10,True
+T2_fem_conforming,"kappa=2000, N=2: max error metric",8.649797235254213e-17,< 1e-10,True
+T2_fem_conforming,"kappa=2000, N=4: max error metric",7.524666791864533e-16,< 1e-10,True
+T2_fem_conforming,"kappa=2000, N=20: max error metric",5.5538906806873454e-15,< 1e-10,True
+T2_fem_conforming,"kappa=2000, N=200: max error metric",2.992436298754342e-13,< 1e-10,True
+T2_fem_convergence_P1S,"kappa=1: phi L2 order (errors ['1.40e-03', '3.50e-04', '8.75e-05', '2.19e-05', '5.47e-06'])",1.999999997810798,"in [1.9, 2.1]",True
+T2_fem_convergence_P1S,"kappa=1: E L2 order (errors ['2.77e-02', '1.39e-02', '6.93e-03', '3.47e-03', '1.73e-03'])",1.0000000000000016,"in [0.9, 1.1]",True
+T2_fem_convergence_P1S,"kappa=80: phi L2 order (errors ['1.52e-03', '3.80e-04', '9.51e-05', '2.38e-05', '5.94e-06'])",1.999999998537607,"in [1.9, 2.1]",True
+T2_fem_convergence_P1S,"kappa=80: E L2 order (errors ['1.46e-02', '7.31e-03', '3.66e-03', '1.83e-03', '9.14e-04'])",1.0000000000000013,"in [0.9, 1.1]",True
+T2_fem_convergence_P1S,"kappa=2000: phi L2 order (errors ['1.53e-03', '3.83e-04', '9.58e-05', '2.39e-05', '5.99e-06'])",1.99999999850839,"in [1.9, 2.1]",True
+T2_fem_convergence_P1S,"kappa=2000: E L2 order (errors ['1.44e-02', '7.20e-03', '3.60e-03', '1.80e-03', '9.00e-04'])",1.0000000000000013,"in [0.9, 1.1]",True
+T3_wrong_uniform_k80,primary field error,27.932899858970075,> 0.05 and flagged,True
+T3_wrong_uniform_k80,relL2_E_mat1 (expected 1 - 1/D = 0.4938),0.49375,approx 0.4938,True
+T3_wrong_uniform_k80,potential failure flag,True,True,True
+T3_wrong_uniform_k80,D jump detected (rel),39.99375,> 0.05,True
+T4_threshold,kappa=1: perturbation giving 4%,0.039999999999999994,fail_primary == False,True
+T4_threshold,kappa=1: perturbation giving 6%,0.06,fail_primary == True,True
+T4_threshold,kappa=80: perturbation giving 4%,0.040000000000000015,fail_primary == False,True
+T4_threshold,kappa=80: perturbation giving 6%,0.06000000000000003,fail_primary == True,True
+T4_threshold,kappa=2000: perturbation giving 4%,0.039999999999999945,fail_primary == False,True
+T4_threshold,kappa=2000: perturbation giving 6%,0.05999999999999996,fail_primary == True,True
+T5_nonfinite,NaN in phi,True,nonfinite and fail_primary both True,True
+T5_nonfinite,+Inf in dphi,True,nonfinite and fail_primary both True,True
+T5_nonfinite,-Inf in phi at interface,True,nonfinite and fail_primary both True,True
+T6_interface,kappa=1: imposed [phi]=0.001,0.0010000000000000009,"== 0.001 (1e-12), [D]==0",True
+T6_interface,kappa=1: imposed [phi]=0.02,0.020000000000000018,"== 0.02 (1e-12), [D]==0",True
+T6_interface,kappa=1: imposed [D]=0.01*D,0.010000000000000009,== 0.01; D-jump flag == False,True
+T6_interface,kappa=1: imposed [D]=0.1*D,0.10000000000000009,== 0.1; D-jump flag == True,True
+T6_interface,kappa=80: imposed [phi]=0.001,0.0010000000000000564,"== 0.001 (1e-12), [D]==0",True
+T6_interface,kappa=80: imposed [phi]=0.02,0.02000000000000006,"== 0.02 (1e-12), [D]==0",True
+T6_interface,kappa=80: imposed [D]=0.01*D,0.019753086419753263,== 0.0197531; D-jump flag == False,True
+T6_interface,kappa=80: imposed [D]=0.1*D,0.19753086419753108,== 0.197531; D-jump flag == True,True
+T6_interface,kappa=2000: imposed [phi]=0.001,0.0010000000000000054,"== 0.001 (1e-12), [D]==0",True
+T6_interface,kappa=2000: imposed [phi]=0.02,0.020000000000000007,"== 0.02 (1e-12), [D]==0",True
+T6_interface,kappa=2000: imposed [D]=0.01*D,0.019990004997501032,== 0.01999; D-jump flag == False,True
+T6_interface,kappa=2000: imposed [D]=0.1*D,0.19990004997501254,== 0.1999; D-jump flag == True,True
+T7_grid,"kappa=5 wrong_uniform: 16 pts/panel, panel 0.05 vs fine",8.326672684688679e-16,< 1e-10 (polynomial integrands),True
+T7_grid,"kappa=5 wrong_uniform: 32 pts/panel, panel 0.05 vs fine",1.539602324033354e-16,< 1e-10 (polynomial integrands),True
+T7_grid,"kappa=5 wrong_uniform: 16 pts/panel, panel 0.025 vs fine",2.7755575615628933e-16,< 1e-10 (polynomial integrands),True
+T7_grid,"kappa=5 perturbed: 16 pts/panel, panel 0.05 vs fine",4.4813689796068486e-14,< 1e-10 (polynomial integrands),True
+T7_grid,"kappa=5 perturbed: 32 pts/panel, panel 0.05 vs fine",5.416672317624935e-16,< 1e-10 (polynomial integrands),True
+T7_grid,"kappa=5 perturbed: 16 pts/panel, panel 0.025 vs fine",4.1666710135576535e-16,< 1e-10 (polynomial integrands),True
+T7_grid_info,kappa=5 non-conforming FEM N=21: default grid (kinks inside panels) vs node-aligned fine grid,0.05108108108106595,reported; motivates extra_breaks for FEM,True
+T7_grid,kappa=5 non-conforming FEM N=21: node-aligned default vs node-aligned fine,5.937091096530648e-15,< 1e-10,True
+T7_grid,"kappa=2000 wrong_uniform: 16 pts/panel, panel 0.05 vs fine",1.5708780939923157e-16,< 1e-10 (polynomial integrands),True
+T7_grid,"kappa=2000 wrong_uniform: 32 pts/panel, panel 0.05 vs fine",2.276012197626898e-16,< 1e-10 (polynomial integrands),True
+T7_grid,"kappa=2000 wrong_uniform: 16 pts/panel, panel 0.025 vs fine",1.5708780939923157e-16,< 1e-10 (polynomial integrands),True
+T7_grid,"kappa=2000 perturbed: 16 pts/panel, panel 0.05 vs fine",2.1235321799693934e-15,< 1e-10 (polynomial integrands),True
+T7_grid,"kappa=2000 perturbed: 32 pts/panel, panel 0.05 vs fine",1.0617660899846967e-15,< 1e-10 (polynomial integrands),True
+T7_grid,"kappa=2000 perturbed: 16 pts/panel, panel 0.025 vs fine",1.911178961972454e-15,< 1e-10 (polynomial integrands),True
+T7_grid_info,kappa=2000 non-conforming FEM N=21: default grid (kinks inside panels) vs node-aligned fine grid,0.05249475576996238,reported; motivates extra_breaks for FEM,True
+T7_grid,kappa=2000 non-conforming FEM N=21: node-aligned default vs node-aligned fine,4.450227304779925e-15,< 1e-10,True
+T8_mesh,kappa=5: conforming N=20 primary,2.826166425630796e-16,< 1e-10,True
+T8_mesh,"kappa=5: non-conforming band field errors ['0.47', '0.333', '0.236', '0.167', '0.118', '0.0833']",0.5058884114408226,reported order; must decrease with N,True
+T8_mesh,"kappa=5: non-conforming global phi errors ['0.0159', '0.00823', '0.00419', '0.00212', '0.00106', '0.000533']",0.9935981565128105,reported order; must decrease with N,True
+T8_mesh,kappa=80: conforming N=20 primary,5.620311981822292e-16,< 1e-10,True
+T8_mesh,"kappa=80: non-conforming band field errors ['0.707', '0.494', '0.347', '0.245', '0.173', '0.122']",0.5127399175585436,reported order; must decrease with N,True
+T8_mesh,"kappa=80: non-conforming global phi errors ['0.0443', '0.0227', '0.0115', '0.0058', '0.00291', '0.00146']",0.9992082824746384,reported order; must decrease with N,True
+T8_mesh,kappa=2000: conforming N=20 primary,8.459434255777378e-16,< 1e-10,True
+T8_mesh,"kappa=2000: non-conforming band field errors ['0.725', '0.506', '0.356', '0.251', '0.177', '0.125']",0.5133798943766339,reported order; must decrease with N,True
+T8_mesh,"kappa=2000: non-conforming global phi errors ['0.0475', '0.0243', '0.0123', '0.00619', '0.00311', '0.00156']",0.9999673537533158,reported order; must decrease with N,True

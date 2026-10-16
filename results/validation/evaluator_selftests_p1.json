@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-16T06:34:34",
+  "git_commit": "e5908b1",
+  "n_checks": 98,
+  "n_passed": 98,
+  "by_test": {
+    "T1_exact": {
+      "checks": 18,
+      "passed": 18
+    },
+    "T2_fem_conforming": {
+      "checks": 24,
+      "passed": 24
+    },
+    "T2_fem_convergence_P1S": {
+      "checks": 6,
+      "passed": 6
+    },
+    "T3_wrong_uniform_k80": {
+      "checks": 4,
+      "passed": 4
+    },
+    "T4_threshold": {
+      "checks": 6,
+      "passed": 6
+    },
+    "T5_nonfinite": {
+      "checks": 3,
+      "passed": 3
+    },
+    "T6_interface": {
+      "checks": 12,
+      "passed": 12
+    },
+    "T7_grid": {
+      "checks": 14,
+      "passed": 14
+    },
+    "T7_grid_info": {
+      "checks": 2,
+      "passed": 2
+    },
+    "T8_mesh": {
+      "checks": 9,
+      "passed": 9
+    }
+  }
+}
