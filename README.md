@@ -11,7 +11,8 @@ Research project status: **Phase 5 complete: full P1 sweep (180 primary + 30 ext
 | 5. Full P1 sweep, regression baselines, loss visibility | complete (results/raw/, results/processed/p1_*, results/figures/p1_*) |
 | 6. P1 analysis, hypothesis tests | complete (docs/phase6_p1_findings.md) |
 | 7. P2 cylinder | complete (docs/phase7_p2_findings.md) |
-| 8–14 | not started |
+| 8. P3 line charge | complete (docs/phase8_p3_findings.md) |
+| 9–14 | not started |
 
 ## Layout
 - `literature/` – literature database, review, gap matrix/report, BibTeX, and the scripts that build the CSVs
