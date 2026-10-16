@@ -12,7 +12,7 @@ bootstrap CIs use finite pairs only (count reported). Ties count against the pre
 """
 import json, pathlib
 import numpy as np, pandas as pd, matplotlib
-matplotlib.use("Agg"); import matplotlib.pyplot as plt
+matplotlib.use("Agg"); import matplotlib.pyplot as plt, matplotlib.ticker
 from scipy.stats import binom
 from src.analysis.p1_summary import cp_interval
 
@@ -158,6 +158,13 @@ def precision_table(D, FC):
             rows.append(dict(design="replica_adam_5seed", formulation=f, kappa=k, median_f32=a.err.median(), median_f64=b.err.median(),
                              ratio=r, fold=max(r, 1 / r), fails_f32=int(a.fail.sum()), fails_f64=int(b.fail.sum()),
                              config_fails_f32=a.fail.sum() >= 3, config_fails_f64=b.fail.sum() >= 3))
+    for f in ("F1", "F2", "F3", "F4", "F5", "F6"):       # SUPERSEDED (unmatched init): quantifies init variability
+        for k in KAPPAS:
+            a = series(D, f, "base", k, SEEDS5); b = series(D, f, "C64old", k, SEEDS5)
+            r = b.err.median() / a.err.median()
+            rows.append(dict(design="SUPERSEDED_replica_unmatched_init", formulation=f, kappa=k, median_f32=a.err.median(),
+                             median_f64=b.err.median(), ratio=r, fold=max(r, 1 / r), fails_f32=int(a.fail.sum()),
+                             fails_f64=int(b.fail.sum()), config_fails_f32=a.fail.sum() >= 3, config_fails_f64=b.fail.sum() >= 3))
     for f in ("F2", "F3"):
         for k in K3:
             for opt, a_arm, b_arm in (("adam", "base", "C64"), ("lbfgs", "Elbfgs", "C64lbfgs")):
@@ -207,7 +214,12 @@ def verdicts(P, FC, PT):
                   replica_n_configs=len(rep), replica_config_flag_changes=flagchg,
                   adam_prediction_holds=bool(rep.fold.median() <= 1.25 and flagchg <= 1),
                   twobytwo_median_fold_adam=float(fa.median()), twobytwo_median_fold_lbfgs=float(fl.median()),
-                  lbfgs_larger_effect=bool(fl.median() > fa.median()))
+                  lbfgs_larger_effect=bool(fl.median() > fa.median()),
+                  lbfgs_f64_better_cells=int((PT[PT.design == "2x2_lbfgs_10seed"].ratio < 1).sum()))
+    old = PT[PT.design == "SUPERSEDED_replica_unmatched_init"]
+    V["C_superseded_unmatched_init"] = dict(note="float64 runs drew a different initialisation (bug); NOT a precision effect",
+                                            median_fold=float(old.fold.median()), max_fold=float(old.fold.max()),
+                                            config_flag_changes=int((old.config_fails_f32 != old.config_fails_f64).sum()))
     # D criteria
     def nf(f, arm, k): return int(FC[(FC.formulation == f) & (FC.arm == arm) & (FC.seed_set == "10seed") & (FC.kappa == k)].n_failed.iloc[0])
     dd = {str(k): dict(F2=nf("F2", "base", k), F4=nf("F4", "base", k), F4full=nf("F4full", "D", k)) for k in KAPPAS}
@@ -237,20 +249,31 @@ def fig_arms(FC, panels, fname, title):
 
 
 def fig_seed_scatter(D, P, fname):
+    """One point per seed for every pre-specified comparison. Colour = kappa, marker = arm."""
     sel = P[P.prespecified]
-    groups = list(sel.intervention.unique())
-    fig, axes = plt.subplots(1, len(groups), figsize=(4.4 * len(groups), 4.2), squeeze=False)
-    for ax, iv in zip(axes[0], groups):
-        g = sel[sel.intervention == iv]
-        for r, mk in zip(g.itertuples(), "osd^v<>ph*Xo"):
+    panels = [("A", "F2"), ("A", "F3"), ("B", "F2norm"), ("D", "F4"), ("E", "F3"), ("E", "F5")]
+    cmap = plt.get_cmap("viridis"); col = {k: cmap(i / (len(KAPPAS) - 1)) for i, k in enumerate(KAPPAS)}
+    fig, axes = plt.subplots(2, 3, figsize=(13.5, 8.6))
+    for ax, (iv, f) in zip(axes.ravel(), panels):
+        g = sel[(sel.intervention == iv) & (sel.x.str.split("/").str[0] == f)]
+        for r in g.itertuples():
             fx, ax_ = r.x.split("/"); fy, ay = r.y.split("/")
             x = series(D, fx, ax_, r.kappa, SEEDS10).err.values; y = series(D, fy, ay, r.kappa, SEEDS10).err.values
-            ax.scatter(np.clip(y, 1e-7, 1e2), np.clip(x, 1e-7, 1e2), s=14, marker=mk, label=f"{r.comparison.split(' vs')[0]} κ={r.kappa:g}")
-        ax.plot([1e-7, 1e2], [1e-7, 1e2], "k-", lw=0.7); ax.axhline(.05, color="gray", ls=":"); ax.axvline(.05, color="gray", ls=":")
-        ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlabel("reference error (same seed) (–)"); ax.set_ylabel("intervention error (–)")
-        ax.set_title(f"Intervention {iv}: below diagonal = predicted sign", fontsize=9); ax.legend(fontsize=5.5, ncol=2)
-    fig.suptitle("Phase 11 pre-specified paired comparisons (P1, primary band field error, one point per seed)", fontsize=10)
-    fig.tight_layout(); fig.savefig(ROOT / "results/figures" / fname, dpi=130); plt.close(fig)
+            mk = "^" if "Adam2k" in r.comparison else "o"
+            ax.scatter(np.clip(y, 1e-8, 1e3), np.clip(x, 1e-8, 1e3), s=22, marker=mk, color=col[r.kappa], edgecolor="k", lw=0.3)
+        ax.plot([1e-8, 1e3], [1e-8, 1e3], "k-", lw=0.7); ax.axhline(.05, color="gray", ls=":"); ax.axvline(.05, color="gray", ls=":")
+        ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(1e-8, 1e3); ax.set_ylim(1e-8, 1e3)
+        ref = {"A": "baseline", "B": "F2 baseline", "D": "F2 (same seed)", "E": "Adam 3000"}[iv]
+        ax.set_xlabel(f"reference error: {ref} (–)"); ax.set_ylabel("intervention error (–)")
+        ttl = {"A": f"A: {f} with rebalancing", "B": "B: F2norm (κ ≥ 80)", "D": "D: F4 vs F2 (κ ≥ 400)",
+               "E": f"E: {f}, L-BFGS (●) / Adam2k→L-BFGS1k (▲)"}[iv]
+        ax.set_title(ttl + "\nbelow diagonal = predicted sign", fontsize=9)
+    from matplotlib.lines import Line2D
+    h = [Line2D([], [], marker="o", ls="", color=col[k], markeredgecolor="k", label=f"κ = {k:g}") for k in KAPPAS]
+    h += [Line2D([], [], color="gray", ls=":", label="5% failure threshold")]
+    fig.legend(handles=h, loc="lower center", ncol=7, fontsize=8)
+    fig.suptitle("Phase 11 pre-specified paired comparisons, P1: primary band field error, one point per seed (10 matched seeds)", fontsize=10)
+    fig.tight_layout(rect=(0, 0.04, 1, 0.97)); fig.savefig(ROOT / "results/figures" / fname, dpi=130); plt.close(fig)
 
 
 def fig_precision(PT, fname):
@@ -258,8 +281,12 @@ def fig_precision(PT, fname):
     for des, mk, lab in (("replica_adam_5seed", "o", "Adam, replica (5 seeds, 36 configs)"),
                          ("2x2_adam_10seed", "s", "Adam, F2/F3 (10 seeds)"), ("2x2_lbfgs_10seed", "^", "L-BFGS, F2/F3 (10 seeds)")):
         g = PT[PT.design == des]; ax.scatter(g.median_f32, g.ratio, marker=mk, label=lab, alpha=.8)
+    g = PT[PT.design == "SUPERSEDED_replica_unmatched_init"]
+    ax.scatter(g.median_f32, g.ratio, marker="x", color="0.55", label="SUPERSEDED: f64 with a different init (bug)")
     ax.axhspan(1 / 1.25, 1.25, color="green", alpha=.12, label="±1.25× band (prediction)")
     ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlabel("median primary error, float32 (–)")
+    ax.set_yticks([0.1, 0.2, 0.5, 0.8, 1, 1.25, 2, 5, 10, 20]); ax.yaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter("%g"))
+    ax.yaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
     ax.set_ylabel("median error ratio float64 / float32 (–)"); ax.legend(fontsize=7)
     ax.set_title("Intervention C: effect of float64 on median primary band field error (P1)", fontsize=10)
     fig.tight_layout(); fig.savefig(ROOT / "results/figures" / fname, dpi=130); plt.close(fig)
@@ -304,7 +331,7 @@ def main():
                                           ("F4full", "D", "F4full (all conditions hard)")])],
              "p1_interventions_D.png", "Intervention D: hard interface conditions, P1")
     fig_arms(FC, [(f, [(f, "base", "Adam 3000"), (f, "Elbfgs", "L-BFGS ≤3000 evals"), (f, "Ehyb", "Adam 2000 → L-BFGS ≤1000")])
-                  for f in ("F2", "F3", "F5")], "p1_interventions_E.png", "Intervention E: optimiser (equal function+gradient budget), P1")
+                  for f in ("F2", "F3", "F5")], "p1_interventions_E.png", "Intervention E: optimiser at equal function+gradient budget, P1 (E arms run at κ = 1, 80, 2000 only; lines join measured points)")
     fig_precision(PT, "p1_interventions_C.png"); fig_seed_scatter(D, P, "p1_interventions_paired.png")
     return P, FC, CC, PT, V
 

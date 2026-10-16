@@ -6,9 +6,9 @@
 
 1. Unzip the attached package into `/home/claude/` (the directory inside is `pinn_dielectric_project/`).
 2. Run the environment setup and verification in Section 4.
-3. Continue with **Phase 11**.
+3. Continue with **Phase 12** (Phase 11 is complete; read `docs/phase11_interventions_findings.md`).
 
-Do not redo Phases 1–10. Do not change frozen settings without a change-log entry. Report progress after each phase.
+Do not redo Phases 1–11. Do not change frozen settings without a change-log entry. Report progress after each phase.
 
 ---
 
@@ -60,8 +60,8 @@ The problems are P1 (1D layered capacitor), P2 (dielectric cylinder), P3 (2D lin
 | 8 | P3 line charge (210 + 15 sensitivity + 60 regression) | complete |
 | 9 | P4 corner (210 + 60 regression), H10 | complete |
 | 10 | P5 thin film (210 + 60 thickness + 40 density + 60 regression) | complete |
-| **11** | **Controlled interventions A–E** | **next** |
-| 12 | Robustness | not started |
+| 11 | Controlled interventions A–E (1,155 rows incl. 270 superseded; see docs/phase11_interventions_findings.md) | complete |
+| **12** | **Robustness** | **next** |
 | 13 | Remedy comparison vs FEM (cost) | not started |
 | 14 | Final analyses, figures, paper, reproduction guide, educational resource | not started |
 
@@ -236,7 +236,16 @@ The full pytest suite takes about 2–3 min. If it exceeds the limit, run `tests
 8. P4 clip-derivative bug in verification code.
 9. Background-process kill and concurrent-run duplicates (sandbox incidents, not code bugs).
 
-## 9. PHASE 11 — Controlled interventions (frozen design; protocol Sec. 10)
+## 9a. PHASE 11 RESULTS (complete)
+
+- H5: A mixed (3/12 supported: F3 at κ ≥ 80; F2 worse everywhere, fails 10/10 at κ = 1, 5); B refuted (3/3); D refuted (F4 fails 10/10 at κ ≥ 20); E mixed (9/12 supported; F3 all 6 at 10/10 seeds; F5 refuted at κ = 1 via quadrature overfitting).
+- C holds under Adam (median fold 1.0001, 0 flag changes); L-BFGS float64 lower in 6/6 cells (median fold 3.4).
+- H4 intervention clause NOT met (A, B leave F2 at κ = 2000 at 9/10 failures) → H4 refuted by criterion. L-BFGS (descriptive): F2 κ = 2000 failures 9 → 4 (f32), → 1 (f64).
+- BUG fixed: float64 initialisation differed from float32 (nets.init_mlp); all C rerun as C_f64v2*; originals kept as superseded. Init variability alone gave fold changes up to 20.7×.
+- Recommended remedies for Phase 13: L-BFGS (and Adam→L-BFGS) for F2/F3; F5 needs resampled quadrature (not in the frozen design).
+- `scripts/run_sweep.py` now has `--max-seconds` and string overrides (`--override optimiser=lbfgs`, `rebalance=1`, `adam_steps=2000`).
+
+## 9. PHASE 11 — Controlled interventions (frozen design; protocol Sec. 10) — DONE, kept for reference
 
 Run all of these on P1, with **10 matched seeds (0–9)**, changing one factor at a time. **The primary sweep has only seeds 0–4**, so first run the unchanged baseline for seeds 5–9: `run_type intervention`, `variant base`, for every (formulation, κ) used below. Matched comparisons then use seeds 0–9 of the identical baseline. Seeds 0–4 can come from the primary rows: same code path and settings, and the determinism is confirmed.
 

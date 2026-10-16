@@ -8,14 +8,14 @@ F2,base,5seed,3,2000.0,5,True
 F2,A,10seed,6,1.0,0,False
 F2,A,10seed,5,1.0,0,False
 F2,A,5seed,3,1.0,0,False
-F2,C64,5seed,3,400.0,4,True
+F2,C64,5seed,3,2000.0,5,True
 F3,base,10seed,6,80.0,3,True
 F3,base,10seed,5,20.0,2,True
 F3,base,5seed,3,20.0,2,True
 F3,A,10seed,6,5.0,1,False
 F3,A,10seed,5,5.0,1,False
 F3,A,5seed,3,1.0,0,False
-F3,C64,5seed,3,80.0,3,True
+F3,C64,5seed,3,20.0,2,True
 F4,base,10seed,6,20.0,2,True
 F4,base,10seed,5,20.0,2,True
 F4,base,5seed,3,20.0,2,True

@@ -184,8 +184,8 @@
   "overall": "mixed",
   "n_configs": 12,
   "counts": {
-   "supported": 9,
    "refuted": 2,
+   "supported": 9,
    "inconclusive": 1
   },
   "per_config": [
@@ -404,14 +404,21 @@
   }
  },
  "C": {
-  "replica_median_fold": 1.3807176046622907,
-  "replica_max_fold": 20.71850482590341,
+  "replica_median_fold": 1.0000673343418445,
+  "replica_max_fold": 1.0730794855162602,
   "replica_n_configs": 36,
-  "replica_config_flag_changes": 2,
-  "adam_prediction_holds": false,
-  "twobytwo_median_fold_adam": 1.3649318794251817,
-  "twobytwo_median_fold_lbfgs": 3.4275933525167845,
-  "lbfgs_larger_effect": true
+  "replica_config_flag_changes": 0,
+  "adam_prediction_holds": true,
+  "twobytwo_median_fold_adam": 1.0007572124167403,
+  "twobytwo_median_fold_lbfgs": 3.3640280036536394,
+  "lbfgs_larger_effect": true,
+  "lbfgs_f64_better_cells": 6
+ },
+ "C_superseded_unmatched_init": {
+  "note": "float64 runs drew a different initialisation (bug); NOT a precision effect",
+  "median_fold": 1.3807176046622907,
+  "max_fold": 20.71850482590341,
+  "config_flag_changes": 2
  },
  "D": {
   "failure_counts_10seed": {
