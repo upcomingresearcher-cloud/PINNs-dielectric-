@@ -72,7 +72,8 @@ def train_run(fname, prob_cls, kappa, seed, cfg2d, run_type="pinn", variant="bas
     F, opt, update, term_grads, phi_grad, sched = compiled_fns(fname, prob_cls, lr_init, lr_final, steps)
     w = F.weights(d); params = F.init(jax.random.PRNGKey(seed), width, depth, dtype); st = opt.init(params)
     rid = R.run_id(prob.problem_id, fname, float(kappa), seed, run_type, variant)
-    key = (fname, prob_cls.__name__, lr_init, lr_final, steps, precision, npm, ni, ne, width, depth)
+    key = (fname, prob_cls.__name__, lr_init, lr_final, steps, precision, width, depth,
+           tuple(sorted((k_, tuple(v_.shape)) for k_, v_ in d.items())))   # shapes vary by seed when the boundary crosses the interface
     t0 = time.perf_counter(); cached = key in _AOT
     if not cached: _AOT[key] = (update.lower(params, st, d, w).compile(), term_grads.lower(params, d).compile())
     upd, tg = _AOT[key]; compile_s = time.perf_counter() - t0

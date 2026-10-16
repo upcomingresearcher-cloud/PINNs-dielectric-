@@ -270,3 +270,319 @@ P2-REG_F4-k2000-s2-regression-base,regression,complete,P2,2d_cylinder_R0.25_box2
 P2-REG_F4-k2000-s3-regression-base,regression,complete,P2,2d_cylinder_R0.25_box2,REG_F4,base,2000.0,3,"3x32 tanh x2 net(s), inputs=2",3,32,tanh,4482,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,2.8819867111451458e-05,"{""data1"": 2.114993185386993e-05, ""data2"": 7.669935257581528e-06}",0.009544287385395313,0.009474710630023385,21.90255593494367,0.23509037673182923,0.22456620506431813,18.82223605777362,0.06966815123843342,0.06706390218781436,85.10255751017517,0.24369993875614826,0.23181570203852653,108.1924898156148,34.500142523560434,0.06706390218781436,85.10255751017515,87.8182091393586,0.23181570203852653,108.19248981561478,False,2.896635880150808e-09,201.10787459515672,3.87973700354985e-05,3.4245903026779567,0.7165961296654709,8.08599484036776e-08,-2.6137640953025434,"{""E_in_mean"": 0.013557801167888826, ""kappa_eff"": 146.5165460264257, ""log_kappa_eff_ratio"": -2.6137640953025434}",8192,87.8182091393586,108.1924898156148,True,True,False,True,True,2.6902552020146686,2.272000074299285e-06,394.1484375,5e346de01084,1.2.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,7c19d323c783,2026-10-16T09:27:06,compile_cached=True
 P2-REG_F4-k2000-s4-regression-base,regression,complete,P2,2d_cylinder_R0.25_box2,REG_F4,base,2000.0,4,"3x32 tanh x2 net(s), inputs=2",3,32,tanh,4482,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,3.9271582409128314e-05,"{""data1"": 3.197584373992868e-05, ""data2"": 7.295738669199636e-06}",0.011436872692550958,0.011375111854913134,22.599926827454137,0.22879936031103912,0.21142017665597493,23.66989152994118,0.08358274914378051,0.08135472369608125,86.4541778929385,0.26470703592419004,0.2510889239226517,120.62197304538441,35.048106098441295,0.08135472369608125,86.45417789293849,97.907026328459,0.2510889239226517,120.62197304538438,False,2.3931397983283116e-09,210.06135705900994,3.599083958333212e-05,3.474305360094763,0.7415160960278857,8.08599484036776e-08,-2.5377364349789344,"{""E_in_mean"": 0.01257148125193309, ""kappa_eff"": 158.09024242409495, ""log_kappa_eff_ratio"": -2.5377364349789344}",8192,97.907026328459,120.62197304538441,True,True,False,True,True,2.732622301992251,2.088000201183604e-06,394.1484375,914963d8ebd9,1.2.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,7c19d323c783,2026-10-16T09:27:09,compile_cached=True
 P2-F2-k5-s100-pilot-bugcheck-20k-float64,pilot,complete,P2,2d_cylinder_R0.25_box2,F2,bugcheck-20k-float64,5.0,100,"3x32 tanh x2 net(s), inputs=2",3,32,tanh,4482,adam,cosine 0.001->0.0001/20000,0.001,float64,512,256,128,0,20000,20000,28160000,0.017846748511091616,"{""pde1"": 0.00011364740602229351, ""pde2"": 8.211378408934822e-07, ""bc"": 0.0006291136228609081, ""cont"": 0.01706088445292751, ""flux"": 4.228189144000874e-05}",0.05178954237375522,0.051259627472549245,0.43783595638620965,0.9399508254349846,1.041997308675186,0.4378134026034354,0.1635677698745858,0.1607133004558745,0.43778025508665297,0.48588079371736254,0.48904594639633725,0.4377898806770031,0.21502563505304442,0.1607133004558745,0.4377802550866531,0.4571857223623048,0.48904594639633725,0.4377898806770031,False,0.06530866032335893,0.005517514099375477,2.21665626439408,1.676860172317488,0.16063335103826412,0.021711159170773764,0.6597839498559519,"{""E_in_mean"": 0.18740854749336086, ""kappa_eff"": 9.671871836960115, ""log_kappa_eff_ratio"": 0.6597839498559519}",8192,0.48588079371736254,0.48904594639633725,True,True,True,False,False,122.50187006604301,4.5699091030001,528.23046875,ae5d9571ad50,1.2.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,7c19d323c783,2026-10-16T09:33:47,compile_cached=False
+P3-F1-k1-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F1,base,1.0,0,"3x32 tanh x1 net(s), inputs=2",3,32,tanh,2241,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,3.039416540673301e-07,"{""pde1"": 1.8878385787957086e-07, ""pde2"": 1.914439735628548e-07, ""bc"": 1.1382773834611726e-07}",0.00026752567088761126,0.00021032913243443314,0.00044653567302000964,0.00022649255573233248,0.00021558159239783004,0.00023940145441594816,0.0003665526170162537,0.00029023349711583443,0.0006116380727504686,0.00021401641219112477,0.0002026576764277541,0.0002276082578550687,0.0003665526170162537,0.00029023349711583443,0.0006116380727504686,0.00021401641219112477,0.0002026576764277541,0.0002276082578550687,False,0.0,0.0,0.0,9.673487656448494,1.0048357706471668e-05,0.0006185799138620496,nan,"{""relL2_E_near_source"": 9.87525721200962e-06, ""relL2_E_far_field"": 0.0004569876922506164}",23808,0.00021401641219112477,0.0002276082578550687,False,False,False,False,False,9.003470877000836,3.9884626249995563,415.265625,24c6a544362c,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:41:20,compile_cached=False
+P3-F1-k1-s1-pinn-base,pinn,failed_technical,P3,,F1,base,1.0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k1-s2-pinn-base,pinn,failed_technical,P3,,F1,base,1.0,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k1-s3-pinn-base,pinn,failed_technical,P3,,F1,base,1.0,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k1-s4-pinn-base,pinn,failed_technical,P3,,F1,base,1.0,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k5-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F1,base,5.0,0,"3x32 tanh x1 net(s), inputs=2",3,32,tanh,2241,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,0.005508773174369708,"{""pde1"": 4.122700192965567e-05, ""pde2"": 0.00011321078636683524, ""bc"": 0.005431554280221462}",0.7566152934322816,0.5430218763154843,2.8194748424038463,2.198025861165586,1.9280435437169183,2.6264949711896284,0.45278772754672725,0.32362928182665723,1.9958921752041772,0.6557543146605899,0.47659349283119024,2.009779998835913,1.2852327355251596,0.32362928182665723,1.9958921752041772,1.5666251373848734,0.47659349283119024,2.009779998835913,False,0.0,2.399762217949894,0.0,16.346885553674014,1.0607014650515838,0.14463696028196343,nan,"{""relL2_E_near_source"": 0.1289337016643282, ""relL2_E_far_field"": 0.6202953857918836}",23808,1.5666251373848734,2.009779998835913,True,True,True,False,True,9.6543066510053,1.6730000425013714e-06,416.19140625,31be47ccbee2,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:41:36,compile_cached=True
+P3-F1-k5-s1-pinn-base,pinn,failed_technical,P3,,F1,base,5.0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k5-s2-pinn-base,pinn,failed_technical,P3,,F1,base,5.0,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k5-s3-pinn-base,pinn,failed_technical,P3,,F1,base,5.0,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k5-s4-pinn-base,pinn,failed_technical,P3,,F1,base,5.0,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k20-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F1,base,20.0,0,"3x32 tanh x1 net(s), inputs=2",3,32,tanh,2241,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,0.011146605343128613,"{""pde1"": 1.3036804375587963e-05, ""pde2"": 6.088292502681725e-05, ""bc"": 0.01110964547842741}",1.126834791790083,0.795672485262754,13.424400388571756,6.946337581537034,5.339400858537645,12.527653304874491,0.6231732999090569,0.4399154793338475,9.503834743878064,0.8171987650618816,0.57877122349095,9.507582292192481,6.483427257321691,0.4399154793338475,9.503834743878064,7.357674512340945,0.57877122349095,9.507582292192481,False,0.0,9.978486982827537,0.0,41.48223050404576,4.67658976534956,0.21402870633961688,nan,"{""relL2_E_near_source"": 0.1743338259046286, ""relL2_E_far_field"": 0.8698625095703183}",23808,7.357674512340945,9.507582292192481,True,True,True,False,True,9.245810499991421,2.4109999685606454e-06,416.31640625,6234d55af7ff,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:41:51,compile_cached=True
+P3-F1-k20-s1-pinn-base,pinn,failed_technical,P3,,F1,base,20.0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k20-s2-pinn-base,pinn,failed_technical,P3,,F1,base,20.0,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k20-s3-pinn-base,pinn,failed_technical,P3,,F1,base,20.0,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k20-s4-pinn-base,pinn,failed_technical,P3,,F1,base,20.0,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k80-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F1,base,80.0,0,"3x32 tanh x1 net(s), inputs=2",3,32,tanh,2241,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,0.013407590839847217,"{""pde1"": 3.5605278299044585e-06, ""pde2"": 0.0006220294162631035, ""bc"": 0.013094795867800713}",1.2409587572053007,0.8787624570145091,55.57422041908283,11.277729050139907,8.071792888909458,52.08635766517727,0.6708115974722823,0.4701279802466163,39.76352643602814,0.8545398433999993,0.6023964057637905,39.63379477131571,27.58189321212361,0.4701279802466163,39.76352643602814,30.69193097014443,0.6023964057637905,39.63379477131572,False,0.0,40.18595271351401,0.0,143.55868346088405,19.156951279526517,0.2377715598261796,nan,"{""relL2_E_near_source"": 0.1865794284366718, ""relL2_E_far_field"": 0.9374008793480988}",23808,30.69193097014443,39.63379477131571,True,True,True,False,True,10.174092700984147,1.7630000002100132e-06,416.31640625,0b88c6091694,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:42:07,compile_cached=True
+P3-F1-k80-s1-pinn-base,pinn,failed_technical,P3,,F1,base,80.0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k80-s2-pinn-base,pinn,failed_technical,P3,,F1,base,80.0,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k80-s3-pinn-base,pinn,failed_technical,P3,,F1,base,80.0,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k80-s4-pinn-base,pinn,failed_technical,P3,,F1,base,80.0,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k400-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F1,base,400.0,0,"3x32 tanh x1 net(s), inputs=2",3,32,tanh,2241,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,0.023104698571387416,"{""pde1"": 5.923559911025222e-06, ""pde2"": 0.015505066141486168, ""bc"": 0.01534920372068882}",1.2756456333894615,0.9188551970467588,276.3181294698778,13.01036247396833,9.216526248337004,262.92106201995165,0.6844044818797903,0.4679818944076001,205.61331157562844,0.8644534217267654,0.6022846547699527,202.48920057801334,143.27740092554345,0.4679818944076001,205.61331157562844,156.85994285412903,0.6022846547699527,202.48920057801334,False,0.0,204.5382704205581,0.0,718.4817415667508,100.62127804828705,0.2559633729725562,nan,"{""relL2_E_near_source"": 0.18640886967707504, ""relL2_E_far_field"": 0.9570646007511205}",23808,156.85994285412903,202.48920057801334,True,True,True,False,True,8.886837466991892,1.8149999050365295e-06,416.31640625,333a4683a726,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:42:21,compile_cached=True
+P3-F1-k400-s1-pinn-base,pinn,failed_technical,P3,,F1,base,400.0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k400-s2-pinn-base,pinn,failed_technical,P3,,F1,base,400.0,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k400-s3-pinn-base,pinn,failed_technical,P3,,F1,base,400.0,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k400-s4-pinn-base,pinn,failed_technical,P3,,F1,base,400.0,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k2000-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F1,base,2000.0,0,"3x32 tanh x1 net(s), inputs=2",3,32,tanh,2241,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,0.2128650339552678,"{""pde1"": 6.306590421445435e-06, ""pde2"": 0.39422285556793213, ""bc"": 0.015750452876091003}",1.2825475737157128,0.9252613655680006,1382.5009445171147,13.380928369279783,9.474320728244798,1317.1946192584596,0.6871060540764059,0.4687327578137855,1032.3715864547703,0.8664066668353895,0.6029854120041475,1015.5638289384475,720.0501581426843,0.4687327578137855,1032.3715864547703,786.7767287690831,0.6029854120041475,1015.5638289384474,False,0.0,1024.4587053324185,0.0,3576.9526619012095,505.6725224059108,0.26002925988562153,nan,"{""relL2_E_near_source"": 0.18677349656302936, ""relL2_E_far_field"": 0.9608701089619255}",23808,786.7767287690831,1015.5638289384475,True,True,True,False,True,9.170919108005819,1.886000063677784e-06,416.31640625,ba311814ea6b,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:42:36,compile_cached=True
+P3-F1-k2000-s1-pinn-base,pinn,failed_technical,P3,,F1,base,2000.0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k2000-s2-pinn-base,pinn,failed_technical,P3,,F1,base,2000.0,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k2000-s3-pinn-base,pinn,failed_technical,P3,,F1,base,2000.0,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k2000-s4-pinn-base,pinn,failed_technical,P3,,F1,base,2000.0,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.2-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F1,base,0.2,0,"3x32 tanh x1 net(s), inputs=2",3,32,tanh,2241,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,0.0008878509106580168,"{""pde1"": 0.0003474399563856423, ""pde2"": 0.00037242285907268524, ""bc"": 0.000527919502928853}",0.3913001684377065,0.3255881138092877,0.5258580570070809,0.48164635966070013,0.4664585113956882,0.4984470180810738,0.3066250462522134,0.258716573000603,0.3937662112180727,0.4724583915690427,0.5682984925526663,0.4137598444383136,0.26166991809392187,0.258716573000603,0.3937662112180727,0.5587057423722358,0.5682984925526663,0.4137598444383136,False,0.0,2.389875899075016,0.0,8.399274786557287,0.2632258962918238,0.04931259299718865,nan,"{""relL2_E_near_source"": 0.12680827743501735, ""relL2_E_far_field"": 0.34291252817173046}",23808,0.5587057423722358,0.5682984925526663,True,True,True,False,True,8.639246654994167,1.693000285740709e-06,416.31640625,e02cdbcc3f02,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:42:49,compile_cached=True
+P3-F1-k0.2-s1-pinn-base,pinn,failed_technical,P3,,F1,base,0.2,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.2-s2-pinn-base,pinn,failed_technical,P3,,F1,base,0.2,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.2-s3-pinn-base,pinn,failed_technical,P3,,F1,base,0.2,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.2-s4-pinn-base,pinn,failed_technical,P3,,F1,base,0.2,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.05-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F1,base,0.05,0,"3x32 tanh x1 net(s), inputs=2",3,32,tanh,2241,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,0.0009924325422616675,"{""pde1"": 0.00047441868809983134, ""pde2"": 0.00047422360512427986, ""bc"": 0.000518111395649612}",0.4631743703499661,0.397718671253264,0.5876018150042002,0.5561867996482662,0.5414034708955889,0.5723592455091651,0.37449326447143244,0.3230221086945157,0.45772908883371094,0.566228197490004,0.6919826674744924,0.4952089184259107,0.32323270205054916,0.3230221086945157,0.45772908883371094,0.6911009836072634,0.6919826674744924,0.49520891842591064,False,0.0,9.707955406445414,0.0,8.239420447072709,0.3141439321456995,0.07092132189633382,nan,"{""relL2_E_near_source"": 0.167365140465243, ""relL2_E_far_field"": 0.410295889726012}",23808,0.6911009836072634,0.6919826674744924,True,True,True,False,True,8.9194247969981,1.5109999367268756e-06,416.31640625,5d8ecf7b22fd,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:43:04,compile_cached=True
+P3-F1-k0.05-s1-pinn-base,pinn,failed_technical,P3,,F1,base,0.05,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.05-s2-pinn-base,pinn,failed_technical,P3,,F1,base,0.05,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.05-s3-pinn-base,pinn,failed_technical,P3,,F1,base,0.05,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.05-s4-pinn-base,pinn,failed_technical,P3,,F1,base,0.05,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.0125-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F1,base,0.0125,0,"3x32 tanh x1 net(s), inputs=2",3,32,tanh,2241,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,0.0011246450885664672,"{""pde1"": 0.0005119052366353571, ""pde2"": 0.0005978744011372328, ""bc"": 0.0005697552696801722}",0.35447678905142116,0.33704798902051375,0.3908541420893922,0.45947175912959604,0.45272472688687754,0.46691387964774256,0.3364901968806358,0.2768848851343961,0.4255313052098933,0.5605729363021537,0.6042020914696814,0.5388561603968728,0.27690075758734023,0.2768848851343961,0.4255313052098933,0.6041815413679452,0.6042020914696814,0.5388561603968727,False,0.0,32.66166379618732,0.0,8.721035978850153,0.2848505008647293,0.054673280886455594,nan,"{""relL2_E_near_source"": 0.15091291925495887, ""relL2_E_far_field"": 0.3670246282256014}",23808,0.6041815413679452,0.6042020914696814,True,True,True,False,True,9.241778165997403,1.6079998204077128e-06,416.31640625,1dd38d9b513a,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:43:18,compile_cached=True
+P3-F1-k0.0125-s1-pinn-base,pinn,failed_technical,P3,,F1,base,0.0125,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.0125-s2-pinn-base,pinn,failed_technical,P3,,F1,base,0.0125,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.0125-s3-pinn-base,pinn,failed_technical,P3,,F1,base,0.0125,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.0125-s4-pinn-base,pinn,failed_technical,P3,,F1,base,0.0125,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.0025-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F1,base,0.0025,0,"3x32 tanh x1 net(s), inputs=2",3,32,tanh,2241,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,0.0007467661271221004,"{""pde1"": 0.0003934720007237047, ""pde2"": 6.474014662671834e-05, ""bc"": 0.0005176600534468889}",0.2788538972335473,0.2828653905635036,0.2696890641550997,0.38109460775948606,0.37981084692555,0.38252595647006926,0.3188355327877215,0.2368001090231936,0.43055584319141704,0.5580281017050739,0.5310416386021903,0.570229313980166,0.23680103805074568,0.2368001090231936,0.4305558431914171,0.5310421807898098,0.5310416386021903,0.5702293139801662,False,0.0,141.77110440346658,0.0,9.155795693818,0.2523031296531265,0.0540279071464759,nan,"{""relL2_E_near_source"": 0.13315234047342944, ""relL2_E_far_field"": 0.3482842892239418}",23808,0.5580281017050739,0.570229313980166,True,True,True,False,True,9.182886031002909,1.5699997675255872e-06,416.31640625,9e3b28b242b8,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:43:33,compile_cached=True
+P3-F1-k0.0025-s1-pinn-base,pinn,failed_technical,P3,,F1,base,0.0025,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.0025-s2-pinn-base,pinn,failed_technical,P3,,F1,base,0.0025,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.0025-s3-pinn-base,pinn,failed_technical,P3,,F1,base,0.0025,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.0025-s4-pinn-base,pinn,failed_technical,P3,,F1,base,0.0025,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.0005-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F1,base,0.0005,0,"3x32 tanh x1 net(s), inputs=2",3,32,tanh,2241,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,0.0006984781814480812,"{""pde1"": 0.000385183870093897, ""pde2"": 2.8303516046435107e-06, ""bc"": 0.0005044710705988109}",0.2728341371784511,0.27814179752062546,0.2606238600453469,0.3741481782181411,0.3733789315464256,0.3750068620370659,0.3191081331854039,0.2333932017095013,0.43432022411101456,0.5587161467015174,0.5245197288318282,0.5740245593376648,0.23339324091075592,0.2333932017095013,0.43432022411101456,0.5245197565175642,0.5245197288318282,0.5740245593376649,False,0.0,697.7584204337576,0.0,9.198570324775245,0.24943797632965206,0.05357598677038214,nan,"{""relL2_E_near_source"": 0.13165655917397728, ""relL2_E_far_field"": 0.3486427457811819}",23808,0.5587161467015174,0.5740245593376648,True,True,True,False,True,8.701278597998225,1.6710000636521727e-06,416.31640625,efae8714ad61,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:43:47,compile_cached=True
+P3-F1-k0.0005-s1-pinn-base,pinn,failed_technical,P3,,F1,base,0.0005,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.0005-s2-pinn-base,pinn,failed_technical,P3,,F1,base,0.0005,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.0005-s3-pinn-base,pinn,failed_technical,P3,,F1,base,0.0005,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F1-k0.0005-s4-pinn-base,pinn,failed_technical,P3,,F1,base,0.0005,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k1-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F2,base,1.0,0,"3x32 tanh x2 net(s), inputs=2",3,32,tanh,4482,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,4.384379082011947e-06,"{""pde1"": 5.440216455099289e-07, ""pde2"": 1.865873855422251e-06, ""bc"": 1.7184931948577287e-06, ""cont"": 2.0062498151673935e-07, ""flux"": 5.5365404705298715e-08}",0.0010761169733135255,0.0008861888085916142,0.0017032471827843104,0.0008244801790927499,0.000833462584608324,0.0008131413882078509,0.001430613028887479,0.0012359589831899141,0.002128195926834013,0.0010550617777887743,0.0011957611302016978,0.0008435127439801344,0.001430613028887479,0.0012359589831899141,0.002128195926834013,0.0010550617777887743,0.0011957611302016978,0.0008435127439801344,False,0.0004505054619079587,0.00013373180898978667,0.001687279700901143,9.673030873172683,3.717223965765192e-05,0.0026198767591267824,nan,"{""relL2_E_near_source"": 3.72203849450822e-05, ""relL2_E_far_field"": 0.0017835863764643545}",23808,0.0010550617777887743,0.0011957611302016978,False,False,False,False,False,10.285032136001519,5.263130310999713,538.81640625,9fc887aac856,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:44:10,compile_cached=False
+P3-F2-k1-s1-pinn-base,pinn,failed_technical,P3,,F2,base,1.0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k1-s2-pinn-base,pinn,failed_technical,P3,,F2,base,1.0,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k1-s3-pinn-base,pinn,failed_technical,P3,,F2,base,1.0,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k1-s4-pinn-base,pinn,failed_technical,P3,,F2,base,1.0,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k5-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F2,base,5.0,0,"3x32 tanh x2 net(s), inputs=2",3,32,tanh,4482,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,0.036642860155552626,"{""pde1"": 0.002625799970701337, ""pde2"": 0.00574920978397131, ""bc"": 0.005666013341397047, ""cont"": 0.021138440817594528, ""flux"": 0.001463396241888404}",0.10561250613801183,0.09130836107984229,0.2932731949280336,0.26986805701761873,0.3256758047799827,0.1056107669997152,0.14918373538187996,0.14532170862841196,0.25517136285042114,0.3422358745562354,0.3449734895090195,0.2892332196920411,0.19663546915608826,0.14532170862841196,0.25517136285042114,0.31361323964976906,0.3449734895090195,0.2892332196920411,False,0.1455470682580629,0.012989391794112591,2.1648450537898265,8.154645785535969,0.027981168770945378,0.1593626127103614,nan,"{""relL2_E_near_source"": 0.03629582082859646, ""relL2_E_far_field"": 0.2055080631306552}",23808,0.3422358745562354,0.3449734895090195,True,True,True,False,False,10.233669721998922,1.8519999684940558e-06,538.81640625,c52851405f0a,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:44:27,compile_cached=True
+P3-F2-k5-s1-pinn-base,pinn,failed_technical,P3,,F2,base,5.0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k5-s2-pinn-base,pinn,failed_technical,P3,,F2,base,5.0,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k5-s3-pinn-base,pinn,failed_technical,P3,,F2,base,5.0,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k5-s4-pinn-base,pinn,failed_technical,P3,,F2,base,5.0,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k20-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F2,base,20.0,0,"3x32 tanh x2 net(s), inputs=2",3,32,tanh,4482,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,0.4925494287163019,"{""pde1"": 0.025053320452570915, ""pde2"": 0.1255161613225937, ""bc"": 0.030693013221025467, ""cont"": 0.2507716119289398, ""flux"": 0.06051532179117203}",0.41877597122022475,0.2830449034470138,5.191292860703861,2.5699008634324487,2.6730289127413074,1.904636577447535,0.5102167825264446,0.5047903351041408,1.6741945468365258,1.2272436676348046,1.2271534282800267,1.2513330538807217,1.1990579626074886,0.5047903351041408,1.6741945468365258,1.241654712207919,1.2271534282800267,1.2513330538807217,False,0.501575756934153,0.07308219274815367,26.55069168638737,9.685516569322624,0.32540375870526345,0.2972570355898373,nan,"{""relL2_E_near_source"": 0.14159773493545635, ""relL2_E_far_field"": 0.7124244120628799}",23808,1.241654712207919,1.2513330538807217,True,True,True,False,True,10.376167289017758,1.6679996406310238e-06,538.81640625,57d4de525361,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:44:44,compile_cached=True
+P3-F2-k20-s1-pinn-base,pinn,failed_technical,P3,,F2,base,20.0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k20-s2-pinn-base,pinn,failed_technical,P3,,F2,base,20.0,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k20-s3-pinn-base,pinn,failed_technical,P3,,F2,base,20.0,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k20-s4-pinn-base,pinn,failed_technical,P3,,F2,base,20.0,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k80-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F2,base,80.0,0,"3x32 tanh x2 net(s), inputs=2",3,32,tanh,4482,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,8.349649995565414,"{""pde1"": 0.2780728042125702, ""pde2"": 1.8772276639938354, ""bc"": 0.18982291221618652, ""cont"": 5.096536636352539, ""flux"": 0.9079899787902832}",1.5655603874822377,1.2419913013546204,60.45702246313611,16.644106179094056,16.153197313661334,30.792207265598442,1.9532501003613532,1.9517090500087546,6.734898843013963,4.888094048211562,4.8875397193747,6.859611002481506,4.878287770098434,1.9517090500087546,6.73489884301396,6.146392532025439,4.8875397193747,6.859611002481508,False,2.25958577927873,0.2725334299533255,360.93540085556117,39.866811218957466,4.59766467647751,0.6830340434395828,nan,"{""relL2_E_near_source"": 0.7227373477564902, ""relL2_E_far_field"": 2.686175127838772}",23808,6.146392532025439,6.859611002481506,True,True,True,False,True,10.138868828009436,1.7369998204230797e-06,538.81640625,820242a42ff0,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:45:01,compile_cached=True
+P3-F2-k80-s1-pinn-base,pinn,failed_technical,P3,,F2,base,80.0,1,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k80-s2-pinn-base,pinn,failed_technical,P3,,F2,base,80.0,2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[127]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[129]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[127,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k80-s3-pinn-base,pinn,failed_technical,P3,,F2,base,80.0,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[132]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[124]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[132,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k80-s4-pinn-base,pinn,failed_technical,P3,,F2,base,80.0,4,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"TypeError: Argument types differ from the types for which this computation was compiled. Perhaps you are calling the compiled executable with a different enable_x64 mode than when it was AOT compiled? The mismatches are:
+Argument 'd['HB1']' compiled with float32[125] and called with float32[124]
+Argument 'd['HB2']' compiled with float32[131] and called with float32[132]
+Argument 'd['XB1']' compiled with float32[125,2] and called with float32[124,2]
+Argument 'd['XB2']' compiled with float32[131,2"
+P3-F2-k400-s0-pinn-base,pinn,complete,P3,2d_linecharge_h0.25_planar,F2,base,400.0,0,"3x32 tanh x2 net(s), inputs=2",3,32,tanh,4482,adam,cosine 0.001->0.0001/3000,0.001,float32,512,256,128,0,3000,3000,4224000,92.85744380950928,"{""pde1"": 16.905109405517578, ""pde2"": 32.69546127319336, ""bc"": 8.414093971252441, ""cont"": 20.180246353149414, ""flux"": 14.662532806396484}",6.363086549995559,5.899112159998231,744.8645434676265,32.935163255422516,30.466199692387352,359.29677921695827,7.472503922960505,7.471868641699453,40.80627267370648,22.009702315820956,22.00934870467506,46.30469111158437,28.9355402669874,7.471868641699453,40.80627267370648,38.47586076245961,22.00934870467506,46.30469111158437,False,4.495146627103978,1.0866529935735378,3112.165295178641,477.09783747287236,66.48020052999897,5.943189597216357,nan,"{""relL2_E_near_source"": 1.5937332012371574, ""relL2_E_far_field"": 10.528306360339018}",23808,38.47586076245961,46.30469111158437,True,True,True,False,True,9.75589574097421,1.8780001482809894e-06,538.81640625,1d14a57fc2d5,1.3.0,"{""jax"": ""0.11.2"", ""numpy"": ""2.4.4"", ""optax"": ""0.2.8"", ""python"": ""3.12.3"", ""scipy"": ""1.17.1""}",Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none,bc80d8f918a3,2026-10-16T09:45:17,compile_cached=True
