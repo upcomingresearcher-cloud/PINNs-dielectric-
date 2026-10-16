@@ -1,0 +1,605 @@
+{
+  "H2": {
+    "n": 180,
+    "median_R": 3.995968469340368,
+    "frac_R_gt1": 1.0,
+    "n_fail": 180,
+    "concealed_fraction": 0.11666666666666667,
+    "median_R_by_formulation": {
+      "F1": 4.084428124315302,
+      "F2": 4.676721205812217,
+      "F3": 2.12225169987461,
+      "F4": 436.92539231967646,
+      "F5": 60.63698232350211,
+      "F6": 2.3326016502801643
+    }
+  },
+  "H8_vs_P1": {
+    "failed_P1": {
+      "F1": 10,
+      "F2": 6,
+      "F3": 10,
+      "F4": 10,
+      "F5": 10,
+      "F6": 3
+    },
+    "failed_this": {
+      "F1": 10,
+      "F2": 10,
+      "F3": 10,
+      "F4": 10,
+      "F5": 15,
+      "F6": 10
+    },
+    "tau_failcount": 0.2981423969999719,
+    "tau_median_error": 0.6
+  },
+  "regression_median_primary": {
+    "1.0": {
+      "REG_F1": 0.0322797121486698,
+      "REG_F2": 0.053079770404412,
+      "REG_F3": 0.0674088527694676,
+      "REG_F4": 0.001743818346745
+    },
+    "80.0": {
+      "REG_F1": 13.931180922449553,
+      "REG_F2": 0.4367458337040286,
+      "REG_F3": 9.915962177525172,
+      "REG_F4": 7.352364804146601
+    },
+    "2000.0": {
+      "REG_F1": 350.87120006338665,
+      "REG_F2": 3.0410695281307034,
+      "REG_F3": 250.58547407240016,
+      "REG_F4": 190.27866899698256
+    }
+  },
+  "loss_visibility": [
+    {
+      "problem_id": "P4",
+      "formulation": "F1",
+      "kappa": 1.0,
+      "candidate": "exact",
+      "loss_total": 1.9321425628969137e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F1",
+      "kappa": 1.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 4.2288352149153183e-32,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F2",
+      "kappa": 1.0,
+      "candidate": "exact",
+      "loss_total": 4.283861252502657e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F2",
+      "kappa": 1.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 4.2288352149153183e-32,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F3",
+      "kappa": 1.0,
+      "candidate": "exact",
+      "loss_total": 2.513773406101859e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F3",
+      "kappa": 1.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 4.2288352149153183e-32,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F4",
+      "kappa": 1.0,
+      "candidate": "exact",
+      "loss_total": 4.113425731482918e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F4",
+      "kappa": 1.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.0,
+      "note": "hard-BC formulation: wrong candidate violates Dirichlet data -> N/A"
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F5",
+      "kappa": 1.0,
+      "candidate": "exact",
+      "loss_total": 1.999371681469282,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F5",
+      "kappa": 1.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 1.9993716814692817,
+      "note": "hard-BC formulation: wrong candidate violates Dirichlet data -> N/A"
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F6",
+      "kappa": 1.0,
+      "candidate": "exact",
+      "loss_total": 5.9005677106287084e-30,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F6",
+      "kappa": 1.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 4.2288352149153183e-32,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F1",
+      "kappa": 80.0,
+      "candidate": "exact",
+      "loss_total": 1.0576795537678324e-30,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F1",
+      "kappa": 80.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.41728311997406053,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F2",
+      "kappa": 80.0,
+      "candidate": "exact",
+      "loss_total": 7.403099116168133e-29,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F2",
+      "kappa": 80.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 3120.9172831199735,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F3",
+      "kappa": 80.0,
+      "candidate": "exact",
+      "loss_total": 7.29782592460037e-29,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F3",
+      "kappa": 80.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 3120.9172831199735,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F4",
+      "kappa": 80.0,
+      "candidate": "exact",
+      "loss_total": 7.402603942111585e-29,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F4",
+      "kappa": 80.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 3120.4999999999995,
+      "note": "hard-BC formulation: wrong candidate violates Dirichlet data -> N/A"
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F5",
+      "kappa": 80.0,
+      "candidate": "exact",
+      "loss_total": 0.9614245240185879,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F5",
+      "kappa": 80.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 41.4869623904876,
+      "note": "hard-BC formulation: wrong candidate violates Dirichlet data -> N/A"
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F6",
+      "kappa": 80.0,
+      "candidate": "exact",
+      "loss_total": 8.236848431642266e-29,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F6",
+      "kappa": 80.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 3199.4173612449736,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F1",
+      "kappa": 2000.0,
+      "candidate": "exact",
+      "loss_total": 1.4183810192834335e-30,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F1",
+      "kappa": 2000.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.4376930087153503,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F2",
+      "kappa": 2000.0,
+      "candidate": "exact",
+      "loss_total": 1.8682855159428472e-25,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F2",
+      "kappa": 2000.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 1998000.9376930085,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F3",
+      "kappa": 2000.0,
+      "candidate": "exact",
+      "loss_total": 1.8682711718625513e-25,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F3",
+      "kappa": 2000.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 1998000.9376930085,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F4",
+      "kappa": 2000.0,
+      "candidate": "exact",
+      "loss_total": 1.8682852445480377e-25,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F4",
+      "kappa": 2000.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 1998000.4999999998,
+      "note": "hard-BC formulation: wrong candidate violates Dirichlet data -> N/A"
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F5",
+      "kappa": 2000.0,
+      "candidate": "exact",
+      "loss_total": 0.9328826679600181,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F5",
+      "kappa": 2000.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 1001.1853694957429,
+      "note": "hard-BC formulation: wrong candidate violates Dirichlet data -> N/A"
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F6",
+      "kappa": 2000.0,
+      "candidate": "exact",
+      "loss_total": 1.8702391225364234e-25,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F6",
+      "kappa": 2000.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 1999999.4376931333,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F1",
+      "kappa": 0.0005,
+      "candidate": "exact",
+      "loss_total": 1.5398953067575978e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F1",
+      "kappa": 0.0005,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.449983520734614,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F2",
+      "kappa": 0.0005,
+      "candidate": "exact",
+      "loss_total": 3.072366322060984e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F2",
+      "kappa": 0.0005,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.9494836457346135,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F3",
+      "kappa": 0.0005,
+      "candidate": "exact",
+      "loss_total": 1.9503804159190243e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F3",
+      "kappa": 0.0005,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.9494836457346135,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F4",
+      "kappa": 0.0005,
+      "candidate": "exact",
+      "loss_total": 2.6291442962924793e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F4",
+      "kappa": 0.0005,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.4995001249999995,
+      "note": "hard-BC formulation: wrong candidate violates Dirichlet data -> N/A"
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F5",
+      "kappa": 0.0005,
+      "candidate": "exact",
+      "loss_total": 2.1730178891375442,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F5",
+      "kappa": 0.0005,
+      "candidate": "wrong_uniform",
+      "loss_total": 1.4997786825621449,
+      "note": "hard-BC formulation: wrong candidate violates Dirichlet data -> N/A"
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F6",
+      "kappa": 0.0005,
+      "candidate": "exact",
+      "loss_total": 3.717763764651717e-24,
+      "note": ""
+    },
+    {
+      "problem_id": "P4",
+      "formulation": "F6",
+      "kappa": 0.0005,
+      "candidate": "wrong_uniform",
+      "loss_total": 1999999.4499836431,
+      "note": ""
+    }
+  ],
+  "fem": [
+    {
+      "kappa": 1.0,
+      "h": 0.2,
+      "dofs": 557,
+      "primary_field_error": 3.371805376476564e-15,
+      "relL2_phi_global": 9.250306249189426e-16,
+      "mesh_plus_solve_s": 0.01885800099989865
+    },
+    {
+      "kappa": 1.0,
+      "h": 0.1,
+      "dofs": 2029,
+      "primary_field_error": 8.825523560875686e-15,
+      "relL2_phi_global": 3.4268268844571054e-15,
+      "mesh_plus_solve_s": 0.0619661199998518
+    },
+    {
+      "kappa": 1.0,
+      "h": 0.05,
+      "dofs": 7645,
+      "primary_field_error": 3.03281638531734e-14,
+      "relL2_phi_global": 1.1534135214386514e-14,
+      "mesh_plus_solve_s": 0.13613728000018455
+    },
+    {
+      "kappa": 1.0,
+      "h": 0.025,
+      "dofs": 29957,
+      "primary_field_error": 1.379968438788717e-13,
+      "relL2_phi_global": 6.137915288364784e-14,
+      "mesh_plus_solve_s": 0.7295716349999566
+    },
+    {
+      "kappa": 1.0,
+      "h": 0.0125,
+      "dofs": 118853,
+      "primary_field_error": 7.694430406079064e-13,
+      "relL2_phi_global": 2.8466594103090583e-13,
+      "mesh_plus_solve_s": 5.261778625000261
+    },
+    {
+      "kappa": 80.0,
+      "h": 0.2,
+      "dofs": 557,
+      "primary_field_error": 0.10089106154951669,
+      "relL2_phi_global": 0.002004662506929604,
+      "mesh_plus_solve_s": 0.012667620000229363
+    },
+    {
+      "kappa": 80.0,
+      "h": 0.1,
+      "dofs": 2029,
+      "primary_field_error": 0.07513760756263815,
+      "relL2_phi_global": 0.0006984622840098987,
+      "mesh_plus_solve_s": 0.0314332769999055
+    },
+    {
+      "kappa": 80.0,
+      "h": 0.05,
+      "dofs": 7645,
+      "primary_field_error": 0.03967418940766629,
+      "relL2_phi_global": 0.0002426443594757629,
+      "mesh_plus_solve_s": 0.125179825000032
+    },
+    {
+      "kappa": 80.0,
+      "h": 0.025,
+      "dofs": 29957,
+      "primary_field_error": 0.013331589551941369,
+      "relL2_phi_global": 8.991766845523706e-05,
+      "mesh_plus_solve_s": 0.6868894480003291
+    },
+    {
+      "kappa": 80.0,
+      "h": 0.0125,
+      "dofs": 118853,
+      "primary_field_error": 0.002419439589817373,
+      "relL2_phi_global": 3.742213148473573e-05,
+      "mesh_plus_solve_s": 4.7063976349995755
+    },
+    {
+      "kappa": 2000.0,
+      "h": 0.2,
+      "dofs": 557,
+      "primary_field_error": 0.1053933413395734,
+      "relL2_phi_global": 0.0021579482792579634,
+      "mesh_plus_solve_s": 0.012923408999995445
+    },
+    {
+      "kappa": 2000.0,
+      "h": 0.1,
+      "dofs": 2029,
+      "primary_field_error": 0.07944938529768311,
+      "relL2_phi_global": 0.0007650414499264332,
+      "mesh_plus_solve_s": 0.03302641999971456
+    },
+    {
+      "kappa": 2000.0,
+      "h": 0.05,
+      "dofs": 7645,
+      "primary_field_error": 0.04220043261094461,
+      "relL2_phi_global": 0.00027133164892028907,
+      "mesh_plus_solve_s": 0.19371662599996853
+    },
+    {
+      "kappa": 2000.0,
+      "h": 0.025,
+      "dofs": 29957,
+      "primary_field_error": 0.014198293794285081,
+      "relL2_phi_global": 0.00010177996611264941,
+      "mesh_plus_solve_s": 0.7482345969997368
+    },
+    {
+      "kappa": 2000.0,
+      "h": 0.0125,
+      "dofs": 118853,
+      "primary_field_error": 0.002596423760417122,
+      "relL2_phi_global": 4.291759655673874e-05,
+      "mesh_plus_solve_s": 4.774788742000055
+    },
+    {
+      "kappa": 0.0005,
+      "h": 0.2,
+      "dofs": 557,
+      "primary_field_error": 0.019524078455279335,
+      "relL2_phi_global": 0.00020234294324432105,
+      "mesh_plus_solve_s": 0.013083273000120244
+    },
+    {
+      "kappa": 0.0005,
+      "h": 0.1,
+      "dofs": 2029,
+      "primary_field_error": 0.008255905658792228,
+      "relL2_phi_global": 3.890087281102593e-05,
+      "mesh_plus_solve_s": 0.03289362500026982
+    },
+    {
+      "kappa": 0.0005,
+      "h": 0.05,
+      "dofs": 7645,
+      "primary_field_error": 0.003243082131974588,
+      "relL2_phi_global": 6.992560737202897e-06,
+      "mesh_plus_solve_s": 0.12921220699990954
+    },
+    {
+      "kappa": 0.0005,
+      "h": 0.025,
+      "dofs": 29957,
+      "primary_field_error": 0.0009886846490844486,
+      "relL2_phi_global": 9.509434048778837e-07,
+      "mesh_plus_solve_s": 0.6783820939999714
+    },
+    {
+      "kappa": 0.0005,
+      "h": 0.0125,
+      "dofs": 118853,
+      "primary_field_error": 0.00019750326150423222,
+      "relL2_phi_global": 1.1104329276976506e-07,
+      "mesh_plus_solve_s": 4.675681402999999
+    }
+  ]
+}

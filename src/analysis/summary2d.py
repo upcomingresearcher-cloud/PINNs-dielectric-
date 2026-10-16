@@ -8,7 +8,7 @@ matplotlib.use("Agg"); import matplotlib.pyplot as plt
 from scipy.stats import kendalltau, beta
 ROOT = pathlib.Path(__file__).resolve().parents[2]; sys.path.insert(0, str(ROOT))
 FORMS = ["F1", "F2", "F3", "F4", "F5", "F6"]
-GEOM = {"P3": lambda occ: [occ.addRectangle(-1, -1, 0, 2, 1)]}
+GEOM = {"P3": lambda occ: [occ.addRectangle(-1, -1, 0, 2, 1)], "P4": lambda occ: [occ.addRectangle(0, 0, 0, 1, 1)]}
 
 
 def cp(k, n): return (0.0 if k == 0 else beta.ppf(.025, k, n - k + 1)), (1.0 if k == n else beta.ppf(.975, k + 1, n - k))
@@ -65,6 +65,7 @@ def loss_vis(pid, cls, kappas=(1.0, 80.0, 2000.0, 0.0005)):
 def main(pid):
     cls = problem_class(pid)
     d = pd.read_csv(ROOT / "results/raw/runs_2d.csv"); d = d[(d.status == "complete") & (d.problem_id == pid)]
+    d = d.sort_values("timestamp").drop_duplicates("run_id", keep="first")   # concurrent-execution duplicates (identical results) kept in raw data
     P = d[(d.run_type == "pinn") & (d.variant == "base")]; reg = d[d.run_type == "regression"]; var = d[(d.run_type == "pinn") & (d.variant != "base")]
     rows = []
     for (f, k), g in P.groupby(["formulation", "kappa"]):
@@ -124,3 +125,16 @@ if __name__ == "__main__":
     for k in ("H2", "H8_vs_P1", "variant_vs_base", "regression_median_primary"):
         if k in r: print(k, json.dumps(r[k], default=float)[:600])
     print("FEM:", json.dumps([x for x in r["fem"] if x["kappa"] in (80.0, 2000.0)], default=float)[:700])
+
+
+def h10(pid="P4"):
+    d = pd.read_csv(ROOT / "results/raw/runs_2d.csv"); d = d[(d.status == "complete") & (d.problem_id == pid) & (d.run_type == "pinn") & (d.variant == "base")]
+    d = d.sort_values("timestamp").drop_duplicates("run_id", keep="first")
+    ex = pd.DataFrame([json.loads(e) for e in d.extra_json], index=d.index); d = pd.concat([d, ex], axis=1)
+    cols = [f"signedE_{ray}_r{r}" for ray in ("bisector2", "bisector1") for r in ("0.02", "0.05")]
+    tab = d.groupby(["formulation", "kappa"])[cols + ["coef_ratio_r0.05"]].median().reset_index()
+    sing = tab[(tab.kappa > 1) & tab.formulation.isin(["F1", "F2"])]
+    below = bool((sing[cols] < -0.10).all().all()); within_or_pos = bool(((sing[cols] > -0.10)).any().any())
+    verdict = "supported" if below else ("refuted" if within_or_pos else "inconclusive")
+    tab.to_csv(ROOT / f"results/processed/{pid}_H10_corner_metrics.csv", index=False)
+    return verdict, tab
