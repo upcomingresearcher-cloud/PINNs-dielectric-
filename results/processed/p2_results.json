@@ -1,0 +1,488 @@
+{
+  "H2_on_P2": {
+    "n": 180,
+    "median_R": 7.468990284169765,
+    "frac_R_gt1": 0.9722222222222222,
+    "n_fail": 180,
+    "concealed_fraction": 0.016666666666666666,
+    "median_R_by_formulation": {
+      "F1": 15.112978104794054,
+      "F2": 2.925971968608481,
+      "F3": 1.081025680629602,
+      "F4": 6.248584927804869,
+      "F5": 34.654049564305474,
+      "F6": 2.562070267554133
+    }
+  },
+  "H8_P1_vs_P2": {
+    "shared_kappas": [
+      1.0,
+      80.0,
+      2000.0
+    ],
+    "failed_P1": {
+      "F1": 10,
+      "F2": 6,
+      "F3": 10,
+      "F4": 10,
+      "F5": 10,
+      "F6": 3
+    },
+    "failed_P2": {
+      "F1": 10,
+      "F2": 10,
+      "F3": 10,
+      "F4": 10,
+      "F5": 15,
+      "F6": 10
+    },
+    "kendall_tau_failcount": 0.2981423969999719,
+    "p": 0.4884223166225936,
+    "kendall_tau_median_error": 0.7333333333333333,
+    "verdict_partial": "tau < 0.6",
+    "note": "H8 also requires H2 median R > 3 on each of P2-P5; final verdict after P5"
+  },
+  "regression": {
+    "1.0": {
+      "REG_F1": 0.0079822841521876,
+      "REG_F2": 0.0159379635187248,
+      "REG_F3": 0.0136831777055374,
+      "REG_F4": 0.0009243693966446
+    },
+    "80.0": {
+      "REG_F1": 17.031055758232167,
+      "REG_F2": 0.6280715140492162,
+      "REG_F3": 12.83149694282875,
+      "REG_F4": 3.886159687140845
+    },
+    "2000.0": {
+      "REG_F1": 431.8210353083674,
+      "REG_F2": 2.0017929454425047,
+      "REG_F3": 318.7267053824033,
+      "REG_F4": 97.907026328459
+    }
+  },
+  "loss_visibility": [
+    {
+      "problem_id": "P2",
+      "formulation": "F1",
+      "kappa": 1.0,
+      "candidate": "exact",
+      "loss_total": 0.0,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F1",
+      "kappa": 1.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.0,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F2",
+      "kappa": 1.0,
+      "candidate": "exact",
+      "loss_total": 0.0,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F2",
+      "kappa": 1.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.0,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F3",
+      "kappa": 1.0,
+      "candidate": "exact",
+      "loss_total": 0.0,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F3",
+      "kappa": 1.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.0,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F4",
+      "kappa": 1.0,
+      "candidate": "exact",
+      "loss_total": 0.0,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F4",
+      "kappa": 1.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.0,
+      "note": "wrong candidate violates Dirichlet data -> not representable (hard BC); N/A"
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F5",
+      "kappa": 1.0,
+      "candidate": "exact",
+      "loss_total": 2.0,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F5",
+      "kappa": 1.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 2.0,
+      "note": "wrong candidate violates Dirichlet data -> not representable (hard BC); N/A"
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F6",
+      "kappa": 1.0,
+      "candidate": "exact",
+      "loss_total": 0.0,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F6",
+      "kappa": 1.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.0,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F1",
+      "kappa": 80.0,
+      "candidate": "exact",
+      "loss_total": 9.921633266254198e-32,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F1",
+      "kappa": 80.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.0015240297840470247,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F2",
+      "kappa": 80.0,
+      "candidate": "exact",
+      "loss_total": 2.4323266147237988e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F2",
+      "kappa": 80.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 3120.5015240297835,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F3",
+      "kappa": 80.0,
+      "candidate": "exact",
+      "loss_total": 1.437900440106944e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F3",
+      "kappa": 80.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 3120.5015240297835,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F4",
+      "kappa": 80.0,
+      "candidate": "exact",
+      "loss_total": 2.4300637667323637e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F4",
+      "kappa": 80.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 3120.4999999999995,
+      "note": "wrong candidate violates Dirichlet data -> not representable (hard BC); N/A"
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F5",
+      "kappa": 80.0,
+      "candidate": "exact",
+      "loss_total": 1.9706123563252216,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F5",
+      "kappa": 80.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 9.755806863549802,
+      "note": "wrong candidate violates Dirichlet data -> not representable (hard BC); N/A"
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F6",
+      "kappa": 80.0,
+      "candidate": "exact",
+      "loss_total": 2.1490481295551756e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F6",
+      "kappa": 80.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 799.7504005386959,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F1",
+      "kappa": 2000.0,
+      "candidate": "exact",
+      "loss_total": 8.995913814199285e-32,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F1",
+      "kappa": 2000.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.0015989714913693877,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F2",
+      "kappa": 2000.0,
+      "candidate": "exact",
+      "loss_total": 2.118986962766376e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F2",
+      "kappa": 2000.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 1998000.5015989714,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F3",
+      "kappa": 2000.0,
+      "candidate": "exact",
+      "loss_total": 1.2171789219612488e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F3",
+      "kappa": 2000.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 1998000.5015989714,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F4",
+      "kappa": 2000.0,
+      "candidate": "exact",
+      "loss_total": 2.1167703033811773e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F4",
+      "kappa": 2000.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 1998000.5,
+      "note": "wrong candidate violates Dirichlet data -> not representable (hard BC); N/A"
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F5",
+      "kappa": 2000.0,
+      "candidate": "exact",
+      "loss_total": 1.9693885346201627,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F5",
+      "kappa": 2000.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 198.25136607893737,
+      "note": "wrong candidate violates Dirichlet data -> not representable (hard BC); N/A"
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F6",
+      "kappa": 2000.0,
+      "candidate": "exact",
+      "loss_total": 1.8810128621143737e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F6",
+      "kappa": 2000.0,
+      "candidate": "wrong_uniform",
+      "loss_total": 499999.75039977406,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F1",
+      "kappa": 0.0005,
+      "candidate": "exact",
+      "loss_total": 1.0145388817971312e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F1",
+      "kappa": 0.0005,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.0015989714913693877,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F2",
+      "kappa": 0.0005,
+      "candidate": "exact",
+      "loss_total": 2.337233732300761e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F2",
+      "kappa": 0.0005,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.5010990964913694,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F3",
+      "kappa": 0.0005,
+      "candidate": "exact",
+      "loss_total": 1.312472634079444e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F3",
+      "kappa": 0.0005,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.5010990964913694,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F4",
+      "kappa": 0.0005,
+      "candidate": "exact",
+      "loss_total": 2.327011515876575e-31,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F4",
+      "kappa": 0.0005,
+      "candidate": "wrong_uniform",
+      "loss_total": 0.4995001250000001,
+      "note": "wrong candidate violates Dirichlet data -> not representable (hard BC); N/A"
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F5",
+      "kappa": 0.0005,
+      "candidate": "exact",
+      "loss_total": 1.987606175148743,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F5",
+      "kappa": 0.0005,
+      "candidate": "wrong_uniform",
+      "loss_total": 1.9018743169605312,
+      "note": "wrong candidate violates Dirichlet data -> not representable (hard BC); N/A"
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F6",
+      "kappa": 0.0005,
+      "candidate": "exact",
+      "loss_total": 8.422661157582773e-25,
+      "note": ""
+    },
+    {
+      "problem_id": "P2",
+      "formulation": "F6",
+      "kappa": 0.0005,
+      "candidate": "wrong_uniform",
+      "loss_total": 499999.750399774,
+      "note": ""
+    }
+  ],
+  "fem_conforming_kappa80": [
+    {
+      "h": 0.2,
+      "dofs": 565,
+      "primary_field_error": 0.1761264262479984,
+      "relL2_phi_global": 0.007836309907166814,
+      "mesh_plus_solve_s": 0.012483558999974775
+    },
+    {
+      "h": 0.1,
+      "dofs": 2093,
+      "primary_field_error": 0.07535203141340255,
+      "relL2_phi_global": 0.002187588956662362,
+      "mesh_plus_solve_s": 0.03196945499985304
+    },
+    {
+      "h": 0.05,
+      "dofs": 7869,
+      "primary_field_error": 0.029679038442577976,
+      "relL2_phi_global": 0.0005780912371571327,
+      "mesh_plus_solve_s": 0.12573226399990745
+    },
+    {
+      "h": 0.025,
+      "dofs": 30337,
+      "primary_field_error": 0.010424040864216616,
+      "relL2_phi_global": 0.00015306566818330561,
+      "mesh_plus_solve_s": 0.6711617329997352
+    },
+    {
+      "h": 0.0125,
+      "dofs": 119697,
+      "primary_field_error": 0.003984515299893768,
+      "relL2_phi_global": 3.866478823821008e-05,
+      "mesh_plus_solve_s": 4.41175098299982
+    }
+  ]
+}
