@@ -1,0 +1,19 @@
+# P2 configuration (frozen in docs/protocol_change_log.md, v1.2.0, before any P2 run)
+protocol_version: "1.2.0"
+problem: P2
+steps: 3000
+lr_init: 1.0e-3
+lr_final: 1.0e-4
+width: 32
+depth: 3
+precision: float32
+n_interior: 512
+n_interface: 128
+n_edge: 64
+grad_log_interval: 25
+metric_log_interval: 250
+seeds: [0, 1, 2, 3, 4]
+contrasts_full: [1, 5, 20, 80, 400, 2000, 0.2, 0.05, 0.0125, 0.0025, 0.0005]
+contrasts_reduced: [1, 80, 2000]
+full_sweep: [F1, F2, F6]
+reduced_sweep: [F3, F4, F5]

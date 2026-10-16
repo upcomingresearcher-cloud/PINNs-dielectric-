@@ -34,3 +34,19 @@ Pending decisions already scheduled by the protocol (not changes):
 | 2026-10-16 | 1.1.0 | **2D selection recorded (Sec. 8.2 rule, before any 2D run): strongest two = F6 (3 failed seeds), F2 (8).** Full contrast sweep in 2D: F1, F2, F6. Reduced grid {1, 80, 2000}: F3, F4, F5. | Pre-registered rule applied to primary P1 data | 2D sweeps | none |
 | 2026-10-16 | 1.1.0 | H11 operational choice: gradient ratio uses weighted per-term norms (gradient of the actual training loss); unweighted reported as sensitivity. Fixed before computing either. | YAML did not specify weighted vs unweighted | H11 | none |
 | 2026-10-16 | 1.1.0 | EXPLORATORY additions (not pre-registered, labelled): within-kappa stratified AUC for H11; field-supervised regression REGD_* (run_type regression_exploratory, 120 runs). | Investigate H11 confounding and H4 regression-baseline weakness | none | none |
+
+## Phase 7 (P2) configuration — frozen before any P2 run
+| Date | Version | Item | Value / rule |
+|---|---|---|---|
+| 2026-10-16 | 1.2.0 | Geometry | box [-1,1]^2, cylinder radius R = 0.25 at origin, E0 = 1 (x-directed); material 1 = matrix (eps = 1), material 2 = inclusion (eps = kappa); exact isolated-cylinder Dirichlet data on the box |
+| 2026-10-16 | 1.2.0 | Points | 512 interior per material (uniform, seed-dependent), 128 interface points (equispaced in theta, seed-dependent rotation), 256 boundary points (64 per edge, uniform) |
+| 2026-10-16 | 1.2.0 | Training | identical to P1: 3x32 tanh, Adam, cosine 1e-3 -> 1e-4, 3000 counted gradient evaluations, float32, seeds 0-4 |
+| 2026-10-16 | 1.2.0 | Contrasts | F1, F2, F6: {1,5,20,80,400,2000} + inverse {0.2,0.05,0.0125,0.0025,0.0005}; F3, F4, F5: {1,80,2000} |
+| 2026-10-16 | 1.2.0 | Interface band | |r - R| < 0.05 |
+| 2026-10-16 | 1.2.0 | Hard BC (F4, F5) | phi = G + B*(...), G = Coons transfinite interpolation of the boundary data (uses boundary data only), B = (1-x^2)(1-y^2) |
+| 2026-10-16 | 1.2.0 | F6 scales | L_c = 2 (box width), V_c = E0*L_c, D_s = eps_h*V_c/L_c = eps_h*E0; same divisors as P1 |
+| 2026-10-16 | 1.2.0 | Metrics | vector L2 errors of E and D; [phi] relative to V_c; [D_n] as interface-L2 norm relative to ||D_n,exact||; tangential-E jump; energy error; kappa_eff = 2E0/mean(E_x, r < R-0.05) - 1; BC error |
+| 2026-10-16 | 1.2.0 | Reference | exact; FEM (gmsh body-fitted, P2 elements, scikit-fem) as independent cross-check with convergence; FEM errors computed with FEM quadrature on the mesh's own material tags (polygonal interface; O(h^2) sliver difference documented) |
+| 2026-10-16 | 1.2.0 | Baselines | phi-only regression (REG_F1..F4) and loss visibility (exact vs uniform-field solution) at kappa {1, 80, 2000} |
+| 2026-10-16 | 1.2.0 | Database | 2D runs in results/raw/runs_2d.csv (2D metric schema), logs as in P1 |
+| 2026-10-16 | 1.2.0 | CORRECTION of a stated property (rule unchanged): "F6 identical to F2 when eps1 == eps2" holds only when V_c = L_c = 1 (P1). In P2 the frozen divisors give weights (4, 4, 1/4, 1/4, 1) at kappa = 1. F6 is applied exactly as frozen; the property claim in protocol_v1.yaml/Sec. 5 is P1-specific. | Caught by the 2D Gate 3 test | interpretation of F6 vs F2 at kappa=1 in 2D | none |
