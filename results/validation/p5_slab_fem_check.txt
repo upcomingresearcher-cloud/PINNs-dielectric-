@@ -1,0 +1,4 @@
+kappa=80 t=0.02: elems=18732 dofs=37593 max|phi err|=5.1e-15 max rel E_y err=3.7e-14 max|E_x|=5.3e-14
+kappa=80 t=0.005: elems=74044 dofs=148237 max|phi err|=1.0e-14 max rel E_y err=7.5e-14 max|E_x|=8.7e-14
+kappa=2000 t=0.02: elems=18732 dofs=37593 max|phi err|=7.3e-15 max rel E_y err=5.8e-14 max|E_x|=4.4e-14
+kappa=2000 t=0.005: elems=74044 dofs=148237 max|phi err|=9.4e-15 max rel E_y err=1.1e-13 max|E_x|=1.3e-13

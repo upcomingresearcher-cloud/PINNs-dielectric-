@@ -16,7 +16,7 @@ from scipy.spatial import cKDTree
 import matplotlib.tri as mtri
 
 
-def mesh_box(h, geometry=None, conforming=True):
+def mesh_box(h, geometry=None, conforming=True, grade=None):
     """geometry: callable adding interface entities inside the box and returning (tags of material-2 surfaces)
     via gmsh.model.occ; returns nodes (2,N), triangles (3,M), material tag per triangle (1/2)."""
     gmsh.initialize(); gmsh.option.setNumber("General.Terminal", 0)
@@ -32,7 +32,18 @@ def mesh_box(h, geometry=None, conforming=True):
             inc_set |= {e[1] for e in mp[len([box]) + i]}
         mat2 = sorted(inc_set)
     occ.synchronize()
-    gmsh.option.setNumber("Mesh.MeshSizeMax", h); gmsh.option.setNumber("Mesh.MeshSizeMin", h)
+    if grade is not None:      # (h_in, d_in, d_out): size h_in within d_in of the material-2 boundary, growing to h beyond d_out
+        h_in, d_in, d_out = grade
+        curves = [c[1] for c in gmsh.model.getBoundary([(2, t) for t in mat2], oriented=False)] if mat2 else []
+        fd = gmsh.model.mesh.field.add("Distance"); gmsh.model.mesh.field.setNumbers(fd, "CurvesList", curves)
+        gmsh.model.mesh.field.setNumber(fd, "Sampling", 400)
+        ft = gmsh.model.mesh.field.add("Threshold"); gmsh.model.mesh.field.setNumber(ft, "InField", fd)
+        for k, v in (("SizeMin", h_in), ("SizeMax", h), ("DistMin", d_in), ("DistMax", d_out)): gmsh.model.mesh.field.setNumber(ft, k, v)
+        gmsh.model.mesh.field.setAsBackgroundMesh(ft)
+        gmsh.option.setNumber("Mesh.MeshSizeExtendFromBoundary", 0); gmsh.option.setNumber("Mesh.MeshSizeFromPoints", 0)
+        gmsh.option.setNumber("Mesh.MeshSizeMax", h); gmsh.option.setNumber("Mesh.MeshSizeMin", h_in)
+    else:
+        gmsh.option.setNumber("Mesh.MeshSizeMax", h); gmsh.option.setNumber("Mesh.MeshSizeMin", h)
     gmsh.option.setNumber("Mesh.Algorithm", 6)
     gmsh.model.mesh.generate(2)
     tags, coords, _ = gmsh.model.mesh.getNodes()
@@ -53,9 +64,9 @@ def mesh_box(h, geometry=None, conforming=True):
 def _lap(u, v, w): return dot(grad(u), grad(v))
 
 
-def solve(problem, h, order=2, conforming=True, geometry=None):
+def solve(problem, h, order=2, conforming=True, geometry=None, grade=None):
     t0 = time.perf_counter()
-    P, T, M = mesh_box(h, geometry, conforming)
+    P, T, M = mesh_box(h, geometry, conforming, grade)
     t_mesh = time.perf_counter() - t0
     t1 = time.perf_counter()
     mesh = skfem.MeshTri(P, T)
@@ -129,4 +140,5 @@ class FEM2DSolution:
         if out.any():
             tree = cKDTree(self.mesh.p[:, self.mesh.t].mean(1).T); el[out] = tree.query(X[out])[1]
         phi, g = self._eval_in(X, el)
-        return self.problem.to_physical(X, phi, g, side) if hasattr(self, "problem") else (phi, g)
+        tp = getattr(getattr(self, "problem", None), "to_physical", None)
+        return tp(X, phi, g, side) if tp is not None else (phi, g)

@@ -77,3 +77,16 @@ Pending decisions already scheduled by the protocol (not changes):
 | 2026-10-16 | 1.4.0 | Points, training, contrasts, sweep design | identical to P2/P3; interface points 64 per ray, r in (0.02, 1) |
 | 2026-10-16 | 1.4.0 | INCIDENT: two sweep processes ran concurrently for ~3 min (11:37-11:40), duplicating 5 P4 runs (F1, kappa 0.0025, seeds 0-4) with IDENTICAL results (determinism confirmed). Raw rows kept; analyses de-duplicate by run_id (first by timestamp). Wall-clock of the 8 unique runs finished in that window is contaminated (shared core): flagged and excluded from cost analyses. | Overlapping tool calls | timing of 8 P4 runs | none |
 | 2026-10-16 | 1.4.0 | H10 operationalisation (stated before computing): applied to every kappa > 1 (field singular); supported if, for F1 and F2, the median signed |E| error is < -10% at r = 0.02 and 0.05 on both bisector rays at every kappa > 1; refuted if within +/-10% or positive at any of these; otherwise inconclusive. kappa <= 1 reported descriptively. | H10 did not specify the contrast set | H10 | none |
+
+## Phase 10 (P5) configuration — frozen before any P5 PINN run
+| Date | Version | Item | Value / rule |
+|---|---|---|---|
+| 2026-10-16 | 1.5.0 | Geometry | film |x| < 0.5, |y| < t/2 (eps kappa) in box [-1,1]^2 (eps 1); phi = -E0 y on the box (E0 = 1); main sweep t = 0.02 |
+| 2026-10-16 | 1.5.0 | Reference | body-fitted P2-FEM, graded mesh h_in = t/8 within t of the film -> h_far = 0.05 beyond 0.3; cached in results/reference/. Validated: (i) exact 1D three-slab reproduction to ~1e-13 (results/validation/p5_slab_fem_check.txt); (ii) reference level vs finest (t/16) band-field difference 0.013% (kappa 80), 0.014% (2000), 0.070% (0.0005), 0.035% (t = 0.1, kappa 80) — all < 0.1% (results/validation/p5_reference_convergence.csv) |
+| 2026-10-16 | 1.5.0 | Regions | corner squares half-width t/2 excluded; band = |x| < 0.55 & |y| < t/2 + 0.05; interface metrics on the long faces |
+| 2026-10-16 | 1.5.0 | Level set | psi = (0.25 - x^2)(t^2/4 - y^2)/(0.25 t) |
+| 2026-10-16 | 1.5.0 | Scales | V_c = E0 L_c = 2, L_c = 2 |
+| 2026-10-16 | 1.5.0 | Main sweep | as P2-P4 (F1/F2/F6 full incl. inverse; F3-F5 {1,80,2000}; 5 seeds; regression at {1,80,2000}) |
+| 2026-10-16 | 1.5.0 | Thickness study | F2, F6 x t in {0.1, 0.005} x kappa {1, 80, 2000} x 5 seeds (t = 0.02 from main sweep) |
+| 2026-10-16 | 1.5.0 | Sampling-density study | F2, F6 x film points {128, 2048} (baseline 512) x kappa {80, 2000} x 5 seeds, t = 0.02 |
+| 2026-10-16 | 1.5.0 | Gate 3 for P5 | exact-loss check only at kappa = 1 (closed form -E0 y); kappa != 1 has no closed form |

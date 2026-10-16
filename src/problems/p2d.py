@@ -385,3 +385,121 @@ class P4Corner(Problem2D):
         php, _ = pred(X, s); phe, _ = self.exact(X, s)
         out["coef_ratio_r0.05"] = float(np.sum(w * php * phe) / np.sum(w * phe * phe))
         return out
+
+
+class P5Film(Problem2D):
+    """Thin high-permittivity film: material 2 = rectangle |x| < 0.5, |y| < t/2 (eps kappa); material 1 elsewhere.
+    Applied field via phi = -E0 y on the box. No closed form: reference = converged body-fitted P2-FEM (graded mesh,
+    h = t/8 near the film), cached in results/reference/. Corner squares of half-width e = t/2 around the four film
+    corners are excluded from all metrics (90-degree high-eps corners are singular, cf. P4). Band = |x| < 0.55 and
+    |y| < t/2 + 0.05 (max-norm dilation of the film by 0.05; contains the whole film). Interface metrics on the long
+    faces only (the short faces lie inside the corner exclusion)."""
+    problem_id = "P5"; E0 = 1.0; Lc = 2.0; geometry_label = "2d_thin_film"; refined_quadrature = dict(n=10); T = 0.02
+    REF_LEVEL = dict(h_far=0.05, frac_in=1 / 8)
+    def __init__(self, kappa):
+        super().__init__(kappa); self.t = self.T; self.e = self.t / 2; self._ref = None; self._memo = {}
+    @property
+    def Vc(self): return self.E0 * self.Lc
+    @staticmethod
+    def psi_jax(x, y, pp): return (0.25 - x**2) * (pp[0]**2 / 4 - y**2) / (0.25 * pp[0])
+    @staticmethod
+    def h_jax(x, y, hp): return -hp[0] * y
+    def jax_params(self): return dict(pp=[self.t], hp=[self.E0])
+    def side_of(self, X): return np.where((np.abs(X[:, 0]) < 0.5) & (np.abs(X[:, 1]) < self.t / 2), 2, 1)
+    def h_np(self, X): return -self.E0 * X[:, 1]
+    def exact_jax(self, z, side):
+        if self.kappa != 1: raise NotImplementedError("P5 has no closed form for kappa != 1 (FEM reference)")
+        return -self.E0 * z[1]
+    def wrong_uniform_jax(self, z, side): return -self.E0 * z[1]
+    def wrong_uniform(self, X, side): return -self.E0 * X[:, 1], np.tile([0.0, -self.E0], (len(X), 1))
+    def geometry(self): return lambda occ: [occ.addRectangle(-0.5, -self.t / 2, 0, 1, self.t)]
+
+    # ---------------- reference (cached converged FEM)
+    def ref_path(self, level=None):
+        import pathlib
+        lv = level or self.REF_LEVEL
+        return pathlib.Path(__file__).resolve().parents[2] / f"results/reference/P5_t{self.t:g}_k{self.kappa:g}_hf{lv['h_far']:g}_fi{lv['frac_in']:g}.npz"
+    def build_reference(self, level=None, force=False):
+        import time, skfem
+        from src.fem import fem2d
+        lv = level or self.REF_LEVEL; path = self.ref_path(lv)
+        if path.exists() and not force: return self.load_reference(lv)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        t0 = time.perf_counter()
+        s = fem2d.solve(self, lv["h_far"], geometry=self.geometry(), grade=(self.t * lv["frac_in"], self.t, 0.3))
+        np.savez_compressed(path, p=s.mesh.p, tri=s.mesh.t, M=s.M, u=s.u, seconds=time.perf_counter() - t0)
+        return s
+    def load_reference(self, level=None):
+        import skfem
+        from src.fem.fem2d import FEM2DSolution
+        z = np.load(self.ref_path(level)); mesh = skfem.MeshTri(z["p"], z["tri"]); basis = skfem.Basis(mesh, skfem.ElementTriP2())
+        return FEM2DSolution(mesh, basis, z["u"], z["M"], True, 2, 0.0, float(z["seconds"]))
+    def exact(self, X, side):
+        if self.kappa == 1.0:                      # uniform field is exact at kappa = 1
+            return -self.E0 * X[:, 1], np.tile([0.0, -self.E0], (len(X), 1))
+        key = (X.tobytes(), np.asarray(side).tobytes())
+        if key not in self._memo:
+            if self._ref is None: self._ref = self.build_reference()
+            self._memo[key] = self._ref(X, side)
+        return self._memo[key]
+    def exact_train(self, X, side): return self.exact(X, side)
+    def h_train_np(self, X): return self.h_np(X)
+
+    # ---------------- training points
+    def sample(self, seed, n_per_material=512, n_interface=128, n_edge=64, n_film=None):
+        rng = np.random.default_rng([seed, 5051]); t = self.t; nf = n_film or n_per_material
+        X2 = np.c_[rng.uniform(-0.5, 0.5, nf), rng.uniform(-t / 2, t / 2, nf)]
+        X1 = []
+        while len(X1) < n_per_material:
+            p = rng.uniform(-1, 1, (2 * n_per_material, 2)); X1.extend(p[self.side_of(p) == 1])
+        X1 = np.asarray(X1[:n_per_material])
+        ns = 2; nl = (n_interface - 2 * ns) // 2                 # long faces get the rest, >= 2 points per short face
+        xl = -0.5 + (np.arange(nl) + rng.uniform(size=nl)) / nl
+        ys = -t / 2 + (np.arange(ns) + rng.uniform(size=ns)) * t / ns
+        XI = np.r_[np.c_[xl, np.full(nl, t / 2)], np.c_[xl, np.full(nl, -t / 2)], np.c_[np.full(ns, 0.5), ys], np.c_[np.full(ns, -0.5), ys]]
+        NI = np.r_[np.tile([0., -1.], (nl, 1)), np.tile([0., 1.], (nl, 1)), np.tile([-1., 0.], (ns, 1)), np.tile([1., 0.], (ns, 1))]
+        XB = self.boundary_points(rng, n_edge); m = len(XI)
+        return dict(X1=X1, X2=X2, XI=XI, NI=NI, QI=np.zeros(m), PI=np.zeros(m), XB=XB, sideB=self.side_of(XB),
+                    A1=4 - t, A2=t, LG=2 * (1 + t))
+
+    # ---------------- evaluation quadrature (cell-aligned with film faces, band edges, corner exclusions)
+    def quadrature(self, n=6):
+        t, e, hb = self.t, self.e, self.band_halfwidth
+        def breaks(core, outer=1.0, pan=0.125):
+            b = sorted(set(core)); out = []
+            for a_, b_ in zip(b[:-1], b[1:]):
+                k = max(1, int(np.ceil((b_ - a_) / pan - 1e-12))); out.extend(np.linspace(a_, b_, k + 1)[:-1])
+            return np.r_[out, b[-1]]
+        xb = breaks([-1, -0.5 - hb, -0.5 - e, -0.5, -0.5 + e, 0.5 - e, 0.5, 0.5 + e, 0.5 + hb, 1], pan=0.1)
+        yb = breaks([-1, -t / 2 - hb, -t / 2 - e, -t / 2, 0.0, t / 2, t / 2 + e, t / 2 + hb, 1])
+        X, W = [], []
+        for x0, x1 in zip(xb[:-1], xb[1:]):
+            for y0, y1 in zip(yb[:-1], yb[1:]):
+                cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+                if abs(abs(cx) - 0.5) < e and abs(abs(cy) - t / 2) < e: continue          # corner exclusion square
+                xs, wx = gl(x0, x1, n); ys, wy = gl(y0, y1, n)
+                A_, B_ = np.meshgrid(xs, ys); WA, WB = np.meshgrid(wx, wy)
+                X.append(np.c_[A_.ravel(), B_.ravel()]); W.append((WA * WB).ravel())
+        X = np.concatenate(X); W = np.concatenate(W); S = self.side_of(X)
+        band = (np.abs(X[:, 0]) < 0.5 + hb) & (np.abs(X[:, 1]) < t / 2 + hb)
+        xi, wi = [], []
+        for i in range(10):
+            a_, b_ = -0.5 + e + (1 - 2 * e) * i / 10, -0.5 + e + (1 - 2 * e) * (i + 1) / 10; q, w = gl(a_, b_, 8); xi.append(q); wi.append(w)
+        xi = np.concatenate(xi); wi = np.concatenate(wi)
+        XI = np.r_[np.c_[xi, np.full_like(xi, t / 2)], np.c_[xi, np.full_like(xi, -t / 2)]]
+        NI = np.r_[np.tile([0., -1.], (len(xi), 1)), np.tile([0., 1.], (len(xi), 1))]
+        tb, _ = gl(-1, 1, 32)
+        XB = np.concatenate([np.c_[tb, -np.ones(32)], np.c_[np.ones(32), tb], np.c_[tb, np.ones(32)], np.c_[-np.ones(32), tb]])
+        return dict(X=X, W=W, side=S, band=band, XI=XI, WI=np.r_[wi, wi], NI=NI, XB=XB, sideB=np.ones(len(XB), int))
+
+    def extra_metrics(self, X, W, side, grad_pred):
+        _, ge = self.exact(X, side); m = side == 2
+        e = np.sum((grad_pred[m] - ge[m])**2, 1); r = np.sum(ge[m]**2, 1)
+        Ein = -np.sum(W[m] * grad_pred[m, 1]) / np.sum(W[m]); Ein_ref = -np.sum(W[m] * ge[m, 1]) / np.sum(W[m])
+        return dict(relL2_E_film=float(np.sqrt(np.sum(W[m] * e) / np.sum(W[m] * r))), Ey_film_mean=float(Ein), Ey_film_mean_ref=float(Ein_ref))
+
+
+class P5FilmThick(P5Film):
+    T = 0.1; geometry_label = "2d_thin_film_t0.1"
+class P5FilmThin(P5Film):
+    T = 0.005; geometry_label = "2d_thin_film_t0.005"
