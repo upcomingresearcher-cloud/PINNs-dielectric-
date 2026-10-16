@@ -48,6 +48,7 @@ def evaluate(problem, pred, quad=None):
     m["energy"] = float(Wp); m["energy_relerr"] = float(abs(Wp - We) / We)
     m["bc_err_max_rel"] = float(np.max(np.abs(pb - hb)) / Vc)
     extra = problem.extra_metrics(X, W, side, g_p) if hasattr(problem, "extra_metrics") else {}
+    if hasattr(problem, "corner_metrics"): extra.update(problem.corner_metrics(pred))
     m["log_kappa_eff_ratio"] = extra.get("log_kappa_eff_ratio", float("nan"))
     m["extra_json"] = json.dumps(extra)
     m["n_eval_points"] = int(len(X))

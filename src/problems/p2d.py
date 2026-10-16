@@ -269,3 +269,119 @@ class P3MatSub(P3LineCharge):
         S["PI"] = -0.5 * np.log(xi**2 + self.H**2)                     # phi_s on y = 0
         S["QI"] = self.eps1 * self.H / (xi**2 + self.H**2)             # -eps1 dphi_s/dn with dphi_s/dn = -H/r^2 at y=0, n = (0,-1)
         return S
+
+
+def corner_lambda(k):
+    """Smallest positive root of kappa tan(l pi/4) + tan(3 l pi/4) = 0 for the bisector-symmetric mode."""
+    from scipy.optimize import brentq
+    if k == 1: return 1.0
+    f = lambda l: k * np.tan(l * np.pi / 4) + np.tan(3 * l * np.pi / 4)
+    return brentq(f, 2 / 3 + 1e-12, 1.0, xtol=1e-15) if k > 1 else brentq(f, 1.0, 4 / 3 - 1e-12, xtol=1e-15)
+
+
+class P4Corner(Problem2D):
+    """Two-material corner: material 2 (eps kappa) = quadrant x > 0, y > 0 (90 deg); material 1 elsewhere (270 deg).
+    Exact solution phi = r^lam Phi(theta): Phi2 = A cos(lam(theta - pi/4)), Phi1 = cos(lam(theta - 5pi/4)),
+    A = cos(3 lam pi/4)/cos(lam pi/4); verified (results/validation/p4_eigen_checks.txt). Used as Dirichlet data on
+    the box, so it is exact. Field ~ r^(lam-1): singular for kappa > 1. Corner disc r < 0.02 excluded from all
+    metrics; band = strips |y| < 0.05 (x > -0.05) and |x| < 0.05 (y > -0.05). Level set psi = x y."""
+    problem_id = "P4"; Lc = 2.0; Vc = 1.0; R_EXCL = 0.02; geometry_label = "2d_corner_quadrant"; refined_quadrature = dict(n=16, nth=32)
+    def __init__(self, kappa):
+        super().__init__(kappa); self.lam = corner_lambda(self.kappa)
+        self.A = np.cos(3 * self.lam * np.pi / 4) / np.cos(self.lam * np.pi / 4)
+    @staticmethod
+    def psi_jax(x, y, pp): return x * y
+    @staticmethod
+    def h_jax(x, y, hp):                                   # hp = [lam, A]
+        lam, A = hp[0], hp[1]
+        r = jnp.sqrt(x**2 + y**2); t = jnp.arctan2(y, x); t = jnp.where(t < 0, t + 2 * jnp.pi, t)
+        in2 = (x > 0) & (y > 0)
+        return r**lam * jnp.where(in2, A * jnp.cos(lam * (t - jnp.pi / 4)), jnp.cos(lam * (t - 5 * jnp.pi / 4)))
+    def jax_params(self): return dict(pp=[0.0], hp=[self.lam, self.A])
+    def side_of(self, X): return np.where((X[:, 0] > 0) & (X[:, 1] > 0), 2, 1)
+    def _theta(self, X, side):
+        t = np.arctan2(X[:, 1], X[:, 0]); s = np.asarray(side)
+        t2 = np.clip(t, 0, np.pi / 2); t1 = np.mod(t, 2 * np.pi); t1 = np.where(t1 < np.pi / 2 - 1e-14, t1 + 2 * np.pi, t1)
+        return np.where(s == 2, t2, t1)
+    def exact(self, X, side):
+        s = np.asarray(side); r = np.hypot(X[:, 0], X[:, 1]); t = self._theta(X, s); lam = self.lam
+        c = np.where(s == 2, self.A, 1.0); t0 = np.where(s == 2, np.pi / 4, 5 * np.pi / 4)
+        Ph = c * np.cos(lam * (t - t0)); dPh = -c * lam * np.sin(lam * (t - t0))
+        phi = r**lam * Ph
+        gr = lam * r**(lam - 1) * Ph; gt = r**(lam - 1) * dPh             # radial, angular components
+        g = np.c_[gr * np.cos(t) - gt * np.sin(t), gr * np.sin(t) + gt * np.cos(t)]
+        return phi, g
+    def exact_jax(self, z, side):
+        x, y = z[0], z[1]; r = jnp.sqrt(x**2 + y**2); t = jnp.arctan2(y, x)
+        if side == 2: return r**self.lam * self.A * jnp.cos(self.lam * (t - jnp.pi / 4))   # no clip: its derivative vanishes at the bound theta = 0
+        t = jnp.where(t < 0, t + 2 * jnp.pi, t); t = jnp.where(t < jnp.pi / 2 - 1e-14, t + 2 * jnp.pi, t)
+        return r**self.lam * jnp.cos(self.lam * (t - 5 * jnp.pi / 4))
+    def h_np(self, X): return self.exact(X, self.side_of(X))[0]
+    def wrong_uniform_jax(self, z, side): return -(z[0] + z[1]) / np.sqrt(2.0)
+    def wrong_uniform(self, X, side):
+        return -(X[:, 0] + X[:, 1]) / np.sqrt(2), np.tile([-1 / np.sqrt(2), -1 / np.sqrt(2)], (len(X), 1))
+
+    def sample(self, seed, n_per_material=512, n_interface=128, n_edge=64):
+        rng = np.random.default_rng([seed, 4049])
+        def draw(cond):
+            out = []
+            while len(out) < n_per_material:
+                p = rng.uniform(-1, 1, (4 * n_per_material, 2)); m = cond(p) & (np.hypot(p[:, 0], p[:, 1]) > self.R_EXCL)
+                out.extend(p[m])
+            return np.asarray(out[:n_per_material])
+        X2 = draw(lambda p: (p[:, 0] > 0) & (p[:, 1] > 0)); X1 = draw(lambda p: ~((p[:, 0] > 0) & (p[:, 1] > 0)))
+        m = n_interface // 2
+        s = self.R_EXCL + (np.arange(m) + rng.uniform(size=m)) * (1 - self.R_EXCL) / m
+        XI = np.r_[np.c_[s, np.zeros(m)], np.c_[np.zeros(m), s]]
+        NI = np.r_[np.tile([0.0, 1.0], (m, 1)), np.tile([1.0, 0.0], (m, 1))]          # from material 1 into 2
+        XB = self.boundary_points(rng, n_edge)
+        return dict(X1=X1, X2=X2, XI=XI, NI=NI, QI=np.zeros(2 * m), PI=np.zeros(2 * m), XB=XB, sideB=self.side_of(XB),
+                    A1=3.0 - 0.75 * np.pi * self.R_EXCL**2, A2=1.0 - 0.25 * np.pi * self.R_EXCL**2, LG=2 * (1 - self.R_EXCL))
+
+    def quadrature(self, n=8, nth=16):
+        hb = self.band_halfwidth; X, W, S = [], [], []
+        def rect(x0, x1, y0, y1, nx, ny):
+            for i in range(nx):
+                for j in range(ny):
+                    xs, wx = gl(x0 + (x1 - x0) * i / nx, x0 + (x1 - x0) * (i + 1) / nx, n)
+                    ys, wy = gl(y0 + (y1 - y0) * j / ny, y0 + (y1 - y0) * (j + 1) / ny, n)
+                    A_, B_ = np.meshgrid(xs, ys); WA, WB = np.meshgrid(wx, wy)
+                    P = np.c_[A_.ravel(), B_.ravel()]; X.append(P); W.append((WA * WB).ravel()); S.append(self.side_of(P))
+        cuts = [-1, -hb, 0, hb, 1]; nseg = {(-1, -hb): 8, (-hb, 0): 1, (0, hb): 1, (hb, 1): 8}
+        for xa, xb in zip(cuts[:-1], cuts[1:]):
+            for ya, yb in zip(cuts[:-1], cuts[1:]):
+                if abs(xa) <= hb and abs(xb) <= hb and abs(ya) <= hb and abs(yb) <= hb: continue     # corner square: polar
+                rect(xa, xb, ya, yb, nseg[(xa, xb)], nseg[(ya, yb)])
+        for k in range(8):                                  # square [-hb, hb]^2 minus disc r < R_EXCL, polar about the corner
+            th, wt = gl(k * np.pi / 4, (k + 1) * np.pi / 4, nth)
+            for t_, w_ in zip(th, wt):
+                rmax = hb / max(abs(np.cos(t_)), abs(np.sin(t_)))
+                for jj in range(3):
+                    a_, b_ = self.R_EXCL + (rmax - self.R_EXCL) * jj / 3, self.R_EXCL + (rmax - self.R_EXCL) * (jj + 1) / 3
+                    r, wr = gl(a_, b_, n); P = np.c_[r * np.cos(t_), r * np.sin(t_)]
+                    X.append(P); W.append(w_ * wr * r); S.append(self.side_of(P))
+        X = np.concatenate(X); W = np.concatenate(W); S = np.concatenate(S)
+        band = ((np.abs(X[:, 1]) < hb) & (X[:, 0] > -hb)) | ((np.abs(X[:, 0]) < hb) & (X[:, 1] > -hb))
+        si, wi = [], []
+        for a_, b_ in ((self.R_EXCL, hb),) + tuple((hb + (1 - hb) * i / 8, hb + (1 - hb) * (i + 1) / 8) for i in range(8)):
+            t, w = gl(a_, b_, n); si.append(t); wi.append(w)
+        si = np.concatenate(si); wi = np.concatenate(wi)
+        XI = np.r_[np.c_[si, np.zeros_like(si)], np.c_[np.zeros_like(si), si]]
+        NI = np.r_[np.tile([0.0, 1.0], (len(si), 1)), np.tile([1.0, 0.0], (len(si), 1))]
+        tb, wb = gl(-1, 1, 32)
+        XB = np.concatenate([np.c_[tb, -np.ones(32)], np.c_[np.ones(32), tb], np.c_[tb, np.ones(32)], np.c_[-np.ones(32), tb]])
+        return dict(X=X, W=W, side=S, band=band, XI=XI, WI=np.r_[wi, wi], NI=NI, XB=XB, sideB=self.side_of(XB))
+
+    def corner_metrics(self, pred):
+        """H10: signed relative |E| error at fixed r on fixed rays; fitted r^lam coefficient on r = 0.05."""
+        out = {}
+        for nm, th, side in (("bisector2", np.pi / 4, 2), ("bisector1", 5 * np.pi / 4, 1), ("ray_pi", np.pi, 1)):
+            for r in (0.02, 0.05, 0.1):
+                X = np.array([[r * np.cos(th), r * np.sin(th)]]); s = np.array([side])
+                _, gp = pred(X, s); _, ge = self.exact(X, s)
+                out[f"signedE_{nm}_r{r:g}"] = float((np.linalg.norm(gp) - np.linalg.norm(ge)) / np.linalg.norm(ge))
+        t, w = gl(0, 2 * np.pi, 32); t = np.concatenate([t / 8 + k * np.pi / 4 for k in range(8)]); w = np.tile(w / 8, 8)
+        X = 0.05 * np.c_[np.cos(t), np.sin(t)]; s = self.side_of(X + 1e-15)
+        php, _ = pred(X, s); phe, _ = self.exact(X, s)
+        out["coef_ratio_r0.05"] = float(np.sum(w * php * phe) / np.sum(w * phe * phe))
+        return out

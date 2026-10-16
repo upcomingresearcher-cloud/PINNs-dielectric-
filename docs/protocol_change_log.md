@@ -64,3 +64,14 @@ Pending decisions already scheduled by the protocol (not changes):
 | 2026-10-16 | 1.3.0 | Pre-run finding: with global subtraction the physical field in material 2 (~2/(1+kappa)) is a cancellation of O(1) terms w and phi_s, amplifying absolute errors ~kappa/2 (FEM band error 0.53 at h=0.025, kappa=2000, order 1.87). DECISION: keep global subtraction as primary (uniform across formulations, common practice). ADD pre-registered sensitivity: F2 with material-wise subtraction (class P3MatSub, variant "matsub") at kappa {80, 2000, 0.0125}, 5 seeds. Continuity residual generalised to w1 - w2 + PI (PI = 0 except matsub). | Avoid a decomposition-driven confound going unexamined | P3 | none (no P3 runs yet) |
 | 2026-10-16 | 1.3.0 | Self-test 8 informational for problems with an interface load (non-conforming mesh has no interface edges; load cannot be applied) | Explained discrepancy, not a pass/fail property | P3 self-tests | none |
 | 2026-10-16 | 1.3.0 | BUG (technical): AOT-executable cache keyed on settings only; in P3 the per-material boundary-point counts vary by seed -> 60 runs raised a shape mismatch and were recorded status=failed_technical (records kept). Fix: cache key includes all data-array shapes. The 16 completed runs are valid (an executable refuses mismatched shapes). Failed runs re-executed; analyses use status == complete. | Shape-dependent compilation | P3 first chunk | 60 reruns |
+
+## Phase 9 (P4) configuration — frozen before any P4 run
+| Date | Version | Item | Value / rule |
+|---|---|---|---|
+| 2026-10-16 | 1.4.0 | Geometry | box [-1,1]^2; material 2 (eps kappa) = quadrant x>0, y>0 (90 deg), material 1 = remaining 270 deg; corner at origin |
+| 2026-10-16 | 1.4.0 | Reference | exact singular solution r^lam Phi(theta) (bisector-symmetric mode), kappa tan(lam pi/4) + tan(3 lam pi/4) = 0; Dirichlet data from it; verified (results/validation/p4_eigen_checks.txt) |
+| 2026-10-16 | 1.4.0 | Regions | corner disc r < 0.02 excluded from all metrics; band = (|y|<0.05, x>-0.05) U (|x|<0.05, y>-0.05) |
+| 2026-10-16 | 1.4.0 | H10 metrics | signed relative |E| error at r in {0.02, 0.05, 0.1} on rays theta = pi/4 (mat 2), 5pi/4 and pi (mat 1); fitted coefficient ratio on r = 0.05. No pointwise peak compared |
+| 2026-10-16 | 1.4.0 | Level set | psi = x*y (smooth; zero on both interface rays; > 0 in material 2) |
+| 2026-10-16 | 1.4.0 | Scales | V_c = 1 (material-1 amplitude normalised to 1), L_c = 2 |
+| 2026-10-16 | 1.4.0 | Points, training, contrasts, sweep design | identical to P2/P3; interface points 64 per ray, r in (0.02, 1) |

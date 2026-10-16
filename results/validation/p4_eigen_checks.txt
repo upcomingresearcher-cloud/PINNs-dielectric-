@@ -1,0 +1,7 @@
+harmonic: 0 0 (sympy, previous call)
+kappa=1: lambda=1.000000 A=-1.00000 | cont@pi/2 0.0e+00 flux@pi/2 -2.2e-16 | cont@0 0.0e+00 flux@0 2.2e-16
+kappa=5: lambda=0.783653 A=-0.33333 | cont@pi/2 0.0e+00 flux@pi/2 -2.1e-12 | cont@0 0.0e+00 flux@0 2.1e-12
+kappa=80: lambda=0.675705 A=-0.02469 | cont@pi/2 0.0e+00 flux@pi/2 -5.8e-15 | cont@0 0.0e+00 flux@0 5.8e-15
+kappa=2000: lambda=0.667034 A=-0.00100 | cont@pi/2 -2.2e-16 flux@pi/2 6.6e-11 | cont@0 -2.2e-16 flux@0 -6.6e-11
+kappa=0.2: lambda=1.216347 A=-1.66667 | cont@pi/2 -1.1e-16 flux@pi/2 3.1e-15 | cont@0 -1.1e-16 flux@0 -3.1e-15
+kappa=0.0005: lambda=1.332966 A=-1.99900 | cont@pi/2 0.0e+00 flux@pi/2 -1.3e-12 | cont@0 0.0e+00 flux@0 1.3e-12
