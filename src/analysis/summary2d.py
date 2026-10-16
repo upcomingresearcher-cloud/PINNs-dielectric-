@@ -18,10 +18,11 @@ def problem_class(pid):
     from src.problems import p2d
     return {getattr(p2d, n).problem_id: getattr(p2d, n) for n in dir(p2d)
             if isinstance(getattr(p2d, n), type) and issubclass(getattr(p2d, n), p2d.Problem2D) and getattr(p2d, n) is not p2d.Problem2D
-            and "MatSub" not in n}[pid]
+            and not any(x in n for x in ("MatSub", "Thick", "Thin"))}[pid]
 
 
 def fem_rows(pid, cls, kappas=(1.0, 80.0, 2000.0, 0.0005), hs=(0.2, 0.1, 0.05, 0.025, 0.0125)):
+    """P5: graded meshes (h_far, h_in = t*frac) as in the reference; other problems: uniform h."""
     out = ROOT / "results/raw/fem_runs_2d.csv"
     old = pd.read_csv(out) if out.exists() else pd.DataFrame()
     if len(old) and (old.problem_id == pid).any(): return old[old.problem_id == pid]
@@ -31,10 +32,13 @@ def fem_rows(pid, cls, kappas=(1.0, 80.0, 2000.0, 0.0005), hs=(0.2, 0.1, 0.05, 0
     rows = []
     for k in kappas:
         p = cls(k)
-        for h in hs:
+        levels = [(0.4, 1.0), (0.2, 0.5), (0.1, 0.25), (0.05, 0.125)] if pid == "P5" else [(h, None) for h in hs]
+        for h, fr in levels:
             ts = []
             for _ in range(3):
-                t0 = time.perf_counter(); s = fem2d.solve(p, h, geometry=GEOM[pid], conforming=True); ts.append(time.perf_counter() - t0)
+                t0 = time.perf_counter()
+                s = fem2d.solve(p, h, geometry=p.geometry(), grade=(p.t * fr, p.t, 0.3)) if fr else fem2d.solve(p, h, geometry=GEOM[pid], conforming=True)
+                ts.append(time.perf_counter() - t0)
             m = evaluate(p, s)
             rows.append(dict(fem_id=f"{pid}-FEM-k{k:g}-h{h:g}-conf", problem_id=pid, kappa=k, h=h, conforming=True, order=2,
                              n_elements=s.n_elements, dofs=s.dofs, mesh_plus_solve_s=float(np.median(ts)), solve_only_s=s.t_solve,
@@ -45,6 +49,7 @@ def fem_rows(pid, cls, kappas=(1.0, 80.0, 2000.0, 0.0005), hs=(0.2, 0.1, 0.05, 0
 
 
 def loss_vis(pid, cls, kappas=(1.0, 80.0, 2000.0, 0.0005)):
+    if pid == "P5": kappas = (1.0,)          # no closed form for kappa != 1
     import jax.numpy as jnp
     from src.pinns import train2d as T
     from src.pinns.formulations2d import make
@@ -138,3 +143,14 @@ def h10(pid="P4"):
     verdict = "supported" if below else ("refuted" if within_or_pos else "inconclusive")
     tab.to_csv(ROOT / f"results/processed/{pid}_H10_corner_metrics.csv", index=False)
     return verdict, tab
+
+
+def p5_variants():
+    d = pd.read_csv(ROOT / "results/raw/runs_2d.csv"); d = d[(d.status == "complete") & (d.problem_id == "P5") & (d.run_type == "pinn")]
+    d = d[d.formulation.isin(["F2", "F6"])].copy()
+    d["film_err"] = [json.loads(e).get("relL2_E_film", np.nan) for e in d.extra_json]
+    d["setting"] = d.variant.map({"base": "t=0.02, 512 film pts", "t0.1": "t=0.1", "t0.005": "t=0.005", "nfilm128": "t=0.02, 128 film pts", "nfilm2048": "t=0.02, 2048 film pts"})
+    g = d[d.kappa.isin([1.0, 80.0, 2000.0])].groupby(["formulation", "setting", "kappa"]).agg(
+        n=("seed", "size"), failed=("fail_primary", "sum"), median_band=("primary_field_error", "median"),
+        median_film=("film_err", "median"), median_phi=("relL2_phi_global", "median")).reset_index()
+    g.to_csv(ROOT / "results/processed/P5_thickness_density.csv", index=False); return g
