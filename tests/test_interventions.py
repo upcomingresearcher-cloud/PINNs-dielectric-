@@ -112,3 +112,25 @@ def test_lbfgs_reaches_low_loss_on_easy_case():
     row0, _ = T.train_run("F2", 1.0, 0, CFG, overrides=dict(steps=1, precision="float64"))
     row, _ = T.train_run("F2", 1.0, 0, CFG, overrides=dict(steps=300, optimiser="lbfgs", precision="float64"))
     assert row["final_loss"] < 1e-3 * row0["final_loss"]
+
+
+def test_rebalanced_training_matches_independent_reference():
+    """Independent implementation (separate jax.grad per term, no Jacobian, no AOT) gives the same lambdas."""
+    import optax
+    N = 30; F = REGISTRY["F2"]; p, d = _data(1.0, jnp.float32)
+    params = F.init(jax.random.PRNGKey(0), 32, 3, jnp.float32)
+    opt = optax.adam(optax.cosine_decay_schedule(1e-3, decay_steps=N, alpha=0.1), b1=0.9, b2=0.999, eps=1e-8); st = opt.init(params)
+    term = lambda pp, i: F.terms(lambda x, s: F.rep(pp, x, s, d), d)[F.TERMS[i]]
+    flat = lambda g: jnp.concatenate([l.ravel() for l in jax.tree_util.tree_leaves(g)])
+    lam = np.ones(6)
+    for step in range(1, N + 1):
+        if (step - 1) % 10 == 0:
+            gs = [np.asarray(flat(jax.grad(term)(params, i)), np.float64) for i in range(6)]
+            gp = np.linalg.norm(gs[0] + gs[1])
+            for i in range(2, 6): lam[i] = 0.9 * lam[i] + 0.1 * gp / np.linalg.norm(gs[i])
+        w = jnp.asarray(lam, jnp.float32)
+        g = jax.grad(lambda pp: sum(w[i] * term(pp, i) for i in range(6)))(params)
+        u, st = opt.update(g, st, params); params = optax.apply_updates(params, u)
+    row, _ = T.train_run("F2", 1.0, 0, CFG, overrides=dict(steps=N, rebalance=1))
+    lt = json.loads(row["notes"].split("final_lambda=")[1])
+    assert np.allclose(lam, [lt[t] for t in F.TERMS], rtol=1e-5)
