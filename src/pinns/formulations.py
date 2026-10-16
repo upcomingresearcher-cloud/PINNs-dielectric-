@@ -149,3 +149,24 @@ class F4Full(Formulation):
 
 REGISTRY = {c.name: c() for c in (F1, F2, F3, F4, F5, F6, F4Full)}
 PRIMARY = ("F1", "F2", "F3", "F4", "F5", "F6")
+
+
+# ---------------- Regression-only baselines (protocol Sec. 7.1) ----------------
+class Regression(Formulation):
+    """Supervised fit of phi_exact using an unchanged representation (NOT a PINN).
+    Loss: MSE of phi at the same interior collocation points, per material. Targets y1, y2
+    are supplied in the data dict."""
+    TERMS = ("data1", "data2")
+    def __init__(self, base):
+        self.base = REGISTRY[base]; self.name = f"REG_{base}"
+        self.n_inputs, self.n_nets = self.base.n_inputs, self.base.n_nets
+        self.uses_interface_point = False
+    def rep(self, p, x, side, d): return self.base.rep(p, x, side, d)
+    def terms(self, f, d):
+        e1 = jax.vmap(lambda x: f(x, 1))(d["x1"]) - d["y1"]; e2 = jax.vmap(lambda x: f(x, 2))(d["x2"]) - d["y2"]
+        return dict(data1=jnp.mean(e1**2), data2=jnp.mean(e2**2))
+
+
+for _b in ("F1", "F2", "F3", "F4"):     # four distinct architectures (protocol Sec. 7.1)
+    REGISTRY[f"REG_{_b}"] = Regression(_b)
+REGRESSION = ("REG_F1", "REG_F2", "REG_F3", "REG_F4")

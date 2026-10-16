@@ -28,8 +28,11 @@ def collocation(seed, problem, n_per_material):
 
 
 def make_data(problem, x1, x2, dtype):
+    """y1, y2: exact potential at the interior points; used ONLY by regression baselines."""
     c = lambda v: jnp.asarray(v, dtype)
-    return dict(x1=c(x1), x2=c(x2), eps1=c(problem.eps1), eps2=c(problem.eps2), a=c(problem.a), V=c(problem.V), L=c(problem.L))
+    y1 = problem.exact(x1, np.ones_like(x1, int))[0]; y2 = problem.exact(x2, np.full_like(x2, 2, int))[0]
+    return dict(x1=c(x1), x2=c(x2), y1=c(y1), y2=c(y2), eps1=c(problem.eps1), eps2=c(problem.eps2),
+                a=c(problem.a), V=c(problem.V), L=c(problem.L))
 
 
 @functools.lru_cache(None)
