@@ -170,3 +170,22 @@ class Regression(Formulation):
 for _b in ("F1", "F2", "F3", "F4"):     # four distinct architectures (protocol Sec. 7.1)
     REGISTRY[f"REG_{_b}"] = Regression(_b)
 REGRESSION = ("REG_F1", "REG_F2", "REG_F3", "REG_F4")
+
+
+class RegressionField(Regression):
+    """EXPLORATORY (Phase 6, not pre-registered): supervised fit of phi AND of D = -eps phi',
+    D-error normalised by D_exact so both materials carry equal weight. Same architecture/budget."""
+    TERMS = ("data1", "data2", "flux1", "flux2")
+    def __init__(self, base):
+        super().__init__(base); self.name = f"REGD_{base}"
+    def terms(self, f, d):
+        t = super().terms(f, d)
+        g1 = jax.vmap(jax.grad(lambda x: f(x, 1)))(d["x1"]); g2 = jax.vmap(jax.grad(lambda x: f(x, 2)))(d["x2"])
+        Dex = 1.0 / (d["a"] / d["eps1"] + (d["L"] - d["a"]) / d["eps2"]) * d["V"]
+        t["flux1"] = jnp.mean(((-d["eps1"] * g1) - Dex)**2) / Dex**2
+        t["flux2"] = jnp.mean(((-d["eps2"] * g2) - Dex)**2) / Dex**2
+        return t
+
+
+for _b in ("F1", "F2", "F3", "F4"):
+    REGISTRY[f"REGD_{_b}"] = RegressionField(_b)

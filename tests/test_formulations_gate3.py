@@ -10,7 +10,7 @@ from src.problems.p1 import P1Problem
 CFG = yaml.safe_load(open(pathlib.Path(__file__).resolve().parents[1] / "configs/protocol_v1.yaml"))
 KAPPAS = [1.0, 80.0, 2000.0]
 EXPECTED_PARAMS = {"F1": 2209, "F2": 4418, "F3": 2241, "F4": 4418, "F5": 2241, "F6": 4418, "F4full": 4418}
-EXPECTED_PARAMS.update({f"REG_{b}": EXPECTED_PARAMS[b] for b in ("F1", "F2", "F3", "F4")})   # same architecture as parent
+EXPECTED_PARAMS.update({f"{p}_{b}": EXPECTED_PARAMS[b] for b in ("F1", "F2", "F3", "F4") for p in ("REG", "REGD")})   # same architecture as parent
 
 
 def _data(k, dtype=jnp.float64, seed=0):

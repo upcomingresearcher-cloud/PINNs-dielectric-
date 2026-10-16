@@ -1,0 +1,155 @@
+{
+  "H1": {
+    "F1_failed_by_kappa": {
+      "5.0": 5,
+      "20.0": 5,
+      "80.0": 5,
+      "400.0": 5,
+      "2000.0": 5
+    },
+    "clause1_F1_fails_ge4_all_kappa_ge5": true,
+    "F2_spearman_logk_error": 0.9572465678068238,
+    "F2_spearman_ci95": [
+      0.9006435393139479,
+      0.9767663062818042
+    ],
+    "clause2": true,
+    "failed_seeds_kappa_gt1": {
+      "F1": 25,
+      "F2": 8,
+      "F3": 19,
+      "F4": 20,
+      "F5": 20,
+      "F6": 3
+    },
+    "clause3_F3toF6_fewer_than_F1": true,
+    "verdict": "supported",
+    "note": "F3/F4/F5 satisfy clause 3 only narrowly (19-20 vs 25 failed seeds); they fail from kappa=20, earlier than F2."
+  },
+  "H2": {
+    "n_runs": 150,
+    "median_R": 2.389850934088164,
+    "median_R_ci95": [
+      1.7256995685503846,
+      3.1774432651441433
+    ],
+    "frac_R_gt1": 0.9666666666666667,
+    "n_failures": 95,
+    "concealed_failure_fraction": 0.23157894736842105,
+    "n_concealed": 22,
+    "median_R_by_formulation": {
+      "F1": 26.98045068706719,
+      "F2": 1.2640616891156302,
+      "F3": 1.025885115991284,
+      "F4": 3.1125731427533974,
+      "F5": 28.272290636823442,
+      "F6": 1.5385606502152815
+    },
+    "verdict": "inconclusive"
+  },
+  "H3": {
+    "n_failing_runs": 11,
+    "n_flux_dominant": 0,
+    "frac_flux_dominant": 0.0,
+    "median_D_jump_rel_failing": 0.0002601674199104,
+    "median_phi_jump_rel_failing": 0.0525909662246704,
+    "median_D_jump_rel_passing": 7.197260856628418e-06,
+    "verdict": "refuted"
+  },
+  "H4": {
+    "clause_regression_lt1pct_all": false,
+    "regression_max": 544.5269809947297,
+    "clause_F1_invisible_all_kappa": true,
+    "clause_visibility_ratio_gt10_F2toF6": false,
+    "visibility_ratio_le10_cases": [
+      [
+        "F5",
+        5
+      ],
+      [
+        "F5",
+        20
+      ]
+    ],
+    "refutation_regression_fails_where_F2_fails": true,
+    "PINN_vs_regression_same_architecture": {
+      "1.0": {
+        "PINN_F2_median": 3.177828718885008e-05,
+        "REG_F2_median": 0.0129690025201344
+      },
+      "5.0": {
+        "PINN_F2_median": 7.78799183230224e-05,
+        "REG_F2_median": 0.0243846131492136
+      },
+      "20.0": {
+        "PINN_F2_median": 0.0001742865232082,
+        "REG_F2_median": 0.031341731381227
+      },
+      "80.0": {
+        "PINN_F2_median": 0.0019622378657079,
+        "REG_F2_median": 0.0702482717481203
+      },
+      "400.0": {
+        "PINN_F2_median": 0.0475074386272711,
+        "REG_F2_median": 0.3121012302833235
+      },
+      "2000.0": {
+        "PINN_F2_median": 0.2818290626473836,
+        "REG_F2_median": 1.5315643353111228
+      }
+    },
+    "intervention_clause": "pending Phase 11",
+    "verdict": "refuted (pre-registered criterion)",
+    "interpretation": "Pre-registered refutation criterion met: phi-only regression with the F2 architecture exceeds 5% where F2 fails. But PINN-trained F2 with the SAME architecture is more accurate than regression at every kappa >= 5, so phi-only regression underestimates representation capacity; the refutation does not by itself establish a representation limit. An exploratory field-supervised regression is run separately."
+  },
+  "H11": {
+    "n_runs": 120,
+    "n_failed": 50,
+    "weighted": {
+      "AUC": 0.8542857142857143,
+      "ci95": [
+        0.7749929535737775,
+        0.9227638197147119
+      ]
+    },
+    "unweighted_sensitivity": {
+      "AUC": 0.8405714285714285,
+      "ci95": [
+        0.7537142857142857,
+        0.9141722285932791
+      ]
+    },
+    "definition": "median over logged steps 0-300 of log10(max/min per-term gradient norm), weighted norms primary",
+    "verdict": "supported"
+  },
+  "selection_2d": {
+    "total_failed_primary": {
+      "F6": 3,
+      "F2": 8,
+      "F3": 19,
+      "F4": 20,
+      "F5": 20,
+      "F1": 25
+    },
+    "median_at_2000": {
+      "F1": 40.87698828956382,
+      "F2": 0.2818290626473836,
+      "F3": 1.122615139012316,
+      "F4": 0.9697945771516328,
+      "F5": 4.297164895416408,
+      "F6": 0.0654862913563929
+    },
+    "ranking": [
+      "F6",
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F1"
+    ],
+    "strongest_two": [
+      "F6",
+      "F2"
+    ]
+  }
+}

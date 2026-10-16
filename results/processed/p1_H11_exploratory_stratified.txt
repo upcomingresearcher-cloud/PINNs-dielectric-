@@ -1,0 +1,8 @@
+spearman(ratio, log kappa): 0.814
+kappa=1: n=20 failed=0 within-kappa AUC=nan
+kappa=5: n=20 failed=0 within-kappa AUC=nan
+kappa=20: n=20 failed=9 within-kappa AUC=0.42424242424242425
+kappa=80: n=20 failed=11 within-kappa AUC=0.8787878787878788
+kappa=400: n=20 failed=12 within-kappa AUC=0.8125
+kappa=2000: n=20 failed=18 within-kappa AUC=0.75
+pooled within-kappa AUC over mixed strata: 0.684 n= 80
