@@ -7,3 +7,4 @@ jax[cpu]==0.11.2
 optax==0.2.8
 pyyaml==6.0.3
 sympy  # derivation checks
+pytest==9.1.1
