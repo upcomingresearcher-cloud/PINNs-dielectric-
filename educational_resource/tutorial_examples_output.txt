@@ -1,0 +1,18 @@
+[1] P1, kappa=80: D = 1.9753; E1 = D/eps1 = 1.9753, E2 = D/eps2 = 0.02469 (E jumps by 80, D is continuous)
+    potential at x=0.25: 0.5062; at x=0.75: 0.00617
+[2] run P1-F2-k80-s0-pinn-base: primary=0.0525 phi_global=3.79e-02 phi_jump=1.57e-02 D_jump=4.51e-05 fail=True wall=2.02s evals=3000
+[3] F1 kappa=80: median primary error 27.8, median final loss 1.31e-03, median effective-contrast log ratio -4.39 (0 = correct contrast)
+[4] P1 failed seeds of 5:
+kappa        1.0     5.0     20.0    80.0    400.0   2000.0
+formulation                                                
+F1                0       5       5       5       5       5
+F2                0       0       0       1       2       5
+F3                0       0       4       5       5       5
+F4                0       0       5       5       5       5
+F5                0       0       5       5       5       5
+F6                0       0       0       0       0       3
+[5] P1 kappa>1: median R = 2.39; concealed failures 22/95
+    P5 kappa!=1: median R = 8.25; concealed 60/163
+[6] F2 kappa=400 per seed: s0=0.212, s1=0.082, s2=0.005, s3=0.011, s4=0.048
+[7] P2 kappa=80 conforming FEM: 565 DOFs 0.176 in 0.01s; 2093 DOFs 0.075 in 0.03s; 7869 DOFs 0.030 in 0.13s; 30337 DOFs 0.010 in 0.67s; 119697 DOFs 0.004 in 4.41s
+    PINN F2: median error 0.634 after 10.0s training
