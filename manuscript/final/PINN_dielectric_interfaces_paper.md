@@ -1,12 +1,11 @@
 # When Do Physics-Informed Neural Networks Resolve Dielectric Interfaces? A Pre-registered, Seed-Level Evaluation Against Interface-Conforming Finite Elements
 
 October 2026
+Devesh Patwari¹, Daksh Mehta¹, Tolga Uras Kurtay¹, Yasir Balat¹
 
-\[Author name\]¹
+¹ Independent researchers
 
-¹ \[Department, Institution, City, Country\]
-
-Corresponding author: \[email address\]
+Corresponding author: Devesh Patwari, devesh.patwari.1@gmail.com
 
 **Keywords:** physics-informed neural networks; dielectric interfaces;
 electrostatics; high-contrast coefficients; finite element method;
@@ -757,26 +756,33 @@ the released raw data.
 
 ### Data and code availability
 
-The project archive contains the source code, the raw databases (3,856
-completed runs plus 60 technical-failure rows, superseded rows retained
-and labelled), processed outputs and figures, the frozen protocol and
-change log, and a single analysis pipeline (scripts/make_all.py) that
-regenerates every table and figure in about 70 s. Installation, testing
-(169 automated tests) and reruns are described in
-docs/REPRODUCTION_GUIDE.md.
+The project repository,
+https://github.com/upcomingresearcher-cloud/PINNs-dielectric-, contains
+the source code, the raw databases (3,856 completed runs plus 60
+technical-failure rows, superseded rows retained and labelled),
+processed outputs and figures, the frozen protocol and change log, and a
+single analysis pipeline (scripts/make_all.py) that regenerates every
+table and figure in about 70 s. Installation, testing (169 automated
+tests) and reruns are described in docs/REPRODUCTION_GUIDE.md.
 
 ### Acknowledgments
 
-\[To be completed by the author: funding sources, computing resources
-and people to thank.\]
+The authors thank John DeMason (University of Michigan, Ann Arbor) for
+his support. This work received no specific funding; all computations
+were run on a single CPU core.
 
 ### Author contributions
 
-\[To be completed by the author.\]
+Devesh Patwari, Daksh Mehta, Tolga Uras Kurtay and Yasir Balat conceived
+and directed the study, reviewed the results and approved the final
+manuscript. The AI system Claude (Anthropic) was used extensively under
+the authors' direction: it wrote the code, ran the experiments,
+performed the analyses and drafted the manuscript. The authors take full
+responsibility for the content of this article.
 
 ### Competing interests
 
-The author declares no competing interests. \[Confirm or amend.\]
+The authors declare no competing interests.
 
 ## References
 
@@ -1116,12 +1122,14 @@ under Intervention B.
 
 ## Appendix G. Reproducibility and software
 
-The project archive contains the source code, raw run databases,
-processed tables, figures, the frozen protocol, the change log and a
-reproduction guide. Every completed run is one row of the database with
-its full configuration, all metrics, cost, software environment,
-hardware and git commit; per-run training trajectories (every 250 steps)
-and per-term gradient logs (every 25 steps) are stored separately.
+The project repository
+(https://github.com/upcomingresearcher-cloud/PINNs-dielectric-) contains
+the source code, raw run databases, processed tables, figures, the
+frozen protocol, the change log and a reproduction guide. Every
+completed run is one row of the database with its full configuration,
+all metrics, cost, software environment, hardware and git commit;
+per-run training trajectories (every 250 steps) and per-term gradient
+logs (every 25 steps) are stored separately.
 
 **Table G1.** Reproduction steps.
 
