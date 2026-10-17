@@ -1,9 +1,91 @@
 {
- "verdict_all_configs": "supported",
+ "verdict_all_configs": "supported at logging resolution (clause 1 not resolvable in some configurations)",
  "verdict_excluding_degenerate_kappa1": "supported",
- "n_configs": 62,
- "n_clause1": 62,
- "n_clause2": 62,
+ "n_configs": 64,
+ "n_clause1": 64,
+ "n_clause2": 64,
+ "not_resolution_safe": [
+  {
+   "problem_id": "P2",
+   "arm": "F1/base",
+   "kappa": 1.0,
+   "pinn_median_t_1pct_lower": 0.0,
+   "pinn_median_t_1pct": 0.911134945749969,
+   "fem_t_1pct": 0.0135112460002346
+  },
+  {
+   "problem_id": "P2",
+   "arm": "F2/R_lbfgs",
+   "kappa": 1.0,
+   "pinn_median_t_1pct_lower": 0.0,
+   "pinn_median_t_1pct": 1.8742587333948337,
+   "fem_t_1pct": 0.0135112460002346
+  },
+  {
+   "problem_id": "P2",
+   "arm": "F3/R_lbfgs",
+   "kappa": 1.0,
+   "pinn_median_t_1pct_lower": 0.0,
+   "pinn_median_t_1pct": 1.590615024731699,
+   "fem_t_1pct": 0.0135112460002346
+  },
+  {
+   "problem_id": "P2",
+   "arm": "F4/base",
+   "kappa": 1.0,
+   "pinn_median_t_1pct_lower": 0.0,
+   "pinn_median_t_1pct": 1.7973533677511189,
+   "fem_t_1pct": 0.0135112460002346
+  },
+  {
+   "problem_id": "P2",
+   "arm": "F6/R_lbfgs",
+   "kappa": 1.0,
+   "pinn_median_t_1pct_lower": 0.0,
+   "pinn_median_t_1pct": 1.7912788942273334,
+   "fem_t_1pct": 0.0135112460002346
+  },
+  {
+   "problem_id": "P5",
+   "arm": "F1/base",
+   "kappa": 1.0,
+   "pinn_median_t_1pct_lower": 0.0,
+   "pinn_median_t_1pct": 0.799547669249724,
+   "fem_t_1pct": 0.0380680799999026
+  },
+  {
+   "problem_id": "P5",
+   "arm": "F2/R_lbfgs",
+   "kappa": 1.0,
+   "pinn_median_t_1pct_lower": 0.0,
+   "pinn_median_t_1pct": 1.7886883364319948,
+   "fem_t_1pct": 0.0380680799999026
+  },
+  {
+   "problem_id": "P5",
+   "arm": "F2/base",
+   "kappa": 1.0,
+   "pinn_median_t_1pct_lower": 0.0,
+   "pinn_median_t_1pct": 0.9225724134165981,
+   "fem_t_1pct": 0.0380680799999026
+  },
+  {
+   "problem_id": "P5",
+   "arm": "F4/base",
+   "kappa": 1.0,
+   "pinn_median_t_1pct_lower": 0.0,
+   "pinn_median_t_1pct": 2.6412126275005035,
+   "fem_t_1pct": 0.0380680799999026
+  },
+  {
+   "problem_id": "P5",
+   "arm": "F6/R_lbfgs",
+   "kappa": 1.0,
+   "pinn_median_t_1pct_lower": 0.0,
+   "pinn_median_t_1pct": 1.7851519897436723,
+   "fem_t_1pct": 0.0380680799999026
+  }
+ ],
  "refuting": [],
  "clause2_failures": [],
  "pinn_reaching_1pct": [
@@ -19,7 +101,7 @@
    "problem_id": "P2",
    "arm": "F2/R_lbfgs",
    "kappa": 1.0,
-   "pinn_median_t_1pct": 1.8742587333948335,
+   "pinn_median_t_1pct": 1.8742587333948337,
    "fem_t_1pct": 0.0135112460002346,
    "ratio_pinn_over_fem_1pct": 138.71842266525903
   },
@@ -67,9 +149,9 @@
    "problem_id": "P2",
    "arm": "F6/base",
    "kappa": 1.0,
-   "pinn_median_t_1pct": 1.7191583093329161,
+   "pinn_median_t_1pct": 1.719158309332916,
    "fem_t_1pct": 0.0135112460002346,
-   "ratio_pinn_over_fem_1pct": 127.23906509459349
+   "ratio_pinn_over_fem_1pct": 127.23906509459347
   },
   {
    "problem_id": "P5",

@@ -113,24 +113,33 @@ def main():
 
 
 def fig_cost(C, F, fname):
-    fig, axes = plt.subplots(2, 3, figsize=(15, 8.4))
+    """One fixed style per PINN arm across all panels (colour = formulation, marker = remedy)."""
+    from matplotlib.lines import Line2D
+    forms = ["F1", "F2", "F3", "F4", "F5", "F6"]; cols = dict(zip(forms, plt.get_cmap("tab10").colors))
+    mk = {"base": "o", "R_lbfgs": "s", "R_adam20k": "D"}
+    fig, axes = plt.subplots(2, 3, figsize=(15, 8.8))
     for i, p in enumerate(PROBLEMS):
         for j, k in enumerate([1.0, 80.0, 2000.0]):
             ax = axes[i, j]; fe = F[(F.problem_id == p) & (F.kappa == k)]
             for conf, st in ((True, "k-o"), (False, "k--x")):
                 g = fe[fe.conforming == conf].sort_values("dofs")
-                if len(g): ax.plot(g.mesh_plus_solve_s, np.maximum(g.primary_field_error, 1e-16), st, lw=1,
-                                   label="FEM conforming" if conf else "FEM non-conforming")
-            g = C[(C.problem_id == p) & (C.kappa == k)]
-            for r, mk in zip(g.itertuples(), "sD^v<>ph*"):
+                if len(g): ax.plot(g.mesh_plus_solve_s, np.maximum(g.primary_field_error, 1e-16), st, lw=1, ms=4)
+            for r in C[(C.problem_id == p) & (C.kappa == k)].itertuples():
+                f, v = r.arm.split("/")
                 ax.errorbar(r.pinn_median_wall_s, r.pinn_median_err, yerr=[[r.pinn_median_err - r.pinn_err_q25], [r.pinn_err_q75 - r.pinn_median_err]],
-                            fmt=mk, ms=6, capsize=2, label=f"PINN {r.arm}")
+                            fmt=mk[v], color=cols[f], mfc=cols[f] if v == "base" else "none", ms=7, capsize=2, mew=1.5)
             for t in TARGETS: ax.axhline(t, color="gray", ls=":", lw=0.8)
             ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlabel("wall-clock (s): FEM mesh+solve; PINN training")
             ax.set_ylabel("primary band field error (–)"); ax.set_title(f"{p}, κ = {k:g}" + (" (FEM exact: degenerate)" if k == 1 else ""), fontsize=9)
-            if i == 0 and j == 0: ax.legend(fontsize=6, ncol=2)
-    fig.suptitle("Phase 13: error vs cost, PINN (median, IQR over 5 seeds) vs FEM refinement; dotted = 5% and 1%", fontsize=10)
-    fig.tight_layout(); fig.savefig(ROOT / "results/figures" / fname, dpi=130); plt.close(fig)
+    h = [Line2D([], [], color="k", marker="o", ls="-", label="FEM conforming (refinement)"),
+         Line2D([], [], color="k", marker="x", ls="--", label="FEM non-conforming")]
+    h += [Line2D([], [], color=cols[f], marker="o", ls="", label=f) for f in forms]
+    h += [Line2D([], [], color="gray", marker=m, ls="", mfc="gray" if v == "base" else "none",
+                 label={"base": "Adam 3000 (filled)", "R_lbfgs": "L-BFGS ≤3000 evals", "R_adam20k": "Adam 20,000 (κ = 80)"}[v]) for v, m in mk.items()]
+    h += [Line2D([], [], color="gray", ls=":", label="5% and 1% targets")]
+    fig.legend(handles=h, loc="lower center", ncol=6, fontsize=8)
+    fig.suptitle("Phase 13: error vs cost on P2 and P5, PINN (median, bars = IQR over 5 seeds) vs FEM refinement", fontsize=10)
+    fig.tight_layout(rect=(0, 0.06, 1, 0.97)); fig.savefig(ROOT / "results/figures" / fname, dpi=130); plt.close(fig)
 
 
 if __name__ == "__main__":
