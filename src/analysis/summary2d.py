@@ -117,7 +117,7 @@ def main(pid):
             for j in range(len(ks)):
                 v = pv.values[i, j]; ax.text(j, i, "not run" if np.isnan(v) else fmt(v), ha="center", va="center", fontsize=7)
         ax.set_xlabel("κ = ε₂/ε₁ (κ<1: inverse contrast)"); ax.set_title(ttl + "\nF3–F5: reduced grid by pre-registered design", fontsize=9)
-        fig.colorbar(im, ax=ax); fig.savefig(ROOT / "results/figures" / fn, dpi=150); plt.close(fig)
+        fig.colorbar(im, ax=ax, label="log10 median primary error (–)" if lg else "failed seeds (of 5)"); fig.savefig(ROOT / "results/figures" / fn, dpi=150); plt.close(fig)
     return t, res
 
 

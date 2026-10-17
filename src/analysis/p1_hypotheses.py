@@ -157,7 +157,7 @@ def main():
             g = t_[t_.formulation == f]
             ax.loglog(g.kappa, g[cols[0]].clip(lower=1e-9), "-o", color=c, ms=3, label=f"{f} {cols[0].split('_')[-1]}")
             ax.loglog(g.kappa, g[cols[1]].clip(lower=1e-9), "--s", color=c, ms=3, label=f"{f} {cols[1].split('_')[-1]}")
-        ax.axhline(.05, c="k", ls=":"); ax.set_xlabel("κ"); ax.set_ylabel("median over 5 seeds (clipped at 1e-9)"); ax.set_title(ttl, fontsize=9)
+        ax.axhline(.05, c="k", ls=":"); ax.set_xlabel("contrast κ = ε₂/ε₁ (–)"); ax.set_ylabel("median over 5 seeds, relative error (–; clipped at 1e-9)"); ax.set_title(ttl, fontsize=9)
         ax.grid(alpha=.3, which="both")
     axes[0].legend(fontsize=5, ncol=2)
     fig.savefig(ROOT / "results/figures/p1_material_and_jumps.png", dpi=150); plt.close(fig)

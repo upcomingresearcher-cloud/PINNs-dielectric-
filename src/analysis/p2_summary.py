@@ -104,13 +104,13 @@ def main():
             for j in range(len(ks)):
                 v = pv.values[i, j]; ax.text(j, i, "not run" if np.isnan(v) else fmt(v), ha="center", va="center", fontsize=7)
         ax.set_xlabel("κ = ε_inclusion / ε_matrix (κ<1: inverse contrast)"); ax.set_title(ttl + "\nF3–F5: reduced grid by pre-registered design", fontsize=9)
-        fig.colorbar(im, ax=ax); fig.savefig(ROOT / "results/figures" / fn, dpi=150); plt.close(fig)
+        fig.colorbar(im, ax=ax, label="log10 median primary error (–)" if lg else "failed seeds (of 5)"); fig.savefig(ROOT / "results/figures" / fn, dpi=150); plt.close(fig)
     fig, ax = plt.subplots(figsize=(6.2, 4.6), constrained_layout=True)
     for k, c in ((80.0, "tab:orange"), (2000.0, "tab:red"), (0.0005, "tab:blue")):
         for conf, ls in ((True, "-o"), (False, "--s")):
             g = fem[(fem.kappa == k) & (fem.conforming == conf)].sort_values("dofs")
             ax.loglog(g.dofs, g.primary_field_error, ls, color=c, ms=4, label=f"κ={k:g}, {'body-fitted' if conf else 'non-conforming'}")
-    ax.axhline(.05, c="k", ls=":"); ax.set_xlabel("FEM degrees of freedom (P2 elements)"); ax.set_ylabel("interface-band field error")
+    ax.axhline(.05, c="k", ls=":"); ax.set_xlabel("FEM degrees of freedom (quadratic elements) (–)"); ax.set_ylabel("primary interface-band field error (–)")
     ax.set_title("P2 FEM convergence (body-fitted vs non-conforming)", fontsize=9); ax.legend(fontsize=6); ax.grid(alpha=.3, which="both")
     fig.savefig(ROOT / "results/figures/p2_fem_convergence.png", dpi=150); plt.close(fig)
     return t, res

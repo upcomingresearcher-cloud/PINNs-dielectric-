@@ -1,9 +1,37 @@
 [
  {
-  "step": "p11",
-  "description": "Interventions A-E, H4 clause, H5 (Phase 11)",
-  "command": "-m src.analysis.interventions",
+  "step": "p1hyp",
+  "description": "P1 hypotheses H1-H4, H11; global-vs-local, material/jump, gradient figures",
+  "command": "-m src.analysis.p1_hypotheses",
   "exit": 0,
-  "seconds": 7.2
+  "seconds": 9.2
+ },
+ {
+  "step": "p2",
+  "description": "P2 summary, maps, FEM convergence (Phase 7)",
+  "command": "-m src.analysis.p2_summary",
+  "exit": 0,
+  "seconds": 11.1
+ },
+ {
+  "step": "p3",
+  "description": "P3 summary and maps (Phase 8)",
+  "command": "-m src.analysis.summary2d P3",
+  "exit": 0,
+  "seconds": 7.8
+ },
+ {
+  "step": "p4",
+  "description": "P4 summary and maps (Phase 9)",
+  "command": "-m src.analysis.summary2d P4",
+  "exit": 0,
+  "seconds": 12.5
+ },
+ {
+  "step": "p5",
+  "description": "P5 summary and maps (Phase 10)",
+  "command": "-m src.analysis.summary2d P5",
+  "exit": 0,
+  "seconds": 4.9
  }
 ]
