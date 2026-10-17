@@ -72,9 +72,9 @@
   },
   {
    "setting": "band16",
-   "kendall_tau_b": 0.8660254037844387,
+   "kendall_tau_b": 1.0,
    "median_R": 2.021697986536299,
-   "total_fails": 54
+   "total_fails": 49
   }
  ],
  "notes": [

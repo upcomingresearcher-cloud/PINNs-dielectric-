@@ -6,9 +6,9 @@
 
 1. Unzip the attached package into `/home/claude/` (the directory inside is `pinn_dielectric_project/`).
 2. Run the environment setup and verification in Section 4.
-3. Continue with **Phase 12** (Phase 11 is complete; read `docs/phase11_interventions_findings.md`).
+3. Continue with **Phase 13** (Phases 11-12 complete; read `docs/phase11_interventions_findings.md` and `docs/phase12_robustness_findings.md`).
 
-Do not redo Phases 1–11. Do not change frozen settings without a change-log entry. Report progress after each phase.
+Do not redo Phases 1–12. Do not change frozen settings without a change-log entry. Report progress after each phase.
 
 ---
 
@@ -61,7 +61,7 @@ The problems are P1 (1D layered capacitor), P2 (dielectric cylinder), P3 (2D lin
 | 9 | P4 corner (210 + 60 regression), H10 | complete |
 | 10 | P5 thin film (210 + 60 thickness + 40 density + 60 regression) | complete |
 | 11 | Controlled interventions A–E (1,155 rows incl. 270 superseded; see docs/phase11_interventions_findings.md) | complete |
-| **12** | **Robustness** | **next** |
+| 12 | Robustness (870 rows; see docs/phase12_robustness_findings.md) | complete |
 | 13 | Remedy comparison vs FEM (cost) | not started |
 | 14 | Final analyses, figures, paper, reproduction guide, educational resource | not started |
 
@@ -269,7 +269,14 @@ Run all of these on P1, with **10 matched seeds (0–9)**, changing one factor a
 
 **Estimated size:** about 1,100 1D runs, 2–3 turns.
 
-## 10. PHASE 12 — Robustness (frozen; protocol Sec. 11, YAML `robustness_p1`)
+## 10a. PHASE 12 RESULTS (complete)
+
+- H6 inconclusive: ranking criterion met 8/8 (tau-b >= 0.65); masking criterion R > 3 met 1/8 (12,000 steps, R = 5.6). Baseline R on the subset is 2.24 (H2 was already inconclusive, R = 2.39); R is stable at 1.84-2.49 in 7/8 settings.
+- 12,000 steps: F2 failures 6 -> 1, concealed failures 7 -> 16. Parameter-matched width 22 does not remove F2/F6's advantage.
+- BUG fixed: F5 energy with non-uniform points (extra band points) now uses importance weights; 15 F5 rows superseded (variant band16v2).
+- Driver: `sh scripts/run_robustness.sh BUDGET_SECONDS` (resumable).
+
+## 10. PHASE 12 — Robustness (frozen; protocol Sec. 11, YAML `robustness_p1`) — DONE, kept for reference
 
 P1, all six formulations, κ ∈ {1, 80, 2000}, seeds 0–4, one factor at a time. The eight variations:
 

@@ -24,6 +24,9 @@ def load():
     d = d[d.kappa.isin(KAPPAS) & d.seed.isin(SEEDS)]
     ref = d[(d.run_type == "pinn") & (d.variant == "base")].assign(setting="baseline")
     rob = d[d.run_type == "robustness"].assign(setting=lambda x: x.variant)
+    # F5 band16 rows are SUPERSEDED (biased energy quadrature, change log); the band16 extra uses band16v2 for F5
+    rob = rob[~((rob.variant == "band16") & (rob.formulation == "F5"))]
+    rob.loc[rob.variant == "band16v2", "setting"] = "band16"
     out = pd.concat([ref, rob], ignore_index=True)
     out["fail"] = out.fail_primary.astype(bool)
     out["R"] = out.primary_field_error / out.relL2_phi_global
@@ -94,6 +97,10 @@ def fig_fails(S, fname):
     for i in range(M.shape[0]):
         for j in range(M.shape[1]): ax.text(j, i, f"{int(M[i, j])}", ha="center", va="center", fontsize=8, color="k" if M[i, j] < 10 else "w")
     ax.set_xticks(range(6)); ax.set_xticklabels(FORMS)
+    n_main = 1 + sum(s in VARIATIONS for s in order)
+    if n_main < len(order):
+        ax.axhline(n_main - 0.5, color="k", lw=2)
+        ax.text(5.6, n_main - 0.35, "extras (descriptive,\nnot counted for H6)", fontsize=7, va="top", ha="right")
     ax.set_yticks(range(len(order))); ax.set_yticklabels([f"{s}  (τ={S.loc[s, 'kendall_tau_b']:.2f}, R={S.loc[s, 'median_R']:.1f})" for s in order], fontsize=8)
     ax.set_title("P1 robustness: failed runs out of 15 (κ ∈ {1, 80, 2000} × 5 seeds)\nτ = Kendall τ-b vs baseline ranking; R = median band-field / global-potential error (κ > 1)", fontsize=9)
     plt.colorbar(im, ax=ax, label="failed runs (of 15)"); fig.tight_layout()
