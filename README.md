@@ -1,25 +1,25 @@
 # PINNs Across Dielectric Interfaces: Failure Mechanisms, Robustness, and Computational Cost
 
-Research project status: **Phase 5 complete: full P1 sweep (180 primary + 30 extension + 120 regression runs) and loss-visibility diagnostic.**
+Research project status: **all 14 phases complete.** Paper: `manuscript/paper.md`. Reproduction: `docs/REPRODUCTION_GUIDE.md`. Tutorial: `educational_resource/tutorial.md`.
 
 | Phase | Status |
 |---|---|
-| 1. Literature database and review | complete |
-| 2. Gaps, hypotheses, frozen protocol | complete (configs/protocol_v1.yaml, docs/experimental_protocol.md) |
-| 3. P1 references, FEM, evaluator, self-tests | complete (results/validation/, results/raw/fem_runs.csv) |
-| 4. PINN formulations, training loop, pilot | complete (src/pinns/, pilot rows in results/raw/runs.csv) |
-| 5. Full P1 sweep, regression baselines, loss visibility | complete (results/raw/, results/processed/p1_*, results/figures/p1_*) |
-| 6. P1 analysis, hypothesis tests | complete (docs/phase6_p1_findings.md) |
-| 7. P2 cylinder | complete (docs/phase7_p2_findings.md) |
-| 8. P3 line charge | complete (docs/phase8_p3_findings.md) |
-| 9. P4 corner | complete (docs/phase9_p4_findings.md) |
-| 10. P5 thin film | complete (docs/phase10_p5_findings.md; cross-problem status: docs/cross_problem_hypotheses_after_P5.md) |
-| 11–14 | not started |
+| 1–5. Literature, protocol, evaluator, formulations, P1 sweep | complete |
+| 6. P1 analysis (docs/phase6_p1_findings.md) | complete |
+| 7–10. P2 cylinder, P3 line charge, P4 corner, P5 thin film (docs/phase7…10_*.md) | complete |
+| 11. Interventions A–E (docs/phase11_interventions_findings.md) | complete |
+| 12. Robustness (docs/phase12_robustness_findings.md) | complete |
+| 13. Remedies vs FEM (docs/phase13_remedy_vs_fem_findings.md) | complete |
+| 14. Final analyses, paper, guides (manuscript/, docs/REPRODUCTION_GUIDE.md, educational_resource/) | complete |
+
+Quick start: `sh scripts/setup_environment.sh && python scripts/make_all.py` regenerates every table and figure from `results/raw/`.
 
 ## Layout
 - `literature/` – literature database, review, gap matrix/report, BibTeX, and the scripts that build the CSVs
 - `docs/` – progress reports and design notes
-- `src/` – (empty) problems, references, pinns, fem, evaluator, experiments, analysis
+- `src/` – problems, references, pinns (formulations, training), fem, evaluator, experiments (records), analysis
+- `results/` – raw databases and logs, processed tables, figures, validation outputs
+- `manuscript/` – paper; `educational_resource/` – beginner tutorial
 - `results/logs/` – environment records and timing benchmarks
 - `scripts/` – utilities (`record_environment.py`, JAX step benchmark)
 

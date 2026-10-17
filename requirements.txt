@@ -1,10 +1,13 @@
-# Phase 1 environment (exact versions recorded in results/logs/environment_*.json)
+# Exact versions used for all results (CPU, Python 3.12, Ubuntu 24). Also recorded per run in software_env.
 numpy==2.4.4
 scipy==1.17.1
 pandas==3.0.2
 matplotlib==3.10.8
 jax[cpu]==0.11.2
 optax==0.2.8
+scikit-fem==12.0.2
+gmsh==4.15.2          # needs system libs: libglu1-mesa libxcursor1 libxinerama1 libxft2 libxrender1
 pyyaml==6.0.3
-sympy  # derivation checks
+sympy                 # derivation checks only
 pytest==9.1.1
+pillow                # figure montages only
