@@ -3,6 +3,8 @@
 BUDGET=${1:-240}; START=$(date +%s)
 run() {  # variant formulations override...
   V=$1; FS=$2; shift 2
+  NF=$(echo $FS | tr ',' '\n' | wc -l); WANT=$((NF * 15))
+  HAVE=$(grep -c -- "-robustness-$V,robustness,complete," results/raw/runs.csv); [ "$HAVE" -ge "$WANT" ] && return
   LEFT=$((BUDGET - ($(date +%s) - START))); [ $LEFT -le 5 ] && return
   OV=""; for o in "$@"; do OV="$OV --override $o"; done
   python scripts/run_sweep.py --run-type robustness --variant $V --formulations $FS --kappas 1,80,2000 --seeds 0,1,2,3,4 --max-seconds $LEFT $OV 2>/dev/null | grep -E "done:|max-seconds|failed" | sed "s/^/$V: /"
