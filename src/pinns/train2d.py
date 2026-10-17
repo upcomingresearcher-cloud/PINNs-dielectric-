@@ -48,6 +48,23 @@ def compiled_fns(fname, prob_cls, lr_init, lr_final, steps):
     return F, opt, update, term_grads, phi_grad, sched
 
 
+@functools.lru_cache(None)
+def compiled_lbfgs(fname, prob_cls, memory=50, max_ls=20):
+    """Phase 13 remedy: same construction as src/pinns/train.py compiled_extra (Phase 11 Intervention E)."""
+    F = make(fname, prob_cls)
+    opt = optax.lbfgs(memory_size=memory, linesearch=optax.scale_by_zoom_linesearch(
+        max_linesearch_steps=max_ls, initial_guess_strategy="one"))
+    terms = lambda p, d: F.term_vector(lambda z, s: F.rep(p, z, s, d), d)
+
+    @jax.jit
+    def step(p, st, d, w):
+        f = lambda q: jnp.sum(w * terms(q, d))
+        v, g = optax.value_and_grad_from_state(f)(p, state=st)
+        u, st = opt.update(g, st, p, value=v, grad=g, value_fn=f)
+        return optax.apply_updates(p, u), st, v, optax.tree_utils.tree_get(st, "num_linesearch_steps")
+    return opt, step
+
+
 _AOT = {}
 
 
@@ -85,15 +102,29 @@ def train_run(fname, prob_cls, kappa, seed, cfg2d, run_type="pinn", variant="bas
         fin = np.isfinite(nrm); mx = nrm[fin].max() if fin.any() else np.nan
         for i, t in enumerate(F.TERMS):
             gl_.append(dict(step=step, term=t, loss_value=v[i], grad_norm_unweighted=nrm[i], grad_norm_weighted=wn[i], weight=float(w[i]),
-                            learning_rate=float(sched(step)), precision=precision, nonfinite=not (np.isfinite(nrm[i]) and np.isfinite(v[i])),
+                            learning_rate=float(sched(step)) if optimiser == "adam" else float("nan"), precision=precision, nonfinite=not (np.isfinite(nrm[i]) and np.isfinite(v[i])),
                             effectively_zero=bool(np.isfinite(nrm[i]) and nrm[i] < 1e-12 * mx)))
     def log_m(step, p):
         m = evaluate(prob, make_pred(phi_grad, p, d, dtype, prob), quad)
         tr_.append(dict(step=step, **{k: m[k] for k in ("primary_field_error", "strict_field_error", "relL2_phi_global", "relL2_E_global",
                                                          "D_jump_rel", "phi_jump_rel", "nonfinite")}))
     gli, mli = int(cfg2d["grad_log_interval"]), int(cfg2d["metric_log_interval"])
-    log_g(0, params); log_m(0, params); ge = 0; tt = 0.0
-    for step in range(1, steps + 1):
+    optimiser = str(o.get("optimiser", "adam"))
+    if optimiser not in ("adam", "lbfgs"): raise ValueError(optimiser)
+    log_g(0, params); log_m(0, params); ge = 0; tt = 0.0; n_iter = 0
+    if optimiser == "lbfgs":                      # <= steps function+gradient evaluations; "step" in logs = evaluations
+        lopt, lstep = compiled_lbfgs(fname, prob_cls); lst = lopt.init(params); first = True
+        kx = key + ("lbfgs",)
+        if kx not in _AOT: _AOT[kx] = lstep.lower(params, lst, d, w).compile()
+        lb = _AOT[kx]
+        while ge + 20 + (1 if first else 0) <= steps:
+            ts = time.perf_counter(); params, lst, loss, nls = lb(params, lst, d, w); jax.block_until_ready(loss)
+            tt += time.perf_counter() - ts; used = int(nls) + (1 if first else 0); first = False; n_iter += 1
+            prev = ge; ge += used
+            if ge // gli > prev // gli: log_g(ge, params)
+            if ge // mli > prev // mli: log_m(ge, params)
+        if tr_[-1]["step"] != ge: log_g(ge, params); log_m(ge, params)
+    for step in range(1, (steps if optimiser == "adam" else 0) + 1):
         ts = time.perf_counter(); params, st, loss = upd(params, st, d, w); jax.block_until_ready(loss); tt += time.perf_counter() - ts; ge += 1
         if step % gli == 0 or step == steps: log_g(step, params)
         if step % mli == 0 or step == steps: log_m(step, params)
@@ -103,14 +134,15 @@ def train_run(fname, prob_cls, kappa, seed, cfg2d, run_type="pinn", variant="bas
     row = dict(run_id=rid, run_type=run_type, status=R.STATUS_COMPLETE, problem_id=prob.problem_id, geometry=prob.geometry_label,
                formulation=fname, variant=variant, kappa=float(kappa), seed=int(seed),
                architecture=f"{depth}x{width} tanh x{F.n_nets} net(s), inputs={F.n_inputs}", hidden_layers=depth, width=width, activation="tanh",
-               n_params=n_params(params), optimiser="adam", lr_schedule=f"cosine {lr_init:g}->{lr_final:g}/{steps}", lr_init=lr_init,
+               n_params=n_params(params), optimiser="adam" if optimiser == "adam" else "lbfgs(m=50,zoom20)",
+               lr_schedule=f"cosine {lr_init:g}->{lr_final:g}/{steps}" if optimiser == "adam" else "none (line search)", lr_init=lr_init,
                precision=precision, n_interior_per_material=npm, n_boundary=4 * ne, n_interface=ni, n_extra_band=0, step_budget=steps,
                grad_evals=ge, collocation_evals=ge * npts, final_loss=float(np.sum(np.asarray(w, np.float64) * vals)),
                final_loss_terms_json=json.dumps(dict(zip(F.TERMS, map(float, vals)))), **m, wall_clock_s=tt, compile_s=compile_s,
                peak_rss_mb=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024.0,
                config_id=R.config_id(dict(f=fname, p=prob.problem_id, k=kappa, s=seed, rt=run_type, v=variant, o=o, c=cfg2d)),
                protocol_version=cfg2d["protocol_version"], software_env=P.software_env(), hardware=P.hardware(), git_commit=P.git_commit(),
-               timestamp=P.now(), notes=f"compile_cached={cached}")
+               timestamp=P.now(), notes=f"compile_cached={cached}" + (f"; lbfgs_iters={n_iter}; fn_evals={ge}" if optimiser == "lbfgs" else ""))
     if out_dir is not None:
         for sub, rows, cols in (("gradlogs", gl_, R.GRADLOG_COLUMNS), ("trajectories", tr_, list(tr_[0]))):
             pth = pathlib.Path(out_dir) / sub; pth.mkdir(parents=True, exist_ok=True)

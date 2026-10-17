@@ -17,7 +17,9 @@ for nm in ("P3LineCharge", "P4Corner", "P5Film"):
 cls = getattr(p2d, a.problem_class) if a.problem_class else PROBS[a.problem]; cfg = yaml.safe_load(open(root / f"configs/{a.problem.lower()}.yaml"))
 ov = {}
 for s in a.override:
-    k, v = s.split("="); ov[k] = v if k == "precision" else float(v)
+    k, v = s.split("=")
+    try: ov[k] = float(v)
+    except ValueError: ov[k] = v            # string overrides: precision, optimiser
 out = root / "results/raw/runs_2d.csv"; done = R.completed_ids(out); t0 = time.time(); n = 0
 for f in a.formulations.split(","):
     for k in a.kappas.split(","):
