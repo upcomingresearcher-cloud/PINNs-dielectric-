@@ -38,6 +38,15 @@ def collocation(seed, problem, n_per_material):
     return strat(0.0, problem.a, n_per_material), strat(problem.a, problem.L, n_per_material)
 
 
+def extra_band_points(seed, problem, n_per_side):
+    """Robustness extra (protocol Sec. 11): n_per_side stratified-jitter points inside the interface band on each
+    side, from a SEPARATE random stream so the primary collocation points are unchanged."""
+    rng = np.random.default_rng([seed, 7919, 1]); h = problem.band_halfwidth
+    def strat(lo, hi, n):
+        edges = np.linspace(lo, hi, n + 1); return edges[:-1] + rng.uniform(size=n) * np.diff(edges)
+    return strat(problem.a - h, problem.a, n_per_side), strat(problem.a, problem.a + h, n_per_side)
+
+
 def make_data(problem, x1, x2, dtype):
     """y1, y2: exact potential at the interior points; used ONLY by regression baselines."""
     c = lambda v: jnp.asarray(v, dtype)
@@ -149,6 +158,10 @@ def train_run(fname, kappa, seed, cfg, run_type="pinn", variant="base", out_dir=
     problem = P1Problem(float(kappa))
     F, opt, update, term_grads, phi_dphi, sched = compiled_fns(fname, lr_init, lr_final, steps)
     x1, x2 = collocation(seed, problem, npm)
+    n_extra = int(float(o.get("n_extra_band", 0)))
+    if n_extra:
+        b1, b2 = extra_band_points(seed, problem, n_extra)
+        x1, x2 = np.sort(np.concatenate([x1, b1])), np.sort(np.concatenate([x2, b2]))
     d = make_data(problem, x1, x2, dtype); w = F.weights(d)
     params = F.init(jax.random.PRNGKey(seed), width, depth, dtype)
     opt_state = opt.init(params)
@@ -163,7 +176,7 @@ def train_run(fname, kappa, seed, cfg, run_type="pinn", variant="base", out_dir=
         F, opt, update, term_grads, phi_dphi, sched = compiled_fns(fname, lr_init, lr_final, adam_steps)
         opt_state = opt.init(params)
 
-    key = (fname, lr_init, lr_final, steps, precision, npm, width, depth)
+    key = (fname, lr_init, lr_final, steps, precision, npm + n_extra, width, depth)
     if adam_steps not in (0, steps): key = key + (("adam_steps", adam_steps),)
     t0 = time.perf_counter()
     if key not in _AOT:
@@ -239,13 +252,13 @@ def train_run(fname, kappa, seed, cfg, run_type="pinn", variant="base", out_dir=
                         f"; final_lambda={json.dumps(dict(zip(F.TERMS, map(float, lam))))}")
     if optimiser != "adam":
         extra_notes += f"; adam_steps={adam_steps}; lbfgs_iters={n_iter}; fn_evals={grad_evals}; grad_evals={grad_evals}"
-    n_loss_pts = 2 * npm + 2 + (1 if F.uses_interface_point else 0)
+    n_loss_pts = 2 * (npm + n_extra) + 2 + (1 if F.uses_interface_point else 0)
     row = dict(run_id=rid, run_type=run_type, status=R.STATUS_COMPLETE, problem_id="P1", geometry="1d_two_slab_a0.5",
                formulation=fname, variant=variant, kappa=float(kappa), seed=int(seed),
                architecture=f"{depth}x{width} tanh x{F.n_nets} net(s), inputs={F.n_inputs}", hidden_layers=depth, width=width,
                activation="tanh", n_params=n_params(params), optimiser=opt_label, lr_schedule=lr_label,
                lr_init=lr_init, precision=precision, n_interior_per_material=npm, n_boundary=2,
-               n_interface=1 if F.uses_interface_point else 0, n_extra_band=0, step_budget=steps, grad_evals=grad_evals,
+               n_interface=1 if F.uses_interface_point else 0, n_extra_band=2 * n_extra, step_budget=steps, grad_evals=grad_evals,
                collocation_evals=grad_evals * n_loss_pts, final_loss=final_loss,
                final_loss_terms_json=json.dumps(dict(zip(F.TERMS, map(float, vals)))), **m,
                wall_clock_s=train_time, compile_s=compile_s,

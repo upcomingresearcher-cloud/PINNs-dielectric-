@@ -31,7 +31,7 @@ Files: `results/raw/runs.csv` (trained models), `results/raw/fem_runs.csv` (FEM)
 | n_interior_per_material |  |  |
 | n_boundary |  |  |
 | n_interface |  |  |
-| n_extra_band |  |  |
+| n_extra_band | count | Total extra collocation points inside the interface band, both sides (robustness extra: 16 per side = 32); 0 otherwise |
 | step_budget |  |  |
 | grad_evals | Counted gradient evaluations (instrumented) | count |
 | collocation_evals | Total collocation-point evaluations over training | count |
