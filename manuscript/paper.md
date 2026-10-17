@@ -14,7 +14,7 @@ We report a pre-registered evaluation of six PINN formulation families on five e
 - a two-material corner (P4);
 - a thin high-permittivity film (P5).
 
-**Design.** Contrast ranges from κ = 1 to 2000, with inverse contrasts in 2D. Every configuration has 5 matched seeds and a fixed budget of 3,000 gradient evaluations. The primary metric is the relative L2 error of the electric field E and displacement D in an interface band, with failure defined as more than 5%. The database holds 3,856 completed training runs (285 of them reruns that supersede earlier rows, which are kept), plus 60 rows recording technical failures, all released.
+**Design.** Contrast ranges from κ = 1 to 2000, with inverse contrasts in 2D. Every configuration has 5 matched seeds and a fixed budget of 3,000 gradient evaluations. The primary metric is the relative L2 error of the electric field E and displacement D in an interface band, with failure defined as more than 5%. The database holds 3,856 completed training runs, plus 60 rows recording technical failures, all released. The 3,856 include 285 rows that were superseded after bug fixes; they are kept for transparency and excluded from analysis, and their 285 replacement reruns are also counted.
 
 **Results.**
 - **1D:** a single network with a strong-form loss fails at every κ ≥ 5, because the flux condition is invisible to its loss. Two-network formulations with soft coupling survive up to κ = 400–2000.
