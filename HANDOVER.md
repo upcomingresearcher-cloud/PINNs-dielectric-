@@ -6,9 +6,9 @@
 
 1. Unzip the attached package into `/home/claude/` (the directory inside is `pinn_dielectric_project/`).
 2. Run the environment setup and verification in Section 4.
-3. Continue with **Phase 14** (Phases 11-13 complete; read `docs/phase11_interventions_findings.md`, `docs/phase12_robustness_findings.md`, `docs/phase13_remedy_vs_fem_findings.md`).
+3. **All 14 phases are complete.** Start from `docs/final_acceptance_checklist.md` (status and open items), `manuscript/paper.md`, and `docs/REPRODUCTION_GUIDE.md`. Open items: 2 UNRESOLVED and 9 VERIFY bibliography notes; journal typesetting.
 
-Do not redo Phases 1–13. Do not change frozen settings without a change-log entry. Report progress after each phase.
+Do not redo Phases 1–14. Do not change frozen settings without a change-log entry. Report progress after each phase.
 
 ---
 
