@@ -35,8 +35,10 @@ def load_fem():
 def run_time_to_target(row, target):
     tr = pd.read_csv(ROOT / "results/raw/trajectories" / f"{row.run_id}.csv")
     hit = tr[(tr.primary_field_error <= target) & np.isfinite(tr.primary_field_error)]
-    if hit.empty: return np.inf, np.nan
-    step = float(hit.step.iloc[0]); return float(row.wall_clock_s) * step / float(row.grad_evals), step
+    if hit.empty: return np.inf, np.nan, np.inf
+    i = hit.index[0]; step = float(tr.step.loc[i]); prev = float(tr.step.loc[i - 1]) if i > 0 else 0.0
+    scale = float(row.wall_clock_s) / float(row.grad_evals)
+    return scale * step, step, scale * prev        # upper bound (first hit) and lower bound (previous record)
 
 
 def fem_time_to_target(F, p, k, target, conforming=True):
@@ -50,10 +52,10 @@ def main():
     D, F = load_pinn(), load_fem()
     rows = []
     for r in D.itertuples():
-        t5, s5 = run_time_to_target(r, 0.05); t1, s1 = run_time_to_target(r, 0.01)
+        t5, s5, l5 = run_time_to_target(r, 0.05); t1, s1, l1 = run_time_to_target(r, 0.01)
         rows.append(dict(problem_id=r.problem_id, arm=r.arm, formulation=r.formulation, variant="base" if r.run_type == "pinn" else r.variant,
                          kappa=r.kappa, seed=r.seed, final_err=r.primary_field_error, wall_s=r.wall_clock_s, compile_s=r.compile_s,
-                         grad_evals=r.grad_evals, t_5pct=t5, step_5pct=s5, t_1pct=t1, step_1pct=s1, hardware=r.hardware))
+                         grad_evals=r.grad_evals, t_5pct=t5, step_5pct=s5, t_5pct_lower=l5, t_1pct=t1, step_1pct=s1, t_1pct_lower=l1, hardware=r.hardware))
     T = pd.DataFrame(rows)
     C = []
     for (p, arm, k), g in T.groupby(["problem_id", "arm", "kappa"]):
@@ -74,7 +76,12 @@ def main():
             rec.update({f"pinn_n_reach_{lab}": n_reach, f"pinn_median_t_{lab}": med_t, f"fem_t_{lab}": ft, f"fem_h_{lab}": fh,
                         f"fem_solve_only_t_{lab}": fso, f"fem_nonconforming_t_{lab}": ftn,
                         f"ratio_pinn_over_fem_{lab}": med_t / ft if np.isfinite(med_t) and np.isfinite(ft) else np.inf})
+        rec["pinn_median_t_1pct_lower"] = float(np.median(g.t_1pct_lower.values))
+        rec["pinn_median_step_1pct"] = float(np.median(g.step_1pct.fillna(np.inf).values))
         rec["clause1"] = (not np.isfinite(rec["pinn_median_t_1pct"])) or rec["pinn_median_t_1pct"] >= 10 * rec["fem_t_1pct"]
+        # logging every 250 steps: the true first-hit time lies in [lower, upper]; clause 1 is resolution-safe only
+        # if it also holds at the lower bound
+        rec["clause1_resolution_safe"] = (not np.isfinite(rec["pinn_median_t_1pct"])) or rec["pinn_median_t_1pct_lower"] >= 10 * rec["fem_t_1pct"]
         rec["clause2"] = rec["fem_equalcost_err"] < rec["pinn_median_err"]
         rec["refutes"] = bool(np.isfinite(rec["pinn_median_t_1pct"]) and rec["pinn_median_t_1pct"] < 10 * rec["fem_t_1pct"])
         rec["degenerate_kappa1"] = k == 1.0
@@ -82,10 +89,14 @@ def main():
     C = pd.DataFrame(C)
     def verdict(S):
         if S.refutes.any(): return "refuted"
-        return "supported" if (S.clause1 & S.clause2).all() else "inconclusive"
+        if (S.clause1 & S.clause2).all():
+            return "supported" if S.clause1_resolution_safe.all() else "supported at logging resolution (clause 1 not resolvable in some configurations)"
+        return "inconclusive"
     nd = C[~C.degenerate_kappa1]
     V = dict(verdict_all_configs=verdict(C), verdict_excluding_degenerate_kappa1=verdict(nd), n_configs=len(C),
              n_clause1=int(C.clause1.sum()), n_clause2=int(C.clause2.sum()),
+             not_resolution_safe=C[~C.clause1_resolution_safe][["problem_id", "arm", "kappa", "pinn_median_t_1pct_lower",
+                                                                "pinn_median_t_1pct", "fem_t_1pct"]].to_dict("records"),
              refuting=C[C.refutes][["problem_id", "arm", "kappa", "pinn_median_t_1pct", "fem_t_1pct"]].to_dict("records"),
              clause2_failures=C[~C.clause2][["problem_id", "arm", "kappa", "pinn_median_err", "fem_equalcost_err"]].to_dict("records"),
              pinn_reaching_1pct=C[np.isfinite(C.pinn_median_t_1pct)][["problem_id", "arm", "kappa", "pinn_median_t_1pct", "fem_t_1pct",

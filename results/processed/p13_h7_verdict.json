@@ -1,0 +1,134 @@
+{
+ "verdict_all_configs": "supported",
+ "verdict_excluding_degenerate_kappa1": "supported",
+ "n_configs": 62,
+ "n_clause1": 62,
+ "n_clause2": 62,
+ "refuting": [],
+ "clause2_failures": [],
+ "pinn_reaching_1pct": [
+  {
+   "problem_id": "P2",
+   "arm": "F1/base",
+   "kappa": 1.0,
+   "pinn_median_t_1pct": 0.911134945749969,
+   "fem_t_1pct": 0.0135112460002346,
+   "ratio_pinn_over_fem_1pct": 67.4353013581537
+  },
+  {
+   "problem_id": "P2",
+   "arm": "F2/R_lbfgs",
+   "kappa": 1.0,
+   "pinn_median_t_1pct": 1.8742587333948335,
+   "fem_t_1pct": 0.0135112460002346,
+   "ratio_pinn_over_fem_1pct": 138.71842266525903
+  },
+  {
+   "problem_id": "P2",
+   "arm": "F2/base",
+   "kappa": 1.0,
+   "pinn_median_t_1pct": 1.9102790035002881,
+   "fem_t_1pct": 0.0135112460002346,
+   "ratio_pinn_over_fem_1pct": 141.38436998831338
+  },
+  {
+   "problem_id": "P2",
+   "arm": "F3/R_lbfgs",
+   "kappa": 1.0,
+   "pinn_median_t_1pct": 1.590615024731699,
+   "fem_t_1pct": 0.0135112460002346,
+   "ratio_pinn_over_fem_1pct": 117.72526565677812
+  },
+  {
+   "problem_id": "P2",
+   "arm": "F3/base",
+   "kappa": 1.0,
+   "pinn_median_t_1pct": 4.493406504163697,
+   "fem_t_1pct": 0.0135112460002346,
+   "ratio_pinn_over_fem_1pct": 332.56788486314855
+  },
+  {
+   "problem_id": "P2",
+   "arm": "F4/base",
+   "kappa": 1.0,
+   "pinn_median_t_1pct": 1.7973533677511189,
+   "fem_t_1pct": 0.0135112460002346,
+   "ratio_pinn_over_fem_1pct": 133.02647052092092
+  },
+  {
+   "problem_id": "P2",
+   "arm": "F6/R_lbfgs",
+   "kappa": 1.0,
+   "pinn_median_t_1pct": 1.7912788942273334,
+   "fem_t_1pct": 0.0135112460002346,
+   "ratio_pinn_over_fem_1pct": 132.5768840413557
+  },
+  {
+   "problem_id": "P2",
+   "arm": "F6/base",
+   "kappa": 1.0,
+   "pinn_median_t_1pct": 1.7191583093329161,
+   "fem_t_1pct": 0.0135112460002346,
+   "ratio_pinn_over_fem_1pct": 127.23906509459349
+  },
+  {
+   "problem_id": "P5",
+   "arm": "F1/base",
+   "kappa": 1.0,
+   "pinn_median_t_1pct": 0.799547669249724,
+   "fem_t_1pct": 0.0380680799999026,
+   "ratio_pinn_over_fem_1pct": 21.003099427440777
+  },
+  {
+   "problem_id": "P5",
+   "arm": "F2/R_lbfgs",
+   "kappa": 1.0,
+   "pinn_median_t_1pct": 1.7886883364319948,
+   "fem_t_1pct": 0.0380680799999026,
+   "ratio_pinn_over_fem_1pct": 46.98656555404347
+  },
+  {
+   "problem_id": "P5",
+   "arm": "F2/base",
+   "kappa": 1.0,
+   "pinn_median_t_1pct": 0.9225724134165981,
+   "fem_t_1pct": 0.0380680799999026,
+   "ratio_pinn_over_fem_1pct": 24.234802843194576
+  },
+  {
+   "problem_id": "P5",
+   "arm": "F4/base",
+   "kappa": 1.0,
+   "pinn_median_t_1pct": 2.6412126275005035,
+   "fem_t_1pct": 0.0380680799999026,
+   "ratio_pinn_over_fem_1pct": 69.3812933961277
+  },
+  {
+   "problem_id": "P5",
+   "arm": "F6/R_lbfgs",
+   "kappa": 1.0,
+   "pinn_median_t_1pct": 1.7851519897436723,
+   "fem_t_1pct": 0.0380680799999026,
+   "ratio_pinn_over_fem_1pct": 46.89367022839711
+  },
+  {
+   "problem_id": "P5",
+   "arm": "F6/base",
+   "kappa": 1.0,
+   "pinn_median_t_1pct": 2.653631069252697,
+   "fem_t_1pct": 0.0380680799999026,
+   "ratio_pinn_over_fem_1pct": 69.70751005197758
+  }
+ ],
+ "hardware": [
+  "Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none",
+  "Intel(R) Xeon(R) Processor @ 2.80GHz; cores=1; gpu=none",
+  "Intel(R) Xeon(R) Processor @ 2.10GHz; cores=1; gpu=none",
+  "Intel(R) Xeon(R) Processor @ 2.80GHz; cores=1; gpu=none"
+ ],
+ "notes": [
+  "PINN time-to-target assumes constant per-step cost (t = wall x step / grad_evals); compile excluded",
+  "kappa = 1 is degenerate for FEM (exact to round-off at every mesh)",
+  "P5 FEM errors are relative to the finest FEM level (excluded); P5 PINN errors use the same reference"
+ ]
+}
