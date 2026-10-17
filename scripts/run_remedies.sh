@@ -5,9 +5,10 @@ run() {  # problem variant formulations kappas override...
   P=$1; V=$2; FS=$3; KS=$4; shift 4
   NF=$(echo $FS | tr ',' '\n' | wc -l); NK=$(echo $KS | tr ',' '\n' | wc -l); WANT=$((NF * NK * 5))
   HAVE=$(grep -c -- "^$P-.*-remedy-$V,remedy,complete," results/raw/runs_2d.csv); [ "$HAVE" -ge "$WANT" ] && return
-  LEFT=$((BUDGET - ($(date +%s) - START))); [ $LEFT -le 40 ] && return
+  MARGIN=35; case $V in *adam20k*) MARGIN=160;; esac     # a 20k-step 2D run takes ~130 s including evaluation
+  LEFT=$((BUDGET - ($(date +%s) - START))); [ $LEFT -le $((MARGIN + 5)) ] && return
   OV=""; for o in "$@"; do OV="$OV --override $o"; done
-  python scripts/run_sweep2d.py --problem $P --run-type remedy --variant $V --formulations $FS --kappas $KS --seeds 0,1,2,3,4 --max-seconds $((LEFT - 35)) $OV 2>/dev/null | grep -E "new runs|failed" | sed "s/^/$P $V: /"
+  python scripts/run_sweep2d.py --problem $P --run-type remedy --variant $V --formulations $FS --kappas $KS --seeds 0,1,2,3,4 --max-seconds $((LEFT - MARGIN)) $OV 2>/dev/null | grep -E "new runs|failed" | sed "s/^/$P $V: /"
 }
 run P2 R_lbfgs F2,F3,F6 1,80,2000 optimiser=lbfgs
 run P5 R_lbfgs F2,F3,F6 1,80,2000 optimiser=lbfgs
