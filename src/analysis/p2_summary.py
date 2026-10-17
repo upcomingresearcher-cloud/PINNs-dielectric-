@@ -10,10 +10,12 @@ FORMS = ["F1", "F2", "F3", "F4", "F5", "F6"]
 
 
 def cp(k, n):
+    """Clopper-Pearson 95% interval for k failures in n runs."""
     return (0.0 if k == 0 else beta.ppf(.025, k, n - k + 1)), (1.0 if k == n else beta.ppf(.975, k + 1, n - k))
 
 
 def loss_visibility():
+    """Loss visibility check on P2: loss of each formulation at the exact and the uniform-permittivity solution."""
     import jax.numpy as jnp
     from src.problems.p2d import P2Cylinder
     from src.pinns import train2d as T
@@ -31,6 +33,7 @@ def loss_visibility():
 
 
 def fem_records():
+    """P2 FEM refinement records (computed and stored on first use; filtered to P2)."""
     out = ROOT / "results/raw/fem_runs_2d.csv"
     if out.exists():
         f = pd.read_csv(out); return f[f.problem_id == "P2"]      # bug fix 2026-10-16: file also holds P3-P5 rows
@@ -56,6 +59,7 @@ def fem_records():
 
 
 def main():
+    """Write the P2 summary, failure maps and FEM convergence figure."""
     d = pd.read_csv(ROOT / "results/raw/runs_2d.csv"); d = d[(d.status == "complete") & (d.problem_id == "P2")]
     P = d[d.run_type == "pinn"]; reg = d[d.run_type == "regression"]
     rows = []

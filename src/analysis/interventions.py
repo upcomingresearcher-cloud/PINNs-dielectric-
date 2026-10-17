@@ -38,6 +38,7 @@ ARMS = {
 
 
 def load():
+    """Load P1 baseline (seeds 0-9) and intervention rows, labelled by arm, with error (+inf if non-finite) and failure flag."""
     d = pd.read_csv(ROOT / "results/raw/runs.csv", low_memory=False)
     d = d[d.status == "complete"].sort_values("timestamp").drop_duplicates("run_id", keep="first")
     d = d[d.problem_id == "P1"]
@@ -53,11 +54,13 @@ def load():
 
 
 def series(D, f, arm, k, seeds):
+    """Rows for one (formulation, arm, kappa) indexed by seed, restricted to the given seeds."""
     g = D[(D.formulation == f) & (D.arm == arm) & (D.kappa == k) & D.seed.isin(seeds)].set_index("seed")
     return g.reindex(seeds)
 
 
 def boot_median_ci(x, rng_seed=BOOT_SEED):
+    """Median of the finite values of x with a percentile-bootstrap 95% confidence interval."""
     x = np.asarray(x, float); x = x[np.isfinite(x)]
     if len(x) == 0: return np.nan, np.nan, np.nan
     rng = np.random.default_rng(rng_seed)
@@ -66,6 +69,7 @@ def boot_median_ci(x, rng_seed=BOOT_SEED):
 
 
 def verdict(k_pred, k_opp, n):
+    """Pre-registered H5 verdict from the counts of predicted-sign and opposite-sign seeds (10-seed comparisons only)."""
     if n == 10:
         if k_pred >= 9: return "supported"
         if k_pred <= 5 or k_opp >= 9: return "refuted"
@@ -94,6 +98,7 @@ def paired(D, intervention, label, fx, ax, fy, ay, k, seeds, prespecified):
 
 
 def holm(ps):
+    """Holm step-down adjustment of a vector of p-values."""
     ps = np.asarray(ps, float); o = np.argsort(ps); m = len(ps); adj = np.empty(m); run = 0.0
     for r, i in enumerate(o):
         run = max(run, min(1.0, (m - r) * ps[i])); adj[i] = run
@@ -101,6 +106,7 @@ def holm(ps):
 
 
 def build_paired(D):
+    """Build every pre-specified and descriptive paired comparison of Interventions A-E."""
     R = []
     for f in ("F2", "F3"):                                   # A
         for k in KAPPAS: R.append(paired(D, "A", f"{f} rebal vs base", f, "A", f, "base", k, SEEDS10, True))
@@ -127,6 +133,7 @@ def build_paired(D):
 
 
 def failure_counts(D):
+    """Failure counts, Clopper-Pearson intervals and error summaries per formulation, arm and kappa, for 10- and 5-seed sets."""
     rows = []
     for (f, arm, k), g in D.groupby(["formulation", "arm", "kappa"]):
         for lab, seeds in (("10seed", SEEDS10), ("5seed", SEEDS5)):
@@ -141,6 +148,7 @@ def failure_counts(D):
 
 
 def critical(FC, f, arm, thr, seed_set="10seed"):
+    """Critical contrast of one arm at a failure threshold, with a monotonicity flag; '>2000' if no primary kappa fails."""
     g = FC[(FC.formulation == f) & (FC.arm == arm) & (FC.seed_set == seed_set) & FC.kappa.isin(KAPPAS)].sort_values("kappa")
     if len(g) < len(KAPPAS): return None
     fails = g[g.n_failed >= thr]
@@ -150,6 +158,7 @@ def critical(FC, f, arm, thr, seed_set="10seed"):
 
 
 def precision_table(D, FC):
+    """Intervention C table: float64/float32 median-error ratios and failure flags (replica, 2x2 design and superseded runs)."""
     rows = []
     for f in ("F1", "F2", "F3", "F4", "F5", "F6"):
         for k in KAPPAS:
@@ -177,6 +186,7 @@ def precision_table(D, FC):
 
 
 def verdicts(P, FC, PT):
+    """Evaluate the pre-registered verdicts: H5 per intervention, A's critical contrast, H4 clause, C and D criteria."""
     V = {}
     for iv in ("A", "B", "D", "E"):
         g = P[(P.intervention == iv) & P.prespecified]
@@ -221,7 +231,9 @@ def verdicts(P, FC, PT):
                                             median_fold=float(old.fold.median()), max_fold=float(old.fold.max()),
                                             config_flag_changes=int((old.config_fails_f32 != old.config_fails_f64).sum()))
     # D criteria
-    def nf(f, arm, k): return int(FC[(FC.formulation == f) & (FC.arm == arm) & (FC.seed_set == "10seed") & (FC.kappa == k)].n_failed.iloc[0])
+    def nf(f, arm, k):
+        """Number of failed seeds (10-seed set) for a formulation, arm and kappa."""
+        return int(FC[(FC.formulation == f) & (FC.arm == arm) & (FC.seed_set == "10seed") & (FC.kappa == k)].n_failed.iloc[0])
     dd = {str(k): dict(F2=nf("F2", "base", k), F4=nf("F4", "base", k), F4full=nf("F4full", "D", k)) for k in KAPPAS}
     f4full_med = {str(k): float(FC[(FC.formulation == "F4full") & (FC.arm == "D") & (FC.seed_set == "10seed") & (FC.kappa == k)].median_err.iloc[0]) for k in KAPPAS}
     V["D"] = dict(failure_counts_10seed=dd,
@@ -235,6 +247,7 @@ ARM_LABEL = {"base": "baseline (Adam, f32)", "A": "A: rebalancing", "B": "B: res
 
 
 def fig_arms(FC, panels, fname, title):
+    """Figure: median primary error versus kappa for several arms side by side."""
     fig, axes = plt.subplots(1, len(panels), figsize=(4.6 * len(panels), 4.0), squeeze=False)
     for ax, (f_title, series_list) in zip(axes[0], panels):
         for (f, arm, lab), mk in zip(series_list, "osd^v"):
@@ -277,6 +290,7 @@ def fig_seed_scatter(D, P, fname):
 
 
 def fig_precision(PT, fname):
+    """Figure: float64/float32 median-error ratios for Intervention C."""
     fig, ax = plt.subplots(figsize=(7.5, 4.2))
     for des, mk, lab in (("replica_adam_5seed", "o", "Adam, replica (5 seeds, 36 configs)"),
                          ("2x2_adam_10seed", "s", "Adam, F2/F3 (10 seeds)"), ("2x2_lbfgs_10seed", "^", "L-BFGS, F2/F3 (10 seeds)")):
@@ -293,6 +307,7 @@ def fig_precision(PT, fname):
 
 
 def main():
+    """Run the full intervention analysis and write tables, verdicts and figures."""
     D = load()
     P = build_paired(D); FC = failure_counts(D); PT = precision_table(D, FC)
     cc = []

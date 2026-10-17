@@ -19,6 +19,7 @@ BOOT_N, BOOT_SEED = 10_000, 12345
 
 
 def load():
+    """Load the P1 reference rows and all robustness rows on kappa in {1, 80, 2000}, seeds 0-4."""
     d = pd.read_csv(ROOT / "results/raw/runs.csv", low_memory=False)
     d = d[(d.status == "complete") & (d.problem_id == "P1")].sort_values("timestamp").drop_duplicates("run_id", keep="first")
     d = d[d.kappa.isin(KAPPAS) & d.seed.isin(SEEDS)]
@@ -34,6 +35,7 @@ def load():
 
 
 def expected_n(setting):
+    """Expected number of runs for a robustness setting."""
     return 45 if setting == "pm_width22" else 90
 
 
@@ -68,6 +70,7 @@ def settings_table(D):
 
 
 def counts_table(D):
+    """Per setting, formulation and kappa: run count, failures, median and IQR of the error, median R and wall time."""
     return (D.groupby(["setting", "formulation", "kappa"])
              .agg(n=("fail", "size"), n_failed=("fail", "sum"), median_err=("primary_field_error", "median"),
                   q25=("primary_field_error", lambda x: x.quantile(.25)), q75=("primary_field_error", lambda x: x.quantile(.75)),
@@ -76,6 +79,7 @@ def counts_table(D):
 
 
 def verdict(S):
+    """Apply the pre-registered H6 rule to the eight robustness variations."""
     V = S[S.role == "variation"]
     if len(V) < len(VARIATIONS) or not V.complete.all():
         return dict(verdict="incomplete", n_variations_complete=int(V.complete.sum()))
@@ -89,6 +93,7 @@ def verdict(S):
 
 
 def fig_fails(S, fname):
+    """Figure: heat map of failed runs out of 15 per setting and formulation, with tau and R."""
     S = S[S.complete].copy(); order = ["baseline"] + [s for s in VARIATIONS + EXTRAS if s in set(S.setting)]
     S = S.set_index("setting").loc[order]
     M = S[[f"fails_{f}" for f in FORMS]].values.astype(float)
@@ -108,6 +113,7 @@ def fig_fails(S, fname):
 
 
 def fig_errors(C, fname):
+    """Figure: primary error per formulation and setting at each kappa."""
     order = ["baseline"] + VARIATIONS + EXTRAS
     fig, axes = plt.subplots(1, 3, figsize=(15, 4.6), sharey=True)
     for ax, k in zip(axes, KAPPAS):
@@ -124,6 +130,7 @@ def fig_errors(C, fname):
 
 
 def main():
+    """Run the robustness analysis and write the tables, verdict and figures."""
     D = load(); C = counts_table(D); S = settings_table(D); V = verdict(S)
     V["extras"] = S[S.role == "extra"][["setting", "kendall_tau_b", "median_R", "total_fails"]].to_dict("records") if "role" in S else []
     V["notes"] = ["pm_width22 ranking uses baseline F1/F3/F5 with width-22 F2/F4/F6 (descriptive extra)",

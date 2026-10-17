@@ -1,6 +1,7 @@
 """Record hardware/software environment to results/logs/environment_<date>.json."""
 import json, platform, os, shutil, subprocess, datetime, importlib
 def ver(m):
+    """Return the installed version string of module m, or a note if it cannot be imported."""
     try: return importlib.import_module(m).__version__
     except Exception as e: return f"unavailable ({type(e).__name__})"
 mem = open("/proc/meminfo").read().split("\n")[0]

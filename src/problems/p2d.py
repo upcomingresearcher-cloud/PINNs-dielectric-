@@ -13,6 +13,7 @@ GL = {n: np.polynomial.legendre.leggauss(n) for n in (4, 6, 8, 12, 16, 24, 32)}
 
 
 def gl(a, b, n):
+    """Gauss-Legendre nodes and weights mapped to [a, b]."""
     t, w = GL[n]; return 0.5 * (b - a) * t + 0.5 * (b + a), 0.5 * (b - a) * w
 
 
@@ -24,19 +25,32 @@ def coons(h, x, y):
 
 
 def bubble(x, y):
+    """Bubble function (1 - x^2)(1 - y^2), zero on the box boundary."""
     return (1 - x**2) * (1 - y**2)
 
 
 class Problem2D:
+    """Base class for 2D problems on the box [-1, 1]^2: geometry, data, references and quadrature."""
     eps1 = 1.0; band_halfwidth = 0.05; problem_id = "P2D"
     def __init__(self, kappa): self.kappa = float(kappa); self.eps2 = float(kappa)
-    def eps_side(self, side): return np.where(np.asarray(side) == 1, self.eps1, self.eps2)
-    def h_np(self, X): return np.asarray(self.h(X[:, 0], X[:, 1]), np.float64)   # h uses only arithmetic
-    def h_train_np(self, X): return self.h_np(X)          # training-variable boundary data (differs for P3)
-    def exact_train(self, X, side): return self.exact(X, side)
-    def to_physical(self, X, phi, grad, side=None): return phi, grad
+    def eps_side(self, side):
+        """Permittivity on the given side(s)."""
+        return np.where(np.asarray(side) == 1, self.eps1, self.eps2)
+    def h_np(self, X):
+        """Dirichlet boundary data (physical potential) at points X."""
+        return np.asarray(self.h(X[:, 0], X[:, 1]), np.float64)   # h uses only arithmetic
+    def h_train_np(self, X):
+        """Boundary data for the trained variable (equal to h_np unless a singular part is subtracted)."""
+        return self.h_np(X)          # training-variable boundary data (differs for P3)
+    def exact_train(self, X, side):
+        """Reference solution of the trained variable (equal to exact unless a singular part is subtracted)."""
+        return self.exact(X, side)
+    def to_physical(self, X, phi, grad, side=None):
+        """Convert a prediction of the trained variable to the physical potential and gradient."""
+        return phi, grad
 
     def boundary_points(self, rng, n_edge=64):
+        """Uniform random points on the four box edges."""
         s = rng.uniform(-1, 1, (4, n_edge))
         return np.concatenate([np.c_[s[0], -np.ones(n_edge)], np.c_[np.ones(n_edge), s[1]],
                                np.c_[s[2], np.ones(n_edge)], np.c_[-np.ones(n_edge), s[3]]])
@@ -47,25 +61,38 @@ class P2Cylinder(Problem2D):
     used as Dirichlet data on the box, so the reference is exact in the box (verified symbolically)."""
     problem_id = "P2"; R = 0.25; E0 = 1.0; Lc = 2.0; geometry_label = "2d_cylinder_R0.25_box2"; refined_quadrature = dict(nr=16, nth=32)
     @property
-    def Vc(self): return self.E0 * self.Lc
+    def Vc(self):
+        """Characteristic voltage used to scale residuals."""
+        return self.E0 * self.Lc
     @property
-    def K(self): return (self.eps2 - self.eps1) / (self.eps2 + self.eps1)
+    def K(self):
+        """Polarisation factor (kappa - 1)/(kappa + 1) of the isolated cylinder."""
+        return (self.eps2 - self.eps1) / (self.eps2 + self.eps1)
     @property
-    def E_in(self): return 2 * self.eps1 / (self.eps2 + self.eps1) * self.E0
+    def E_in(self):
+        """Uniform field magnitude inside the cylinder."""
+        return 2 * self.eps1 / (self.eps2 + self.eps1) * self.E0
 
     # --- geometry. Smooth level set (R^2 - r^2)/(2R): zero on the circle, > 0 inside, |grad| = 1 on the
     # interface. The distance R - r is NOT used: its Laplacian -1/r is singular at the centre.
     @staticmethod
     def psi_jax(x, y, pp):          # pp = [R]
+        """Signed level set of the circular interface (positive inside)."""
         return (pp[0]**2 - x**2 - y**2) / (2 * pp[0])
     @staticmethod
     def h_jax(x, y, hp):            # hp = [E0, K, R]; Dirichlet data (box boundary lies in material 1)
+        """Boundary data of the isolated-cylinder solution (JAX)."""
         return -hp[0] * x + hp[0] * hp[1] * hp[2]**2 * x / (x**2 + y**2)
-    def jax_params(self): return dict(pp=[self.R], hp=[self.E0, self.K, self.R])
-    def side_of(self, X): return np.where(np.hypot(X[:, 0], X[:, 1]) < self.R, 2, 1)
+    def jax_params(self):
+        """Parameters passed to the JAX level-set and boundary-data functions."""
+        return dict(pp=[self.R], hp=[self.E0, self.K, self.R])
+    def side_of(self, X):
+        """Material label: 2 inside the cylinder, 1 outside."""
+        return np.where(np.hypot(X[:, 0], X[:, 1]) < self.R, 2, 1)
 
     # --- exact solution (numpy)
     def exact(self, X, side):
+        """Exact isolated-cylinder potential and gradient."""
         x, y = X[:, 0], X[:, 1]; r2 = x**2 + y**2; side = np.asarray(side)
         pin = -self.E_in * x; gin = np.c_[-self.E_in * np.ones_like(x), np.zeros_like(x)]
         c = self.E0 * self.K * self.R**2
@@ -73,20 +100,27 @@ class P2Cylinder(Problem2D):
         gout = np.c_[-self.E0 + c * (y**2 - x**2) / r2**2, -2 * c * x * y / r2**2]
         return np.where(side == 2, pin, pout), np.where((side == 2)[:, None], gin, gout)
 
-    def h(self, x, y): return self.h_jax(x, y, [self.E0, self.K, self.R])
+    def h(self, x, y):
+        """Exact potential (NumPy) at scalar coordinates."""
+        return self.h_jax(x, y, [self.E0, self.K, self.R])
 
     def exact_jax(self, z, side):
+        """Exact potential on one side (JAX), for loss-visibility checks."""
         x, y = z[0], z[1]
         if side == 2: return -self.E_in * x
         return -self.E0 * x + self.E0 * self.K * self.R**2 * x / (x**2 + y**2)
 
-    def wrong_uniform_jax(self, z, side): return -self.E0 * z[0]
+    def wrong_uniform_jax(self, z, side):
+        """Uniform-field (wrong) potential (JAX)."""
+        return -self.E0 * z[0]
 
     def wrong_uniform(self, X, side):
+        """Uniform-field (wrong) potential and gradient."""
         return -self.E0 * X[:, 0], np.c_[-self.E0 * np.ones(len(X)), np.zeros(len(X))]
 
     # --- training points
     def sample(self, seed, n_per_material=512, n_interface=128, n_edge=64):
+        """Stratified collocation points: disc, annulus-to-box region, interface circle and box edges."""
         rng = np.random.default_rng([seed, 2027])
         rr = self.R * np.sqrt(rng.uniform(size=n_per_material)); th = rng.uniform(0, 2 * np.pi, n_per_material)
         X2 = np.c_[rr * np.cos(th), rr * np.sin(th)]
@@ -102,9 +136,11 @@ class P2Cylinder(Problem2D):
 
     # --- evaluation quadrature (conforming to circle and band edges)
     def quadrature(self, nr=8, nth=16):
+        """Composite Gauss quadrature resolving the circular interface band."""
         R, hb = self.R, self.band_halfwidth
         X, W, S = [], [], []
         def ring(r0, r1, side, npan):
+            """Append Gauss points of an annulus between radii r0 and r1 on one side."""
             for k in range(8):
                 th, wt = gl(k * np.pi / 4, (k + 1) * np.pi / 4, nth)
                 for j in range(npan):
@@ -130,6 +166,7 @@ class P2Cylinder(Problem2D):
         return dict(X=X, W=W, side=S, band=band, XI=XI, WI=wi, NI=NI, XB=XB, sideB=np.ones(len(XB), int))
 
     def extra_metrics(self, X, W, side, grad_pred):
+        """Cylinder-specific metrics: mean field inside the cylinder (away from the band) and the effective contrast it implies."""
         inner = (side == 2) & (np.hypot(X[:, 0], X[:, 1]) < self.R - self.band_halfwidth)
         Ex = -np.sum(W[inner] * grad_pred[inner, 0]) / np.sum(W[inner])
         keff = 2 * self.E0 / Ex - 1 if Ex > 0 else np.nan
@@ -144,43 +181,66 @@ class P3LineCharge(Problem2D):
     QI = eps1 dw1/dn - eps2 dw2/dn = H (eps1 - eps2)/(x^2 + H^2), n = (0, -1). Evaluation excludes r1 < 0.05."""
     problem_id = "P3"; H = 0.25; Lc = 2.0; Vc = 1.0; R_EXCL = 0.05; R_NEAR = 0.15; geometry_label = "2d_linecharge_h0.25_planar"; refined_quadrature = dict(n=16, nth=32)
     @property
-    def K(self): return (self.eps1 - self.eps2) / (self.eps1 + self.eps2)
+    def K(self):
+        """Image-charge coefficient (eps1 - eps2)/(eps1 + eps2)."""
+        return (self.eps1 - self.eps2) / (self.eps1 + self.eps2)
 
     @staticmethod
-    def psi_jax(x, y, pp): return -y                      # > 0 in material 2 (lower half)
+    def psi_jax(x, y, pp):
+        """Signed level set of the planar interface y = 0."""
+        return -y                      # > 0 in material 2 (lower half)
     @staticmethod
     def h_jax(x, y, hp):                                   # training boundary data for w (hp = [K, H])
+        """Boundary data of the image solution (JAX)."""
         r2 = jnp.log(x**2 + (y + hp[1])**2); r1 = jnp.log(x**2 + (y - hp[1])**2)
         return jnp.where(y >= 0, -0.5 * hp[0] * r2, -0.5 * hp[0] * r1)
-    def jax_params(self): return dict(pp=[0.0], hp=[self.K, self.H])
-    def side_of(self, X): return np.where(X[:, 1] < 0, 2, 1)
+    def jax_params(self):
+        """Parameters passed to the JAX level-set and boundary-data functions."""
+        return dict(pp=[0.0], hp=[self.K, self.H])
+    def side_of(self, X):
+        """Material label: 1 above the interface (y > 0), 2 below."""
+        return np.where(X[:, 1] < 0, 2, 1)
 
     def phis(self, X):
+        """Free-space line-charge potential -ln r1 and its gradient."""
         dx, dy = X[:, 0], X[:, 1] - self.H; r2 = dx**2 + dy**2
         return -0.5 * np.log(r2), np.c_[-dx / r2, -dy / r2]
     def exact_w(self, X, side):
+        """Regular part w = phi + ln r1 of the image solution, and its gradient."""
         x, y = X[:, 0], X[:, 1]; s = np.asarray(side)
         yy = np.where(s == 1, y + self.H, y - self.H); r2 = x**2 + yy**2
         return -0.5 * self.K * np.log(r2), np.c_[-self.K * x / r2, -self.K * yy / r2]
     def exact(self, X, side):                              # physical potential
+        """Exact physical potential and gradient (regular part plus line-charge part)."""
         w, gw = self.exact_w(X, side); s, gs = self.phis(X); return w + s, gw + gs
-    def exact_train(self, X, side): return self.exact_w(X, side)
+    def exact_train(self, X, side):
+        """Reference for the trained variable (the regular part)."""
+        return self.exact_w(X, side)
     def to_physical(self, X, phi, grad, side=None):
+        """Add the line-charge part back to a prediction of the regular part."""
         s, gs = self.phis(X); return phi + s, grad + gs
     def h_np(self, X):                                      # PHYSICAL boundary data (evaluator)
+        """Physical Dirichlet data at points X."""
         return self.exact(X, self.side_of(X))[0]
-    def h_train_np(self, X): return self.exact_w(X, self.side_of(X))[0]
+    def h_train_np(self, X):
+        """Dirichlet data for the trained regular part."""
+        return self.exact_w(X, self.side_of(X))[0]
     def exact_jax(self, z, side):                           # w (training variable)
+        """Exact regular part on one side (JAX)."""
         yy = z[1] + self.H if side == 1 else z[1] - self.H
         return -0.5 * self.K * jnp.log(z[0]**2 + yy**2)
     def wrong_uniform_jax(self, z, side):                   # uniform-eps answer for w: phi_s alone -> w = 0
+        """Wrong solution for the regular part (zero: no image charge)."""
         return 0.0 * z[0]
     def wrong_uniform(self, X, side):
+        """Wrong physical solution: the free-space line-charge potential."""
         return self.phis(X)
 
     def sample(self, seed, n_per_material=512, n_interface=128, n_edge=64):
+        """Collocation points in each half-plane (excluding the disc around the charge), interface and edges."""
         rng = np.random.default_rng([seed, 3031])
         def half(sign):
+            """Draw points in one half-plane outside the excluded disc."""
             out = []
             while len(out) < n_per_material:
                 p = np.c_[rng.uniform(-1, 1, n_per_material), sign * rng.uniform(0, 1, n_per_material)]
@@ -197,6 +257,7 @@ class P3LineCharge(Problem2D):
         """Tensor GL on rectangles; a polar patch around the source on the square S = [-0.2,0.2] x [0.05,0.45]."""
         hb = self.band_halfwidth; X, W, S = [], [], []
         def rect(x0, x1, y0, y1, nx, ny, side):
+            """Append tensor Gauss points of a rectangle on one side."""
             for i in range(nx):
                 for j in range(ny):
                     xs, wx = gl(x0 + (x1 - x0) * i / nx, x0 + (x1 - x0) * (i + 1) / nx, n)
@@ -227,12 +288,15 @@ class P3LineCharge(Problem2D):
                     XB=XB, sideB=self.side_of(XB))
 
     def interface_load(self, x):                       # Q(x) on y = 0 (x: (2, ...) quadrature coordinates)
+        """Interface flux load created by subtracting the singular part."""
         return self.H * (self.eps1 - self.eps2) / (x[0]**2 + self.H**2)
     def interface_facets(self, mesh):
+        """Mesh facets lying on the interface (for the FEM interface load)."""
         mid = mesh.p[:, mesh.facets].mean(1)
         return np.nonzero((np.abs(mid[1]) < 1e-12) & (np.abs(mid[0]) < 1 - 1e-12))[0]
 
     def extra_metrics(self, X, W, side, grad_pred):
+        """Line-charge-specific metrics: relative field errors near the source (r1 < R_NEAR) and in the far field."""
         _, ge = self.exact(X, side); r1 = np.hypot(X[:, 0], X[:, 1] - self.H)
         out = {}
         for nm, mk in (("near_source", r1 < self.R_NEAR), ("far_field", r1 >= self.R_NEAR)):
@@ -249,22 +313,29 @@ class P3MatSub(P3LineCharge):
     problem_id = "P3"; geometry_label = "2d_linecharge_h0.25_planar_matsub"
     @staticmethod
     def h_jax(x, y, hp):
+        """Boundary data with material-wise singular subtraction (JAX)."""
         K, H = hp[0], hp[1]
         up = -0.5 * K * jnp.log(x**2 + (y + H)**2)
         dn = -(1 + K) * 0.5 * jnp.log(x**2 + (y - H)**2)        # phi = -2 eps1/(eps1+eps2) ln r1 = -(1+K) ln r1
         return jnp.where(y >= 0, up, dn)
     def exact_train(self, X, side):
+        """Reference for the trained variable under material-wise subtraction."""
         w, gw = self.exact_w(X, side); s = np.asarray(side) == 2
         ph, gp = self.exact(X, side)
         return np.where(s, ph, w), np.where(s[:, None], gp, gw)
-    def h_train_np(self, X): return self.exact_train(X, self.side_of(X))[0]
+    def h_train_np(self, X):
+        """Dirichlet data for the trained variable under material-wise subtraction."""
+        return self.exact_train(X, self.side_of(X))[0]
     def to_physical(self, X, phi, grad, side=None):
+        """Add the subtracted singular part back, material by material."""
         s, gs = self.phis(X); m = (np.asarray(side) == 1) if side is not None else np.ones(len(X), bool)
         return phi + m * s, grad + m[:, None] * gs
     def exact_jax(self, z, side):
+        """Exact trained variable on one side under material-wise subtraction (JAX)."""
         if side == 1: return -0.5 * self.K * jnp.log(z[0]**2 + (z[1] + self.H)**2)
         return -(1 + self.K) * 0.5 * jnp.log(z[0]**2 + (z[1] - self.H)**2)
     def sample(self, seed, *a, **k):
+        """Collocation sample with the prescribed interface potential jump of the subtraction."""
         S = super().sample(seed, *a, **k); xi = S["XI"][:, 0]
         S["PI"] = -0.5 * np.log(xi**2 + self.H**2)                     # phi_s on y = 0
         S["QI"] = self.eps1 * self.H / (xi**2 + self.H**2)             # -eps1 dphi_s/dn with dphi_s/dn = -H/r^2 at y=0, n = (0,-1)
@@ -290,20 +361,28 @@ class P4Corner(Problem2D):
         super().__init__(kappa); self.lam = corner_lambda(self.kappa)
         self.A = np.cos(3 * self.lam * np.pi / 4) / np.cos(self.lam * np.pi / 4)
     @staticmethod
-    def psi_jax(x, y, pp): return x * y
+    def psi_jax(x, y, pp):
+        """Level-set function x*y, zero on the two interface rays of the corner."""
+        return x * y
     @staticmethod
     def h_jax(x, y, hp):                                   # hp = [lam, A]
+        """Boundary data of the singular corner eigen-solution (JAX)."""
         lam, A = hp[0], hp[1]
         r = jnp.sqrt(x**2 + y**2); t = jnp.arctan2(y, x); t = jnp.where(t < 0, t + 2 * jnp.pi, t)
         in2 = (x > 0) & (y > 0)
         return r**lam * jnp.where(in2, A * jnp.cos(lam * (t - jnp.pi / 4)), jnp.cos(lam * (t - 5 * jnp.pi / 4)))
-    def jax_params(self): return dict(pp=[0.0], hp=[self.lam, self.A])
-    def side_of(self, X): return np.where((X[:, 0] > 0) & (X[:, 1] > 0), 2, 1)
+    def jax_params(self):
+        """Parameters passed to the JAX level-set and boundary-data functions."""
+        return dict(pp=[0.0], hp=[self.lam, self.A])
+    def side_of(self, X):
+        """Material label: 2 in the first quadrant, 1 elsewhere."""
+        return np.where((X[:, 0] > 0) & (X[:, 1] > 0), 2, 1)
     def _theta(self, X, side):
         t = np.arctan2(X[:, 1], X[:, 0]); s = np.asarray(side)
         t2 = np.clip(t, 0, np.pi / 2); t1 = np.mod(t, 2 * np.pi); t1 = np.where(t1 < np.pi / 2 - 1e-14, t1 + 2 * np.pi, t1)
         return np.where(s == 2, t2, t1)
     def exact(self, X, side):
+        """Exact singular eigen-solution r^lambda Phi(theta) and its gradient."""
         s = np.asarray(side); r = np.hypot(X[:, 0], X[:, 1]); t = self._theta(X, s); lam = self.lam
         c = np.where(s == 2, self.A, 1.0); t0 = np.where(s == 2, np.pi / 4, 5 * np.pi / 4)
         Ph = c * np.cos(lam * (t - t0)); dPh = -c * lam * np.sin(lam * (t - t0))
@@ -312,18 +391,26 @@ class P4Corner(Problem2D):
         g = np.c_[gr * np.cos(t) - gt * np.sin(t), gr * np.sin(t) + gt * np.cos(t)]
         return phi, g
     def exact_jax(self, z, side):
+        """Exact potential on one side (JAX)."""
         x, y = z[0], z[1]; r = jnp.sqrt(x**2 + y**2); t = jnp.arctan2(y, x)
         if side == 2: return r**self.lam * self.A * jnp.cos(self.lam * (t - jnp.pi / 4))   # no clip: its derivative vanishes at the bound theta = 0
         t = jnp.where(t < 0, t + 2 * jnp.pi, t); t = jnp.where(t < jnp.pi / 2 - 1e-14, t + 2 * jnp.pi, t)
         return r**self.lam * jnp.cos(self.lam * (t - 5 * jnp.pi / 4))
-    def h_np(self, X): return self.exact(X, self.side_of(X))[0]
-    def wrong_uniform_jax(self, z, side): return -(z[0] + z[1]) / np.sqrt(2.0)
+    def h_np(self, X):
+        """Dirichlet data at points X."""
+        return self.exact(X, self.side_of(X))[0]
+    def wrong_uniform_jax(self, z, side):
+        """Uniform-field (wrong) potential (JAX)."""
+        return -(z[0] + z[1]) / np.sqrt(2.0)
     def wrong_uniform(self, X, side):
+        """Uniform diagonal-field (wrong) potential and gradient."""
         return -(X[:, 0] + X[:, 1]) / np.sqrt(2), np.tile([-1 / np.sqrt(2), -1 / np.sqrt(2)], (len(X), 1))
 
     def sample(self, seed, n_per_material=512, n_interface=128, n_edge=64):
+        """Collocation points in each material (excluding the corner disc), interface rays and edges."""
         rng = np.random.default_rng([seed, 4049])
         def draw(cond):
+            """Draw points satisfying a region condition outside the excluded disc."""
             out = []
             while len(out) < n_per_material:
                 p = rng.uniform(-1, 1, (4 * n_per_material, 2)); m = cond(p) & (np.hypot(p[:, 0], p[:, 1]) > self.R_EXCL)
@@ -339,8 +426,10 @@ class P4Corner(Problem2D):
                     A1=3.0 - 0.75 * np.pi * self.R_EXCL**2, A2=1.0 - 0.25 * np.pi * self.R_EXCL**2, LG=2 * (1 - self.R_EXCL))
 
     def quadrature(self, n=8, nth=16):
+        """Composite Gauss quadrature resolving the interface rays and the corner."""
         hb = self.band_halfwidth; X, W, S = [], [], []
         def rect(x0, x1, y0, y1, nx, ny):
+            """Append tensor Gauss points of a rectangle."""
             for i in range(nx):
                 for j in range(ny):
                     xs, wx = gl(x0 + (x1 - x0) * i / nx, x0 + (x1 - x0) * (i + 1) / nx, n)
@@ -399,27 +488,48 @@ class P5Film(Problem2D):
     def __init__(self, kappa):
         super().__init__(kappa); self.t = self.T; self.e = self.t / 2; self._ref = None; self._memo = {}
     @property
-    def Vc(self): return self.E0 * self.Lc
+    def Vc(self):
+        """Characteristic voltage used to scale residuals."""
+        return self.E0 * self.Lc
     @staticmethod
-    def psi_jax(x, y, pp): return (0.25 - x**2) * (pp[0]**2 / 4 - y**2) / (0.25 * pp[0])
+    def psi_jax(x, y, pp):
+        """Signed level set of the film (positive inside)."""
+        return (0.25 - x**2) * (pp[0]**2 / 4 - y**2) / (0.25 * pp[0])
     @staticmethod
-    def h_jax(x, y, hp): return -hp[0] * y
-    def jax_params(self): return dict(pp=[self.t], hp=[self.E0])
-    def side_of(self, X): return np.where((np.abs(X[:, 0]) < 0.5) & (np.abs(X[:, 1]) < self.t / 2), 2, 1)
-    def h_np(self, X): return -self.E0 * X[:, 1]
+    def h_jax(x, y, hp):
+        """Uniform-field boundary data (JAX)."""
+        return -hp[0] * y
+    def jax_params(self):
+        """Parameters passed to the JAX level-set and boundary-data functions."""
+        return dict(pp=[self.t], hp=[self.E0])
+    def side_of(self, X):
+        """Material label: 2 inside the film, 1 outside."""
+        return np.where((np.abs(X[:, 0]) < 0.5) & (np.abs(X[:, 1]) < self.t / 2), 2, 1)
+    def h_np(self, X):
+        """Uniform-field Dirichlet data at points X."""
+        return -self.E0 * X[:, 1]
     def exact_jax(self, z, side):
+        """Exact potential at kappa = 1 (no closed form otherwise)."""
         if self.kappa != 1: raise NotImplementedError("P5 has no closed form for kappa != 1 (FEM reference)")
         return -self.E0 * z[1]
-    def wrong_uniform_jax(self, z, side): return -self.E0 * z[1]
-    def wrong_uniform(self, X, side): return -self.E0 * X[:, 1], np.tile([0.0, -self.E0], (len(X), 1))
-    def geometry(self): return lambda occ: [occ.addRectangle(-0.5, -self.t / 2, 0, 1, self.t)]
+    def wrong_uniform_jax(self, z, side):
+        """Uniform-field (wrong) potential (JAX)."""
+        return -self.E0 * z[1]
+    def wrong_uniform(self, X, side):
+        """Uniform-field (wrong) potential and gradient."""
+        return -self.E0 * X[:, 1], np.tile([0.0, -self.E0], (len(X), 1))
+    def geometry(self):
+        """Geometry descriptor passed to the mesh generator."""
+        return lambda occ: [occ.addRectangle(-0.5, -self.t / 2, 0, 1, self.t)]
 
     # ---------------- reference (cached converged FEM)
     def ref_path(self, level=None):
+        """File path of the stored FEM reference at a refinement level."""
         import pathlib
         lv = level or self.REF_LEVEL
         return pathlib.Path(__file__).resolve().parents[2] / f"results/reference/P5_t{self.t:g}_k{self.kappa:g}_hf{lv['h_far']:g}_fi{lv['frac_in']:g}.npz"
     def build_reference(self, level=None, force=False):
+        """Compute and store the body-fitted FEM reference solution."""
         import time, skfem
         from src.fem import fem2d
         lv = level or self.REF_LEVEL; path = self.ref_path(lv)
@@ -430,11 +540,13 @@ class P5Film(Problem2D):
         np.savez_compressed(path, p=s.mesh.p, tri=s.mesh.t, M=s.M, u=s.u, seconds=time.perf_counter() - t0)
         return s
     def load_reference(self, level=None):
+        """Load the stored FEM reference solution."""
         import skfem
         from src.fem.fem2d import FEM2DSolution
         z = np.load(self.ref_path(level)); mesh = skfem.MeshTri(z["p"], z["tri"]); basis = skfem.Basis(mesh, skfem.ElementTriP2())
         return FEM2DSolution(mesh, basis, z["u"], z["M"], True, 2, 0.0, float(z["seconds"]))
     def exact(self, X, side):
+        """Reference potential and gradient (uniform field at kappa = 1, FEM reference otherwise)."""
         if self.kappa == 1.0:                      # uniform field is exact at kappa = 1
             return -self.E0 * X[:, 1], np.tile([0.0, -self.E0], (len(X), 1))
         key = (X.tobytes(), np.asarray(side).tobytes())
@@ -442,11 +554,16 @@ class P5Film(Problem2D):
             if self._ref is None: self._ref = self.build_reference()
             self._memo[key] = self._ref(X, side)
         return self._memo[key]
-    def exact_train(self, X, side): return self.exact(X, side)
-    def h_train_np(self, X): return self.h_np(X)
+    def exact_train(self, X, side):
+        """Reference for the trained variable (the physical potential)."""
+        return self.exact(X, side)
+    def h_train_np(self, X):
+        """Dirichlet data for the trained variable."""
+        return self.h_np(X)
 
     # ---------------- training points
     def sample(self, seed, n_per_material=512, n_interface=128, n_edge=64, n_film=None):
+        """Collocation points outside and inside the film, on its boundary and on the box edges."""
         rng = np.random.default_rng([seed, 5051]); t = self.t; nf = n_film or n_per_material
         X2 = np.c_[rng.uniform(-0.5, 0.5, nf), rng.uniform(-t / 2, t / 2, nf)]
         X1 = []
@@ -464,8 +581,10 @@ class P5Film(Problem2D):
 
     # ---------------- evaluation quadrature (cell-aligned with film faces, band edges, corner exclusions)
     def quadrature(self, n=6):
+        """Composite Gauss quadrature resolving the film and its interface band."""
         t, e, hb = self.t, self.e, self.band_halfwidth
         def breaks(core, outer=1.0, pan=0.125):
+            """Panel breakpoints for 1D composite quadrature, refined near the film."""
             b = sorted(set(core)); out = []
             for a_, b_ in zip(b[:-1], b[1:]):
                 k = max(1, int(np.ceil((b_ - a_) / pan - 1e-12))); out.extend(np.linspace(a_, b_, k + 1)[:-1])
@@ -493,6 +612,7 @@ class P5Film(Problem2D):
         return dict(X=X, W=W, side=S, band=band, XI=XI, WI=np.r_[wi, wi], NI=NI, XB=XB, sideB=np.ones(len(XB), int))
 
     def extra_metrics(self, X, W, side, grad_pred):
+        """Film-specific metrics: relative field error inside the film and the mean vertical field there (predicted and reference)."""
         _, ge = self.exact(X, side); m = side == 2
         e = np.sum((grad_pred[m] - ge[m])**2, 1); r = np.sum(ge[m]**2, 1)
         Ein = -np.sum(W[m] * grad_pred[m, 1]) / np.sum(W[m]); Ein_ref = -np.sum(W[m] * ge[m, 1]) / np.sum(W[m])
@@ -500,6 +620,8 @@ class P5Film(Problem2D):
 
 
 class P5FilmThick(P5Film):
+    """P5 variant with a thicker film (t = 0.1)."""
     T = 0.1; geometry_label = "2d_thin_film_t0.1"
 class P5FilmThin(P5Film):
+    """P5 variant with a thinner film (t = 0.005)."""
     T = 0.005; geometry_label = "2d_thin_film_t0.005"

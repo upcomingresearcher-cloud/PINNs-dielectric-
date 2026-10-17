@@ -11,10 +11,13 @@ FORMS = ["F1", "F2", "F3", "F4", "F5", "F6"]
 GEOM = {"P3": lambda occ: [occ.addRectangle(-1, -1, 0, 2, 1)], "P4": lambda occ: [occ.addRectangle(0, 0, 0, 1, 1)]}
 
 
-def cp(k, n): return (0.0 if k == 0 else beta.ppf(.025, k, n - k + 1)), (1.0 if k == n else beta.ppf(.975, k + 1, n - k))
+def cp(k, n):
+    """Clopper-Pearson 95% interval for k failures in n runs."""
+    return (0.0 if k == 0 else beta.ppf(.025, k, n - k + 1)), (1.0 if k == n else beta.ppf(.975, k + 1, n - k))
 
 
 def problem_class(pid):
+    """Problem class for a 2D problem identifier (e.g. 'P3')."""
     from src.problems import p2d
     return {getattr(p2d, n).problem_id: getattr(p2d, n) for n in dir(p2d)
             if isinstance(getattr(p2d, n), type) and issubclass(getattr(p2d, n), p2d.Problem2D) and getattr(p2d, n) is not p2d.Problem2D
@@ -49,6 +52,7 @@ def fem_rows(pid, cls, kappas=(1.0, 80.0, 2000.0, 0.0005), hs=(0.2, 0.1, 0.05, 0
 
 
 def loss_vis(pid, cls, kappas=(1.0, 80.0, 2000.0, 0.0005)):
+    """Loss visibility check for a 2D problem: each formulation's loss at the exact and the wrong solution."""
     if pid == "P5": kappas = (1.0,)          # no closed form for kappa != 1
     import jax.numpy as jnp
     from src.pinns import train2d as T
@@ -68,6 +72,7 @@ def loss_vis(pid, cls, kappas=(1.0, 80.0, 2000.0, 0.0005)):
 
 
 def main(pid):
+    """Write the summary tables and maps for one 2D problem."""
     cls = problem_class(pid)
     d = pd.read_csv(ROOT / "results/raw/runs_2d.csv"); d = d[(d.status == "complete") & (d.problem_id == pid)]
     d = d.sort_values("timestamp").drop_duplicates("run_id", keep="first")   # concurrent-execution duplicates (identical results) kept in raw data
@@ -133,6 +138,7 @@ if __name__ == "__main__":
 
 
 def h10(pid="P4"):
+    """H10 for P4: median signed near-corner field errors on the two bisector rays at r = 0.02 and 0.05; returns (verdict, table)."""
     d = pd.read_csv(ROOT / "results/raw/runs_2d.csv"); d = d[(d.status == "complete") & (d.problem_id == pid) & (d.run_type == "pinn") & (d.variant == "base")]
     d = d.sort_values("timestamp").drop_duplicates("run_id", keep="first")
     ex = pd.DataFrame([json.loads(e) for e in d.extra_json], index=d.index); d = pd.concat([d, ex], axis=1)
@@ -146,6 +152,7 @@ def h10(pid="P4"):
 
 
 def p5_variants():
+    """P5 thickness and collocation-density variant summary."""
     d = pd.read_csv(ROOT / "results/raw/runs_2d.csv"); d = d[(d.status == "complete") & (d.problem_id == "P5") & (d.run_type == "pinn")]
     d = d[d.formulation.isin(["F2", "F6"])].copy()
     d["film_err"] = [json.loads(e).get("relL2_E_film", np.nan) for e in d.extra_json]

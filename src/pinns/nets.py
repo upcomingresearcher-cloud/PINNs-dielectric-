@@ -8,6 +8,7 @@ import jax, jax.numpy as jnp
 
 
 def init_mlp(key, d_in, width, depth, dtype):
+    """Fully connected tanh MLP with Glorot-normal weights (drawn in float32, cast to dtype) and zero biases."""
     sizes = [d_in] + [width] * depth + [1]
     params = []
     for fan_in, fan_out in zip(sizes[:-1], sizes[1:]):
@@ -28,4 +29,5 @@ def mlp(params, z):
 
 
 def n_params(tree):
+    """Total number of trainable scalars in a parameter tree."""
     return int(sum(x.size for x in jax.tree_util.tree_leaves(tree)))

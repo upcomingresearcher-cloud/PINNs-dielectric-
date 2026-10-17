@@ -19,7 +19,7 @@ Date: 2026-10-16. Code commit for pilot runs: 42b1a3c. Protocol now v1.1.0.
 - Training cost: 1–3.3 s per 3000-step run (median), plus first-compile 2–9 s per formulation.
 
 ## Problems found
-- Background processes are killed when a tool call ends; the first pilot launch stopped after 17 runs. Database verified intact; sweeps now run in resumable foreground chunks.
+- The compute environment did not support long-running background processes; the first pilot launch stopped after 17 runs. Database verified intact; sweeps now run in resumable foreground chunks.
 - One Gate 3 test had a wrong expectation (F5 at kappa = 1), fixed in the test, not the code.
 
 ## Remaining issues

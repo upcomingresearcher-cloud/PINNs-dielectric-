@@ -34,6 +34,7 @@ def collocation(seed, problem, n_per_material):
     """Stratified jitter: one uniform draw per equal stratum, per material. Seed-only dependence."""
     rng = np.random.default_rng([seed, 7919])
     def strat(lo, hi, n):
+        """Stratified jittered samples: one uniform point in each of n equal cells of [lo, hi]."""
         edges = np.linspace(lo, hi, n + 1); return edges[:-1] + rng.uniform(size=n) * np.diff(edges)
     return strat(0.0, problem.a, n_per_material), strat(problem.a, problem.L, n_per_material)
 
@@ -43,6 +44,7 @@ def extra_band_points(seed, problem, n_per_side):
     side, from a SEPARATE random stream so the primary collocation points are unchanged."""
     rng = np.random.default_rng([seed, 7919, 1]); h = problem.band_halfwidth
     def strat(lo, hi, n):
+        """Stratified jittered samples: one uniform point in each of n equal cells of [lo, hi]."""
         edges = np.linspace(lo, hi, n + 1); return edges[:-1] + rng.uniform(size=n) * np.diff(edges)
     return strat(problem.a - h, problem.a, n_per_side), strat(problem.a, problem.a + h, n_per_side)
 
@@ -66,24 +68,29 @@ def make_data(problem, x1, x2, dtype):
 
 @functools.lru_cache(None)
 def compiled_fns(fname, lr_init, lr_final, steps):
+    """Build the jitted update, per-term gradient and prediction functions for a formulation and schedule."""
     F = REGISTRY[fname]
     sched = optax.cosine_decay_schedule(lr_init, decay_steps=steps, alpha=lr_final / lr_init)
     opt = optax.adam(sched, b1=0.9, b2=0.999, eps=1e-8)
 
     def terms(params, d):
+        """Loss-term vector for parameters params."""
         return F.term_vector(lambda x, s: F.rep(params, x, s, d), d)
 
     def total(params, d, w):
+        """Weighted total loss."""
         return jnp.sum(w * terms(params, d))
 
     @jax.jit
     def update(params, opt_state, d, w):
+        """One Adam step; returns updated parameters, optimiser state and the loss."""
         loss, g = jax.value_and_grad(total)(params, d, w)
         upd, opt_state = opt.update(g, opt_state, params)
         return optax.apply_updates(params, upd), opt_state, loss
 
     @jax.jit
     def term_grads(params, d):
+        """Per-term loss values and per-term gradient norms (for gradient logging)."""
         vals = terms(params, d)
         J = jax.jacrev(terms)(params, d)              # pytree with leading dim = n_terms
         sq = sum(jnp.sum(x.reshape(x.shape[0], -1)**2, axis=1) for x in jax.tree_util.tree_leaves(J))
@@ -91,6 +98,7 @@ def compiled_fns(fname, lr_init, lr_final, steps):
 
     @functools.partial(jax.jit, static_argnums=2)
     def phi_dphi(params, xs, side, d):
+        """Potential and its derivative at points xs on one side of the interface."""
         f = lambda x: F.rep(params, x, side, d)
         return jax.vmap(f)(xs), jax.vmap(jax.grad(f))(xs)
 
@@ -105,6 +113,7 @@ def compiled_extra(fname, memory=50, max_ls=20):
         max_linesearch_steps=max_ls, initial_guess_strategy="one"))
 
     def terms(params, d):
+        """Loss-term vector for parameters params."""
         return F.term_vector(lambda x, s: F.rep(params, x, s, d), d)
 
     @jax.jit
@@ -116,6 +125,7 @@ def compiled_extra(fname, memory=50, max_ls=20):
 
     @jax.jit
     def lbfgs_step(params, state, d, w):
+        """One L-BFGS iteration with zoom line search; also returns the number of line-search evaluations."""
         f = lambda p: jnp.sum(w * terms(p, d))
         value, grad = optax.value_and_grad_from_state(f)(params, state=state)
         upd, state = opt.update(grad, state, params, value=value, grad=grad, value_fn=f)
@@ -142,7 +152,9 @@ _AOT = {}   # compiled executables keyed by formulation/optimiser/shape/dtype (i
 
 
 def make_pred(phi_dphi, params, d, dtype):
+    """Wrap trained parameters as a prediction function (potential, derivative) for the evaluator."""
     def pred(x, side):
+        """Prediction at points x on the given sides, evaluated material by material."""
         x = np.asarray(x, np.float64); side = np.asarray(side)
         phi = np.empty_like(x); dphi = np.empty_like(x)
         for s in (1, 2):
@@ -209,6 +221,7 @@ def train_run(fname, kappa, seed, cfg, run_type="pinn", variant="base", out_dir=
 
     gradlog, traj = [], []
     def log_grads(step, params):
+        """Record per-term loss values and gradient norms at a training step."""
         vals, norms = (np.asarray(v, np.float64) for v in tg_c(params, d))
         wn = np.asarray(w, np.float64) * norms
         fin = np.isfinite(norms); mx = np.max(norms[fin]) if fin.any() else np.nan
@@ -219,6 +232,7 @@ def train_run(fname, kappa, seed, cfg, run_type="pinn", variant="base", out_dir=
                                 nonfinite=not np.isfinite(norms[i]) or not np.isfinite(vals[i]),
                                 effectively_zero=bool(np.isfinite(norms[i]) and norms[i] < 1e-12 * mx)))
     def log_metrics(step, params):
+        """Evaluate all metrics at a training step and append them to the trajectory."""
         m = evaluate(problem, make_pred(phi_dphi, params, d, dtype))
         traj.append(dict(step=step, **{k: m[k] for k in ("primary_field_error", "strict_field_error", "relL2_phi_global",
                                                           "relL2_E_global", "D_jump_rel", "phi_jump_rel", "nonfinite")}))

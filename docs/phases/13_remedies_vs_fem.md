@@ -44,7 +44,7 @@ The "logging resolution" qualifier affects 10 configurations, all at κ = 1. PIN
 
 - **PINN time to target:** wall_clock_s × (first-hit step ÷ total gradient evaluations), assuming a constant cost per step; for L-BFGS, steps are function+gradient evaluations. JIT compile time is excluded and reported separately, as is evaluation/logging overhead. Most runs reuse a cached compilation (compile_s ≈ 0); uncached runs take about 2–6 s.
 - **FEM time:** gmsh meshing + scikit-fem assembly + sparse direct solve (`mesh_plus_solve_s`); `solve_only_s` is also recorded.
-- **Hardware:** single-threaded CPU in the sandbox. P2 FEM ran on a 2.10 GHz Xeon and P5 FEM on a 2.80 GHz Xeon; PINN rows record their own hardware string. The margins (≥ 21× at κ = 1 and "never reached" elsewhere) far exceed plausible hardware differences.
+- **Hardware:** single-threaded CPU. P2 FEM ran on a 2.10 GHz Xeon and P5 FEM on a 2.80 GHz Xeon; PINN rows record their own hardware string. The margins (≥ 21× at κ = 1 and "never reached" elsewhere) far exceed plausible hardware differences.
 - **Different computational structures:** PINN and FEM work differently, and equal gradient evaluations do not imply equal wall-clock. P5 FEM errors are measured against the finest FEM level, as are P5 PINN errors.
 
 ## Interpretation (separate from measurements)

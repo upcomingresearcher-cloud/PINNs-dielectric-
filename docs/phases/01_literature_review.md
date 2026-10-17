@@ -35,7 +35,6 @@ Selected framework: JAX (CPU), which supports float64 for Intervention C.
 
 Measured cost: about 1.7–1.8 ms per gradient evaluation (float32, 3×32 tanh, 256 points, second derivative). At that rate one 3000-step P1 run is roughly 5–10 s with logging, and the 180-run primary P1 sweep is roughly 30–40 min. The 2D problems and interventions will be substantially more expensive; estimates will be made per phase before running.
 
-**Persistence limit:** this sandbox's file system resets between sessions. Each phase ends with a zip of the full project. To continue, re-upload the latest zip at the start of the next session. Without it the work cannot resume from the saved state.
 
 ## Not done or open
 - Ten queries is a modest search. Topics G10, G12, G14–G16 are unsearched.

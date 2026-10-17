@@ -14,6 +14,7 @@ import numpy as np
 
 @dataclass(frozen=True)
 class P1Problem:
+    """P1: two-layer parallel-plate capacitor on [0, L] with interface at a and contrast kappa = eps2/eps1."""
     kappa: float
     a: float = 0.5
     V: float = 1.0          # phi(0) = V, phi(1) = 0
@@ -24,6 +25,7 @@ class P1Problem:
 
     @property
     def eps2(self):
+        """Permittivity of material 2 (kappa * eps1)."""
         return float(self.kappa) * self.eps1
 
     def side_of(self, x):
@@ -32,6 +34,7 @@ class P1Problem:
         return np.where(np.asarray(x) < self.a, 1, 2)
 
     def eps_side(self, side):
+        """Permittivity on the given side(s) of the interface."""
         return np.where(np.asarray(side) == 1, self.eps1, self.eps2)
 
     @property
@@ -41,6 +44,7 @@ class P1Problem:
 
     # ---------------- exact solution ----------------
     def exact(self, x, side):
+        """Exact potential and its derivative on the given side(s)."""
         x = np.asarray(x, dtype=np.float64); side = np.asarray(side)
         D = self.D_exact
         phi1 = self.V - D * x / self.eps1
@@ -50,6 +54,7 @@ class P1Problem:
 
     # deliberately wrong: solution of the uniform-permittivity problem
     def wrong_uniform(self, x, side):
+        """Uniform-permittivity (wrong) solution: a straight line between the plates."""
         x = np.asarray(x, dtype=np.float64)
         return self.V * (1.0 - x / self.L), np.full_like(x, -self.V / self.L)
 
@@ -75,6 +80,7 @@ class P1SProblem(P1Problem):
         return np.linalg.solve(M, rhs)
 
     def exact(self, x, side):
+        """Exact potential and derivative with a uniform source term."""
         x = np.asarray(x, dtype=np.float64); side = np.asarray(side)
         A1, B1, A2, B2 = self._coeffs()
         e1, e2, f = self.eps1, self.eps2, self.f
@@ -84,5 +90,6 @@ class P1SProblem(P1Problem):
 
     @property
     def D_exact(self):  # D varies with x in P1-S; scale for relative jumps = D at interface
+        """Displacement at the interface for the source variant."""
         A1 = self._coeffs()[0]
         return -self.eps1 * (-self.f * self.a / self.eps1 + A1)

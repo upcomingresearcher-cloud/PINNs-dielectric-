@@ -29,6 +29,7 @@ STEPS = [
 
 
 def main(argv):
+    """Run the selected pipeline steps (all by default), print a status line per step and write a JSON log."""
     if "--list" in argv:
         for k, d, _ in STEPS: print(f"{k:8s} {d}")
         return 0

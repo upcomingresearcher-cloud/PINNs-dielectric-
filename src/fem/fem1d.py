@@ -13,6 +13,7 @@ import scipy.sparse.linalg as spla
 
 
 def element_eps(nodes, a, eps1, eps2):
+    """Permittivity of each element; an element cut by the interface gets the length-weighted arithmetic mean."""
     l, r = nodes[:-1], nodes[1:]
     left_len = np.clip(np.minimum(r, a) - l, 0, None)
     right_len = np.clip(r - np.maximum(l, a), 0, None)
@@ -20,6 +21,7 @@ def element_eps(nodes, a, eps1, eps2):
 
 
 def solve(problem, n_elements, f=0.0):
+    """Solve the 1D problem with linear finite elements on a uniform mesh of n_elements."""
     nodes = np.linspace(0.0, problem.L, n_elements + 1)
     h = np.diff(nodes)
     epse = element_eps(nodes, problem.a, problem.eps1, problem.eps2)
@@ -39,6 +41,7 @@ def solve(problem, n_elements, f=0.0):
 
 
 class FEMSolution:
+    """Piecewise-linear FEM solution that can be evaluated like a prediction (potential and derivative)."""
     def __init__(self, nodes, phi, epse, a):
         self.nodes, self.phi, self.epse, self.a = nodes, phi, epse, a
         self.slope = np.diff(phi) / np.diff(nodes)

@@ -5,6 +5,7 @@ from src.pinns.formulations import REGISTRY
 
 
 def analytic_fns(problem):
+    """Exact and uniform-permittivity P1 solutions as JAX-compatible functions."""
     D, a, V, L, e2 = problem.D_exact, problem.a, problem.V, problem.L, problem.eps2
     exact = lambda x, side: (V - D * x / problem.eps1) if side == 1 else D * (L - x) / e2
     wrong = lambda x, side: V * (1 - x / L)
@@ -12,6 +13,7 @@ def analytic_fns(problem):
 
 
 def loss_of(fname, phi_fn, d):
+    """Total weighted loss of formulation fname for a given representation phi_fn."""
     F = REGISTRY[fname]
     t = F.terms(phi_fn, d); w = F.weights(d)
     vals = jnp.stack([t[k] for k in F.TERMS])
@@ -26,6 +28,7 @@ def f1_smoothed_loss(phi_fn, d, width, x_band):
     eps_s = lambda x: e1 + (e2 - e1) * jax.nn.sigmoid((x - a) / width)
     xs = jnp.concatenate([d["x1"], d["x2"], x_band])
     def r_at(x, side):
+        """Strong-form residual eps*phi'' + eps'*phi' at x for a smoothed permittivity."""
         g = jax.grad(lambda t: phi_fn(t, side)); h = jax.grad(g)
         return eps_s(x) * h(x) + jax.grad(eps_s)(x) * g(x)
     left = xs[xs < a]; right = xs[xs >= a]

@@ -28,14 +28,17 @@ def pde_terms(phi_fn, d):
 
 
 def bc_terms(phi_fn, d):
+    """Squared boundary-condition residuals at the two plates."""
     return (phi_fn(jnp.zeros_like(d["a"]), 1) - d["V"])**2, phi_fn(d["L"], 2)**2
 
 
 def cont_term(phi_fn, d):
+    """Squared potential jump across the interface."""
     return (phi_fn(d["a"], 1) - phi_fn(d["a"], 2))**2
 
 
 def flux_term(phi_fn, d):
+    """Squared jump of the normal displacement eps*dphi/dx across the interface."""
     return (d["eps1"] * _d1(phi_fn, 1)(d["a"]) - d["eps2"] * _d1(phi_fn, 2)(d["a"]))**2
 
 
@@ -50,17 +53,21 @@ def energy_term(phi_fn, d):
 
 
 class Formulation:
+    """Base class: a representation of phi (rep) and a set of named loss terms with weights."""
     name = ""; TERMS = (); n_inputs = 1; n_nets = 1
     uses_interface_point = True
 
     def init(self, key, width, depth, dtype):
+        """Initialise the parameters of the formulation's networks."""
         keys = jax.random.split(key, self.n_nets)
         return {f"net{i}": init_mlp(k, self.n_inputs, width, depth, dtype) for i, k in enumerate(keys)}
 
     def weights(self, d):
+        """Loss weights in TERMS order (unit weights by default)."""
         return jnp.ones(len(self.TERMS), dtype=d["eps1"].dtype)
 
     def term_vector(self, phi_fn, d):
+        """Loss terms stacked as a vector in TERMS order."""
         t = self.terms(phi_fn, d)
         return jnp.stack([t[k] for k in self.TERMS])
 
@@ -71,19 +78,26 @@ class Formulation:
 class F1(Formulation):
     """Single network, strong form with piecewise eps. No interface term."""
     name = "F1"; TERMS = ("pde1", "pde2", "bc_left", "bc_right"); uses_interface_point = False
-    def rep(self, p, x, side, d): return mlp(p["net0"], jnp.stack([x]))
+    def rep(self, p, x, side, d):
+        """Single network for both materials."""
+        return mlp(p["net0"], jnp.stack([x]))
     def terms(self, f, d):
+        """PDE residuals and boundary conditions only (no interface terms)."""
         p1, p2 = pde_terms(f, d); b0, b1 = bc_terms(f, d)
         return dict(pde1=p1, pde2=p2, bc_left=b0, bc_right=b1)
     def weights(self, d):  # mean over all 256 interior points (equal counts) = 0.5*pde1 + 0.5*pde2
+        """Loss weights for F1."""
         return jnp.array([0.5, 0.5, 1.0, 1.0], dtype=d["eps1"].dtype)
 
 
 class F2(Formulation):
     """Two subdomain networks, soft continuity + soft flux, unit weights."""
     name = "F2"; TERMS = ("pde1", "pde2", "bc_left", "bc_right", "cont", "flux"); n_nets = 2
-    def rep(self, p, x, side, d): return mlp(p["net0" if side == 1 else "net1"], jnp.stack([x]))
+    def rep(self, p, x, side, d):
+        """Separate network for each material."""
+        return mlp(p["net0" if side == 1 else "net1"], jnp.stack([x]))
     def terms(self, f, d):
+        """PDE, boundary, potential-continuity and flux-continuity terms."""
         p1, p2 = pde_terms(f, d); b0, b1 = bc_terms(f, d)
         return dict(pde1=p1, pde2=p2, bc_left=b0, bc_right=b1, cont=cont_term(f, d), flux=flux_term(f, d))
 
@@ -93,6 +107,7 @@ class F6(F2):
     D_s = eps_h V / L, eps_h = 2 eps1 eps2 / (eps1 + eps2)."""
     name = "F6"
     def weights(self, d):
+        """Physics-scaled weights: each residual divided by its natural scale (harmonic-mean displacement)."""
         eh = 2 * d["eps1"] * d["eps2"] / (d["eps1"] + d["eps2"])
         Ds = eh * d["V"] / d["L"]
         wp = (d["L"] / Ds)**2; wv = 1 / d["V"]**2; wf = 1 / Ds**2
@@ -103,12 +118,15 @@ class F3(Formulation):
     """Cusp-capturing single network N(x, |x-a|). One-sided |x-a| = sgn(side)*(x-a)."""
     name = "F3"; TERMS = ("pde1", "pde2", "bc_left", "bc_right", "flux"); n_inputs = 2
     def rep(self, p, x, side, d):
+        """Single network with a signed interface-distance (cusp) input."""
         s = -1.0 if side == 1 else 1.0
         return mlp(p["net0"], jnp.stack([x, s * (x - d["a"])]))
     def terms(self, f, d):
+        """PDE, boundary and flux-continuity terms."""
         p1, p2 = pde_terms(f, d); b0, b1 = bc_terms(f, d)
         return dict(pde1=p1, pde2=p2, bc_left=b0, bc_right=b1, flux=flux_term(f, d))
     def weights(self, d):
+        """Loss weights for F3."""
         return jnp.array([0.5, 0.5, 1.0, 1.0, 1.0], dtype=d["eps1"].dtype)
 
 
@@ -117,9 +135,11 @@ class F4(Formulation):
     Flux continuity is NOT built in; it is penalised."""
     name = "F4"; TERMS = ("pde1", "pde2", "flux"); n_nets = 2
     def rep(self, p, x, side, d):
+        """Boundary conditions and potential continuity built into the representation."""
         z = jnp.stack([x]); r = 0.0 if side == 1 else (x - d["a"])
         return d["V"] * (1 - x / d["L"]) + x * (d["L"] - x) * (mlp(p["net0"], z) + r * mlp(p["net1"], z))
     def terms(self, f, d):
+        """PDE and flux-continuity terms (the rest holds exactly)."""
         p1, p2 = pde_terms(f, d); return dict(pde1=p1, pde2=p2, flux=flux_term(f, d))
 
 
@@ -127,9 +147,12 @@ class F5(Formulation):
     """Ritz energy with cusp feature and hard BCs: phi = V(1-x/L) + x(L-x) N(x, |x-a|)."""
     name = "F5"; TERMS = ("energy",); n_inputs = 2; uses_interface_point = False
     def rep(self, p, x, side, d):
+        """Cusp-input network with the boundary conditions built in."""
         s = -1.0 if side == 1 else 1.0
         return d["V"] * (1 - x / d["L"]) + x * (d["L"] - x) * mlp(p["net0"], jnp.stack([x, s * (x - d["a"])]))
-    def terms(self, f, d): return dict(energy=energy_term(f, d))
+    def terms(self, f, d):
+        """Ritz energy estimated on the collocation points (importance-weighted when weights are supplied)."""
+        return dict(energy=energy_term(f, d))
 
 
 class F4Full(Formulation):
@@ -144,10 +167,12 @@ class F4Full(Formulation):
         rhs = jnp.stack([V - N1(zero), -N2(L), N2(a) - N1(a), e2 * jax.grad(N2)(a) - e1 * jax.grad(N1)(a)])
         return jnp.linalg.solve(M, rhs)
     def rep(self, p, x, side, d):
+        """Representation satisfying boundary, continuity and flux conditions exactly."""
         c = self._coef(p, d)
         if side == 1: return mlp(p["net0"], jnp.stack([x])) + c[0] + c[1] * x
         return mlp(p["net1"], jnp.stack([x])) + c[2] + c[3] * x
     def terms(self, f, d):
+        """PDE residuals only (all other conditions hold exactly)."""
         p1, p2 = pde_terms(f, d); return dict(pde1=p1, pde2=p2)
 
 
@@ -161,6 +186,7 @@ class F1Norm(F1):
     """Intervention B on F1: PDE residuals r_i/eps_i; BCs unchanged (F1 has no interface terms)."""
     name = "F1norm"
     def terms(self, f, d):
+        """F1 terms with each material's PDE residual divided by its permittivity."""
         p1, p2 = pde_terms_resnorm(f, d); b0, b1 = bc_terms(f, d)
         return dict(pde1=p1, pde2=p2, bc_left=b0, bc_right=b1)
 
@@ -170,6 +196,7 @@ class F2Norm(F2):
     by a single material and are left unchanged (decision logged, protocol change log v1.6.0)."""
     name = "F2norm"
     def terms(self, f, d):
+        """F2 terms with each material's PDE residual divided by its permittivity."""
         p1, p2 = pde_terms_resnorm(f, d); b0, b1 = bc_terms(f, d)
         return dict(pde1=p1, pde2=p2, bc_left=b0, bc_right=b1, cont=cont_term(f, d), flux=flux_term(f, d))
 
@@ -189,8 +216,11 @@ class Regression(Formulation):
         self.base = REGISTRY[base]; self.name = f"REG_{base}"
         self.n_inputs, self.n_nets = self.base.n_inputs, self.base.n_nets
         self.uses_interface_point = False
-    def rep(self, p, x, side, d): return self.base.rep(p, x, side, d)
+    def rep(self, p, x, side, d):
+        """Same representation as the wrapped formulation."""
+        return self.base.rep(p, x, side, d)
     def terms(self, f, d):
+        """Supervised data misfit of the potential in each material."""
         e1 = jax.vmap(lambda x: f(x, 1))(d["x1"]) - d["y1"]; e2 = jax.vmap(lambda x: f(x, 2))(d["x2"]) - d["y2"]
         return dict(data1=jnp.mean(e1**2), data2=jnp.mean(e2**2))
 
@@ -207,6 +237,7 @@ class RegressionField(Regression):
     def __init__(self, base):
         super().__init__(base); self.name = f"REGD_{base}"
     def terms(self, f, d):
+        """Supervised misfit of the potential and of its derivative."""
         t = super().terms(f, d)
         g1 = jax.vmap(jax.grad(lambda x: f(x, 1)))(d["x1"]); g2 = jax.vmap(jax.grad(lambda x: f(x, 2)))(d["x2"])
         Dex = 1.0 / (d["a"] / d["eps1"] + (d["L"] - d["a"]) / d["eps2"]) * d["V"]

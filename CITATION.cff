@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software or data, please cite it as below."
+title: "When Do Physics-Informed Neural Networks Resolve Dielectric Interfaces? A Pre-registered, Seed-Level Evaluation Against Interface-Conforming Finite Elements"
+authors:
+  - family-names: Patwari
+    given-names: Devesh
+    email: devesh.patwari.1@gmail.com
+  - family-names: Mehta
+    given-names: Daksh
+  - family-names: Kurtay
+    given-names: Tolga Uras
+  - family-names: Balat
+    given-names: Yasir
+date-released: 2026-10-17
+license: MIT
+repository-code: "https://github.com/upcomingresearcher-cloud/PINNs-dielectric-"
+keywords:
+  - physics-informed neural networks
+  - dielectric interfaces
+  - electrostatics
+  - finite element method
+  - reproducibility

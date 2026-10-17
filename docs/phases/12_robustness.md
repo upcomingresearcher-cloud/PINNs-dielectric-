@@ -78,4 +78,4 @@ The 12,000-step result suggests that some of the "soft-constraint" failures at 3
 - All results are on P1 only, with 5 seeds per cell (failure counts out of 15 per formulation), and one factor changed at a time, so no interactions were tested.
 - The masking statistic covers only κ = 80 and 2000.
 - The width-22 extra mixes width-22 two-network runs with width-32 single-network baseline runs in one ranking (descriptive).
-- Wall-clock times come from a shared CPU sandbox and are comparable only within a setting.
+- Wall-clock times come from a shared CPU machine and are comparable only within a setting.

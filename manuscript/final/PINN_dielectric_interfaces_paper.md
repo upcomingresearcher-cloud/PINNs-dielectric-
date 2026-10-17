@@ -3,7 +3,7 @@
 October 2026
 Devesh Patwari¹, Daksh Mehta¹, Tolga Uras Kurtay¹, Yasir Balat¹
 
-¹ Independent researchers
+¹ Independent high-school researchers
 
 Corresponding author: Devesh Patwari, devesh.patwari.1@gmail.com
 

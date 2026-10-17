@@ -13,6 +13,7 @@ RUNS2D_COLUMNS = (R.RUN_ID_COLUMNS + R.RUN_SETTING_COLUMNS + R.RUN_OUTCOME_COLUM
 
 
 def make_data(prob, S, dtype):
+    """Convert a 2D collocation sample into the device arrays used by the loss functions."""
     c = lambda v: jnp.asarray(v, dtype)
     sb = S["sideB"]; jp = prob.jax_params()
     XB1, XB2 = S["XB"][sb == 1], S["XB"][sb == 2]
@@ -26,6 +27,7 @@ def make_data(prob, S, dtype):
 
 @functools.lru_cache(None)
 def compiled_fns(fname, prob_cls, lr_init, lr_final, steps):
+    """Build the jitted update, per-term gradient and prediction functions for a 2D formulation."""
     F = make(fname, prob_cls)
     sched = optax.cosine_decay_schedule(lr_init, decay_steps=steps, alpha=lr_final / lr_init)
     opt = optax.adam(sched, b1=0.9, b2=0.999, eps=1e-8)
@@ -34,16 +36,19 @@ def compiled_fns(fname, prob_cls, lr_init, lr_final, steps):
 
     @jax.jit
     def update(p, st, d, w):
+        """One Adam step; returns updated parameters, optimiser state and the loss."""
         l, g = jax.value_and_grad(total)(p, d, w); u, st = opt.update(g, st, p); return optax.apply_updates(p, u), st, l
 
     @jax.jit
     def term_grads(p, d):
+        """Per-term loss values and per-term gradient norms."""
         v = terms(p, d); J = jax.jacrev(terms)(p, d)
         sq = sum(jnp.sum(x.reshape(x.shape[0], -1)**2, axis=1) for x in jax.tree_util.tree_leaves(J))
         return v, jnp.sqrt(sq)
 
     @functools.partial(jax.jit, static_argnums=2)
     def phi_grad(p, Z, side, d):
+        """Potential and gradient at points Z on one side of the interface."""
         f = lambda z: F.rep(p, z, side, d); return jax.vmap(f)(Z), jax.vmap(jax.grad(f))(Z)
     return F, opt, update, term_grads, phi_grad, sched
 
@@ -58,6 +63,7 @@ def compiled_lbfgs(fname, prob_cls, memory=50, max_ls=20):
 
     @jax.jit
     def step(p, st, d, w):
+        """One L-BFGS iteration with zoom line search; also returns the number of line-search evaluations."""
         f = lambda q: jnp.sum(w * terms(q, d))
         v, g = optax.value_and_grad_from_state(f)(p, state=st)
         u, st = opt.update(g, st, p, value=v, grad=g, value_fn=f)
@@ -69,7 +75,9 @@ _AOT = {}
 
 
 def make_pred(phi_grad, p, d, dtype, prob=None):
+    """Wrap trained 2D parameters as a prediction function (potential, gradient) in physical variables."""
     def pred(X, side):
+        """Prediction at points X on the given sides, evaluated material by material."""
         X = np.asarray(X, np.float64); side = np.asarray(side); phi = np.empty(len(X)); g = np.empty((len(X), 2))
         for s in (1, 2):
             m = side == s
@@ -80,6 +88,7 @@ def make_pred(phi_grad, p, d, dtype, prob=None):
 
 
 def train_run(fname, prob_cls, kappa, seed, cfg2d, run_type="pinn", variant="base", out_dir=None, overrides=None):
+    """Train one 2D configuration, evaluate it and return the database row and trained parameters."""
     o = dict(overrides or {})
     steps = int(o.get("steps", cfg2d["steps"])); lr_init = float(o.get("lr_init", cfg2d["lr_init"])); lr_final = float(cfg2d["lr_final"])
     width = int(o.get("width", cfg2d["width"])); depth = int(o.get("depth", cfg2d["depth"]))
@@ -98,6 +107,7 @@ def train_run(fname, prob_cls, kappa, seed, cfg2d, run_type="pinn", variant="bas
     upd, tg = _AOT[key]; compile_s = time.perf_counter() - t0
     quad = prob.quadrature(); gl_, tr_ = [], []
     def log_g(step, p):
+        """Record per-term loss values and gradient norms at a training step."""
         v, nrm = (np.asarray(x, np.float64) for x in tg(p, d)); wn = np.asarray(w, np.float64) * nrm
         fin = np.isfinite(nrm); mx = nrm[fin].max() if fin.any() else np.nan
         for i, t in enumerate(F.TERMS):
@@ -105,6 +115,7 @@ def train_run(fname, prob_cls, kappa, seed, cfg2d, run_type="pinn", variant="bas
                             learning_rate=float(sched(step)) if optimiser == "adam" else float("nan"), precision=precision, nonfinite=not (np.isfinite(nrm[i]) and np.isfinite(v[i])),
                             effectively_zero=bool(np.isfinite(nrm[i]) and nrm[i] < 1e-12 * mx)))
     def log_m(step, p):
+        """Evaluate all metrics at a training step and append them to the trajectory."""
         m = evaluate(prob, make_pred(phi_grad, p, d, dtype, prob), quad)
         tr_.append(dict(step=step, **{k: m[k] for k in ("primary_field_error", "strict_field_error", "relL2_phi_global", "relL2_E_global",
                                                          "D_jump_rel", "phi_jump_rel", "nonfinite")}))

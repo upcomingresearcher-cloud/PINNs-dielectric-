@@ -1,3 +1,4 @@
+"""Run the 2D evaluator self-tests for one problem: python scripts/run_selftests_2d.py P2"""
 import sys, pathlib, csv, json
 root = pathlib.Path(__file__).resolve().parents[1]; sys.path.insert(0, str(root))
 from src.evaluator import selftests2d

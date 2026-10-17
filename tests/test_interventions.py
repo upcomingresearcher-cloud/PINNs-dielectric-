@@ -6,6 +6,7 @@
 4. Intervention E counts every function+gradient evaluation (cross-checked with a host callback counter)
    and never exceeds the budget.
 """
+from conftest import reproduction_tolerance
 import json, pathlib
 import numpy as np, pandas as pd, pytest, yaml
 import jax, jax.numpy as jnp, optax
@@ -25,9 +26,10 @@ def _data(k, dtype=jnp.float64, seed=0):
 def test_baseline_path_reproduces_primary_rows(f, k, s):
     db = pd.read_csv(ROOT / "results/raw/runs.csv", low_memory=False)
     ref = db[db.run_id == f"P1-{f}-k{k:g}-s{s}-pinn-base"].iloc[0]
+    tol = reproduction_tolerance(ref.hardware)
     row, _ = T.train_run(f, k, s, CFG)
     for c in ("primary_field_error", "final_loss", "relL2_phi_global", "D_jump_rel"):
-        assert abs(float(row[c]) - float(ref[c])) <= 1e-13 * max(1.0, abs(float(ref[c]))), c
+        assert abs(float(row[c]) - float(ref[c])) <= tol * max(1.0, abs(float(ref[c]))), c
     assert row["optimiser"] == "adam" and row["grad_evals"] == 3000 and "rebal" not in row["notes"]
 
 

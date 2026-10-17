@@ -13,6 +13,7 @@ def _rel(err2, ref2, w):
 
 
 def evaluate(problem, pred, quad=None):
+    """Evaluate a 2D prediction against the problem reference on fixed quadrature; returns all metrics as a dict."""
     q = quad or problem.quadrature()
     X, W, side, band = q["X"], q["W"], q["side"], q["band"]
     eps = problem.eps_side(side)

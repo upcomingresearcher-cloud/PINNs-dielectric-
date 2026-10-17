@@ -20,6 +20,7 @@ def _err_keys(m):
 
 
 def test1_exact():
+    """T1: the exact solution must give zero error (to round-off) at every contrast."""
     out = []
     for k in KAPPAS:
         p = P1Problem(k); m = evaluate(p, p.exact)
@@ -33,6 +34,7 @@ def test1_exact():
 
 
 def test2_fem():
+    """T2: conforming FEM solutions must be exact and pass the evaluator."""
     out = []
     for k in KAPPAS:
         for n in (2, 4, 20, 200):
@@ -53,6 +55,7 @@ def test2_fem():
 
 
 def test3_wrong_uniform():
+    """T3: the uniform-permittivity (wrong) solution must be flagged as a failure."""
     p = P1Problem(80); m = evaluate(p, p.wrong_uniform)
     return [_c("T3_wrong_uniform_k80", "primary field error", m["primary_field_error"], "> 0.05 and flagged", m["fail_primary"]),
             _c("T3_wrong_uniform_k80", "relL2_E_mat1 (expected 1 - 1/D = 0.4938)", m["relL2_E_mat1"], "approx 0.4938",
@@ -63,12 +66,14 @@ def test3_wrong_uniform():
 
 def _perturbed(p, delta):
     def pred(x, side):
+        """Exact solution plus a smooth perturbation of size delta that vanishes at the plates."""
         phi, d = p.exact(x, side)
         return phi + delta * x * (1 - x), d + delta * (1 - 2 * x)
     return pred
 
 
 def test4_threshold():
+    """T4: controlled perturbations just below / above the threshold must pass / fail."""
     out = []
     for k in (1, 80, 2000):
         p = P1Problem(k)
@@ -81,9 +86,11 @@ def test4_threshold():
 
 
 def test5_nonfinite():
+    """T5: non-finite predictions must be detected and flagged."""
     p = P1Problem(80); out = []
     for label, bad in (("NaN in phi", ("phi", np.nan)), ("+Inf in dphi", ("d", np.inf)), ("-Inf in phi at interface", ("phia", -np.inf))):
         def pred(x, side, bad=bad):
+            """Exact solution with one non-finite value injected into phi or its derivative."""
             phi, d = p.exact(x, side); phi = phi.copy(); d = d.copy()
             if bad[0] == "phi": phi[len(phi) // 3] = bad[1]
             elif bad[0] == "d": d[len(d) // 2] = bad[1]
@@ -95,17 +102,20 @@ def test5_nonfinite():
 
 
 def test6_interface():
+    """T6: imposed potential and displacement jumps must be reported with the correct size."""
     out = []
     for k in (1, 80, 2000):
         p = P1Problem(k)
         for c in (1e-3, 0.02):
             def pred(x, side, c=c):
+                """Exact solution with a constant potential jump c added in material 2."""
                 phi, d = p.exact(x, side); return phi + c * (np.asarray(side) == 2), d
             m = evaluate(p, pred)
             out.append(_c("T6_interface", f"kappa={k}: imposed [phi]={c}", m["phi_jump"], f"== {c} (1e-12), [D]==0",
                           abs(m["phi_jump"] - c) < 1e-12 and abs(m["D_jump"]) < 1e-12))
         for s in (0.01, 0.1):
             def pred(x, side, s=s):
+                """Exact solution with the material-2 displacement scaled by (1 + s)."""
                 phi, d = p.exact(x, side); return phi, d * np.where(np.asarray(side) == 2, 1 + s, 1.0)
             m = evaluate(p, pred)
             exp = s * p.D_exact
@@ -115,6 +125,7 @@ def test6_interface():
 
 
 def test7_grid():
+    """T7: metrics must be insensitive to doubling the evaluation grid."""
     out = []
     keys = ["relL2_phi_global", "relL2_E_band", "relL2_D_band", "relL2_E_mat2", "energy_relerr", "primary_field_error"]
     for k in (5, 2000):
@@ -139,6 +150,7 @@ def test7_grid():
 
 
 def test8_mesh_alignment():
+    """T8: misaligned FEM meshes must show the expected interface-band error behaviour."""
     out = []
     for k in (5, 80, 2000):
         p = P1Problem(k)

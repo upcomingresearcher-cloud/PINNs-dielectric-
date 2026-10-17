@@ -3,6 +3,7 @@ Writes results/validation/phase2_derivation_checks.txt. Every check must print P
 import sympy as sp, pathlib
 out=[]
 def check(name, expr):
+    """Record PASS/FAIL for a symbolic identity that should simplify to zero; return whether it passed."""
     ok = sp.simplify(expr) == 0
     out.append(f"{'PASS' if ok else 'FAIL'}  {name}"); return ok
 x,a,k,V,L = sp.symbols('x a kappa V L', positive=True)

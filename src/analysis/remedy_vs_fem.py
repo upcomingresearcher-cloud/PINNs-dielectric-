@@ -17,6 +17,7 @@ P5_REFERENCE_H = 0.05
 
 
 def load_pinn():
+    """Load P2 and P5 PINN rows (baseline and remedies) on the FEM contrast grid, labelled by formulation/variant arm."""
     d = pd.read_csv(ROOT / "results/raw/runs_2d.csv", low_memory=False)
     d = d[(d.status == "complete") & d.problem_id.isin(PROBLEMS) & d.kappa.isin(KAPPAS) & d.seed.isin(range(5))]
     d = d[((d.run_type == "pinn") & (d.variant == "base")) | (d.run_type == "remedy")]
@@ -26,6 +27,7 @@ def load_pinn():
 
 
 def load_fem():
+    """Load P2 and P5 FEM records, excluding the P5 reference level."""
     f = pd.read_csv(ROOT / "results/raw/fem_runs_2d.csv", low_memory=False)
     f = f[f.problem_id.isin(PROBLEMS) & f.kappa.isin(KAPPAS)].copy()
     f = f[~((f.problem_id == "P5") & np.isclose(f.h, P5_REFERENCE_H))]          # reference level excluded
@@ -33,6 +35,7 @@ def load_fem():
 
 
 def run_time_to_target(row, target):
+    """First logged time at which a run reaches the target error: (upper bound, step, lower bound); inf if never."""
     tr = pd.read_csv(ROOT / "results/raw/trajectories" / f"{row.run_id}.csv")
     hit = tr[(tr.primary_field_error <= target) & np.isfinite(tr.primary_field_error)]
     if hit.empty: return np.inf, np.nan, np.inf
@@ -42,6 +45,7 @@ def run_time_to_target(row, target):
 
 
 def fem_time_to_target(F, p, k, target, conforming=True):
+    """Cost of the coarsest FEM mesh meeting the target: (mesh+solve time, h, solve-only time); inf if none does."""
     g = F[(F.problem_id == p) & (F.kappa == k) & (F.conforming == conforming)].sort_values("dofs")
     hit = g[g.primary_field_error <= target]
     if hit.empty: return np.inf, np.nan, np.nan
@@ -49,6 +53,7 @@ def fem_time_to_target(F, p, k, target, conforming=True):
 
 
 def main():
+    """Run the PINN-versus-FEM comparison and write the tables, H7 verdict and figure."""
     D, F = load_pinn(), load_fem()
     rows = []
     for r in D.itertuples():
@@ -88,6 +93,7 @@ def main():
         C.append(rec)
     C = pd.DataFrame(C)
     def verdict(S):
+        """Apply the H7 rule to a set of configurations."""
         if S.refutes.any(): return "refuted"
         if (S.clause1 & S.clause2).all():
             return "supported" if S.clause1_resolution_safe.all() else "supported at logging resolution (clause 1 not resolvable in some configurations)"

@@ -20,6 +20,7 @@ COL = dict(zip(FORMS, plt.get_cmap("tab10").colors))
 
 
 def load_primary():
+    """Load all completed primary PINN rows (P1-P5, seeds 0-4, variant base), de-duplicated by run_id, with failure flag and R."""
     a = pd.read_csv(ROOT / "results/raw/runs.csv", low_memory=False)
     a = a[(a.run_type == "pinn") & (a.variant == "base") & (a.status == "complete")]
     b = pd.read_csv(ROOT / "results/raw/runs_2d.csv", low_memory=False)
@@ -30,6 +31,7 @@ def load_primary():
 
 
 def band(ax, x, g, col, label, marker="o"):
+    """Draw the median of the value column against x with an interquartile-range band."""
     y = [c for c in g.columns if c != x][0]
     q = g.groupby(x)[y].quantile([.25, .5, .75]).unstack()
     ax.plot(q.index, q[.5], marker=marker, color=col, label=label, ms=4)
@@ -37,6 +39,7 @@ def band(ax, x, g, col, label, marker="o"):
 
 
 def fig_capacitance_energy(D):
+    """Figure: P1 capacitance errors (flux and energy routes) and P2-P5 field-energy errors versus contrast."""
     P1 = D[(D.problem_id == "P1") & (D.kappa >= 1)]
     fig, axes = plt.subplots(1, 3, figsize=(15, 4.3))
     for ax, col, ttl in ((axes[0], "C_flux_relerr", "P1: capacitance from interface flux"),
@@ -63,6 +66,7 @@ def fig_capacitance_energy(D):
 
 
 def fig_gradratio(D):
+    """Figure: early gradient-imbalance ratio versus final primary error for P1 soft-constraint formulations (H11)."""
     P1 = D[(D.problem_id == "P1") & D.formulation.isin(["F2", "F3", "F4", "F6"]) & (D.kappa >= 1)].copy()
     P1["early_log_ratio"] = [early_ratio(r) for r in P1.run_id]
     P1[["run_id", "formulation", "kappa", "seed", "early_log_ratio", "primary_field_error", "fail"]].to_csv(OUT / "final_gradratio.csv", index=False)
@@ -82,6 +86,7 @@ def fig_gradratio(D):
 
 
 def fig_convergence(D):
+    """Figure: primary error during training (median and IQR over seeds) for representative problems and formulations."""
     panels = [("P1", "F2"), ("P1", "F3"), ("P1", "F6"), ("P2", "F2"), ("P5", "F2"), ("P5", "F6")]
     cm = {1.0: "tab:green", 80.0: "tab:orange", 2000.0: "tab:red"}
     fig, axes = plt.subplots(2, 3, figsize=(15, 8), sharex=True)
@@ -97,6 +102,7 @@ def fig_convergence(D):
 
 
 def critical_table(D):
+    """Table of critical contrast (smallest kappa > 1 with >= 3/5 failed seeds) per problem and formulation."""
     rows = []
     for p in PROBS:
         for f in FORMS:
@@ -110,6 +116,7 @@ def critical_table(D):
 
 
 def fig_critical(T):
+    """Figure: critical contrast per formulation and problem (hollow markers = non-monotone above the critical value)."""
     fig, ax = plt.subplots(figsize=(9, 4.6)); grid = [5, 20, 80, 400, 2000]
     for j, p in enumerate(PROBS):
         g = T[T.problem_id == p]
@@ -126,6 +133,7 @@ def fig_critical(T):
 
 
 def fig_fem():
+    """Figure: conforming FEM band-field error versus degrees of freedom for P2-P5."""
     f = pd.read_csv(ROOT / "results/raw/fem_runs_2d.csv"); f = f[f.conforming.astype(bool)]
     fig, axes = plt.subplots(1, 4, figsize=(17, 4.2))
     for ax, p in zip(axes, PROBS[1:]):
@@ -143,6 +151,7 @@ def fig_fem():
 
 
 def fig_cross(D):
+    """Figure: failed runs at kappa in {80, 2000} per problem and formulation, and the median masking ratio per problem."""
     Q = D[D.kappa.isin([80.0, 2000.0])]
     F = Q.groupby(["problem_id", "formulation"]).fail.sum().unstack().reindex(index=PROBS, columns=FORMS)
     N = Q.groupby(["problem_id", "formulation"]).fail.size().unstack().reindex(index=PROBS, columns=FORMS)
@@ -165,6 +174,7 @@ def fig_cross(D):
 
 
 def main():
+    """Generate every cross-phase figure and its supporting table."""
     D = load_primary()
     fig_capacitance_energy(D); fig_gradratio(D); fig_convergence(D)
     T = critical_table(D); fig_critical(T); fig_fem(); F, Rm = fig_cross(D)

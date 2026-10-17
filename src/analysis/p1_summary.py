@@ -10,12 +10,14 @@ FORMS = ["F1", "F2", "F3", "F4", "F5", "F6"]
 
 
 def cp_interval(k, n, alpha=0.05):
+    """Clopper-Pearson (exact binomial) confidence interval for k failures in n runs."""
     lo = 0.0 if k == 0 else beta.ppf(alpha / 2, k, n - k + 1)
     hi = 1.0 if k == n else beta.ppf(1 - alpha / 2, k + 1, n - k)
     return lo, hi
 
 
 def load():
+    """Load completed P1 runs from the database."""
     d = pd.read_csv(ROOT / "results/raw/runs.csv")
     d = d[d.status == "complete"]
     main = d[d.run_type.isin(["pinn", "extension"]) & (d.variant == "base")].copy()
@@ -24,6 +26,7 @@ def load():
 
 
 def config_table(main):
+    """Per-configuration summary (failure count, medians, IQR, interval) for the P1 primary sweep."""
     rows = []
     for (f, k), g in main.groupby(["formulation", "kappa"]):
         n = len(g); nf = int(g.fail_primary.sum()); lo, hi = cp_interval(nf, n)
@@ -45,6 +48,7 @@ def config_table(main):
 
 
 def critical_contrast(t):
+    """Critical contrast per formulation from the configuration table."""
     out = []
     for f in FORMS:
         g = t[(t.formulation == f) & (t.grid == "primary")].sort_values("kappa")
@@ -60,6 +64,7 @@ def critical_contrast(t):
 
 
 def heatmap(t, value, fname, title, cbar, fmt, log=False, vmax=None):
+    """Draw an annotated formulation-by-contrast heat map of one summary value."""
     pv = t.pivot(index="formulation", columns="kappa", values=value).reindex(FORMS)
     fig, ax = plt.subplots(figsize=(8.2, 4.2), constrained_layout=True)
     data = np.log10(pv.values.astype(float)) if log else pv.values.astype(float)
@@ -75,6 +80,7 @@ def heatmap(t, value, fname, title, cbar, fmt, log=False, vmax=None):
 
 
 def main():
+    """Write the P1 summary tables and failure / median-error maps."""
     (ROOT / "results/processed").mkdir(parents=True, exist_ok=True); (ROOT / "results/figures").mkdir(parents=True, exist_ok=True)
     main_, reg = load()
     t = config_table(main_); t.to_csv(ROOT / "results/processed/p1_config_summary.csv", index=False)

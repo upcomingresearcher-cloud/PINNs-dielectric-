@@ -1,37 +1,79 @@
 [
  {
+  "step": "p1",
+  "description": "P1 primary sweep: failure/median-error maps, critical contrast (Phase 6)",
+  "command": "-m src.analysis.p1_summary",
+  "exit": 0,
+  "seconds": 2.6
+ },
+ {
   "step": "p1hyp",
   "description": "P1 hypotheses H1-H4, H11; global-vs-local, material/jump, gradient figures",
   "command": "-m src.analysis.p1_hypotheses",
   "exit": 0,
-  "seconds": 9.2
+  "seconds": 12.2
+ },
+ {
+  "step": "femp1",
+  "description": "P1 FEM mesh-alignment figure",
+  "command": "-m src.analysis.fig_fem_p1",
+  "exit": 0,
+  "seconds": 1.6
  },
  {
   "step": "p2",
   "description": "P2 summary, maps, FEM convergence (Phase 7)",
   "command": "-m src.analysis.p2_summary",
   "exit": 0,
-  "seconds": 11.1
+  "seconds": 10.4
  },
  {
   "step": "p3",
   "description": "P3 summary and maps (Phase 8)",
   "command": "-m src.analysis.summary2d P3",
   "exit": 0,
-  "seconds": 7.8
+  "seconds": 9.3
  },
  {
   "step": "p4",
   "description": "P4 summary and maps (Phase 9)",
   "command": "-m src.analysis.summary2d P4",
   "exit": 0,
-  "seconds": 12.5
+  "seconds": 14.0
  },
  {
   "step": "p5",
   "description": "P5 summary and maps (Phase 10)",
   "command": "-m src.analysis.summary2d P5",
   "exit": 0,
+  "seconds": 6.2
+ },
+ {
+  "step": "p11",
+  "description": "Interventions A-E, H4 clause, H5 (Phase 11)",
+  "command": "-m src.analysis.interventions",
+  "exit": 0,
+  "seconds": 8.6
+ },
+ {
+  "step": "p12",
+  "description": "Robustness, H6 (Phase 12)",
+  "command": "-m src.analysis.robustness",
+  "exit": 0,
+  "seconds": 3.5
+ },
+ {
+  "step": "p13",
+  "description": "Remedies vs FEM, H7 (Phase 13)",
+  "command": "-m src.analysis.remedy_vs_fem",
+  "exit": 0,
   "seconds": 4.9
+ },
+ {
+  "step": "final",
+  "description": "Cross-phase figures: energy, gradient ratio, convergence, critical contrast, FEM, cross-geometry",
+  "command": "-m src.analysis.final_figures",
+  "exit": 0,
+  "seconds": 8.7
  }
 ]

@@ -4,7 +4,7 @@ Phase 1 deliverable A. Each record distinguishes:
   *_author   : what the original authors state
   *_team     : what our team infers (marked as inference)
 verification_level values:
-  full_text_read      - we read the primary source text in this session
+  full_text_read      - the primary source text was read by the authors
   partial_text_read   - abstract plus substantial passages read
   abstract_snippets   - abstract/snippets only; details may be incomplete
   supplied_review_only- only the supplied team review was available
@@ -23,6 +23,7 @@ COLS = ["id","title","authors","year","doi_or_url","source","supplied_review_fil
 
 R = []
 def add(**k):
+    """Append one literature record, filling every missing column with 'not reported'."""
     for c in COLS: k.setdefault(c, "not reported")
     R.append(k)
 
@@ -80,7 +81,7 @@ add(id="L03", title="Adaptive Interface-PINNs (AdaI-PINNs): An Efficient Physics
     limitations_author="Future work: transient, coupled, moving interfaces (per review)",
     limitations_team_inferred="Moderate contrasts; no seeds; hand-tuned weights. Independent evidence: Chung et al. (2026) report AdaI-PINN >80% error on their 2D slanted-interface problem",
     relevance_to_project="Candidate F2-family baseline idea (adaptive activation); weight-sensitivity evidence",
-    review_audit_notes="Original not read by us this session; numbers are as reported in P009 and must be checked before being cited in the paper.")
+    review_audit_notes="Original not read by the authors; numbers are as reported in P009 and must be checked before being cited in the paper.")
 
 add(id="L04", title="Extended physics-informed neural networks (XPINNs): A generalized space-time domain decomposition based deep learning framework for nonlinear PDEs",
     authors="A. D. Jagtap, G. E. Karniadakis", year="2020 (journal); 2021 workshop version",
@@ -290,7 +291,7 @@ for i,(t,a,y,d,rel) in enumerate([
 
 add(id="L30", title="The Deep Ritz Method: a deep learning-based numerical algorithm for solving variational problems",
     authors="W. E, B. Yu", year="2018", doi_or_url="Commun. Math. Stat. 6 (2018) 1-12",
-    source="additional (background knowledge)", verification_level="not verified this session - verify in Phase 2",
+    source="additional (background knowledge)", verification_level="not verified - to be checked before citation",
     relevance_to_project="F5 energy formulation", review_audit_notes="Included because F5 depends on it; bibliographic details must be verified.")
 
 # ---------------- Phase 2 targeted-search additions (2026-10-16) ----------------

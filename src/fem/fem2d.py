@@ -65,6 +65,7 @@ def _lap(u, v, w): return dot(grad(u), grad(v))
 
 
 def solve(problem, h, order=2, conforming=True, geometry=None, grade=None):
+    """Mesh and solve a 2D problem with Lagrange elements (conforming or not); returns the solution and timings."""
     t0 = time.perf_counter()
     P, T, M = mesh_box(h, geometry, conforming, grade)
     t_mesh = time.perf_counter() - t0
@@ -94,6 +95,7 @@ def solve(problem, h, order=2, conforming=True, geometry=None, grade=None):
 
 
 class FEM2DSolution:
+    """2D FEM solution that can be evaluated like a prediction (potential and gradient at points)."""
     def __init__(self, mesh, basis, u, M, conforming, order, t_mesh, t_solve):
         self.mesh, self.basis, self.u, self.M, self.conforming, self.order = mesh, basis, u, M, conforming, order
         self.t_mesh, self.t_solve = t_mesh, t_solve

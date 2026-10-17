@@ -11,6 +11,7 @@ FORMS = ["F1", "F2", "F3", "F4", "F5", "F6"]
 
 
 def boot(fn, *arrays):
+    """Percentile bootstrap of a statistic fn computed on resampled paired arrays."""
     n = len(arrays[0]); vals = []
     for _ in range(B):
         i = RNG.integers(0, n, n); vals.append(fn(*[a[i] for a in arrays]))
@@ -19,12 +20,14 @@ def boot(fn, *arrays):
 
 
 def auc(score, label):
+    """Area under the ROC curve of score for predicting the boolean label (Mann-Whitney form)."""
     pos, neg = score[label], score[~label]
     if len(pos) == 0 or len(neg) == 0: return np.nan
     return float((np.sum(pos[:, None] > neg[None, :]) + 0.5 * np.sum(pos[:, None] == neg[None, :])) / (len(pos) * len(neg)))
 
 
 def early_ratio(run_id, weighted=True, max_step=300):
+    """Median over steps <= max_step of log10(max/min per-term gradient norm) for one run (H11 predictor)."""
     g = pd.read_csv(ROOT / f"results/raw/gradlogs/{run_id}.csv")
     g = g[g.step <= max_step]; col = "grad_norm_weighted" if weighted else "grad_norm_unweighted"
     r = []
@@ -35,6 +38,7 @@ def early_ratio(run_id, weighted=True, max_step=300):
 
 
 def main():
+    """Evaluate hypotheses H1-H4 and H11 on the P1 primary sweep and write results and figures."""
     d = pd.read_csv(ROOT / "results/raw/runs.csv"); d = d[d.status == "complete"]
     P = d[(d.run_type == "pinn") & (d.variant == "base")].copy()
     reg = d[d.run_type == "regression"]

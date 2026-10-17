@@ -4,6 +4,7 @@ import pandas as pd, matplotlib
 matplotlib.use("Agg"); import matplotlib.pyplot as plt
 
 def make(root):
+    """Plot P1 FEM band-field and global-potential errors against element count for aligned and misaligned meshes."""
     d = pd.read_csv(root / "results/raw/fem_runs.csv")
     fig, axes = plt.subplots(1, 2, figsize=(11, 4.2), constrained_layout=True)
     for ax, (q, lab) in zip(axes, (("primary_field_error", "interface-band field error (primary metric)"),

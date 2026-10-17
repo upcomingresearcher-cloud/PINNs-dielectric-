@@ -69,4 +69,4 @@ These corrections are recorded per paper in the `review_audit_notes` column.
 4. **XPINN (P008):** The CEUR workshop version is cited; the archival version is *Commun. Comput. Phys.* 28(5), 2020. The code URL given appears malformed. XPINN's interface loss uses residual continuity, not flux continuity, so it is background for F2 rather than an F2 implementation.
 5. **Liu et al. (P001):** The "Direct comparison: Yes" entry overstates relevance. The paper is about time-domain wave propagation with PML, not electrostatics, and reports no quantitative error.
 6. **PINNacle (no review):** Its "two-domain" Poisson3d-CG problem has equal diffusion coefficients (μ₁ = μ₂ = 1) and is not a coefficient-contrast test.
-7. **AdaI-PINN (P009) and Huang (P007):** The originals were not read this session. Numbers in the database come from the reviews and are flagged for verification before citation.
+7. **AdaI-PINN (P009) and Huang (P007):** The originals were not read by the authors. Numbers in the database come from the reviews and are flagged for verification before citation.

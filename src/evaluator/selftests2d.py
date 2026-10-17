@@ -9,6 +9,7 @@ def _c(t, c, v, crit, ok): return dict(test=t, check=c, value=float(v) if not is
 
 def _pert(p, delta):
     def pred(X, side):
+        """Exact solution plus a smooth perturbation of size delta that vanishes on the box boundary."""
         f, g = p.exact(X, side); x, y = X[:, 0], X[:, 1]; b = (1 - x**2) * (1 - y**2)
         return f + delta * b * x, g + delta * np.c_[b + x * (-2 * x) * (1 - y**2), x * (1 - x**2) * (-2 * y)]
     return pred
@@ -35,6 +36,7 @@ def run(factory, kappas, geometry, h_list=(0.2, 0.1, 0.05, 0.025), wrong_kappa=8
                           m["fail_primary"] == fail and abs(m["primary_field_error"] - tgt) < 1e-9))
     p = factory(kappas[-1])
     def nanpred(X, side):
+        """Exact solution with one NaN injected into the potential."""
         f, g = p.exact(X, side); f = f.copy(); f[len(f) // 2] = np.nan; return f, g
     out.append(_c("T5_nonfinite", "NaN flagged", evaluate(p, nanpred)["nonfinite"], "True", evaluate(p, nanpred)["fail_primary"]))
     q = p.quadrature(); XI, WI, NI = q["XI"], q["WI"], q["NI"]; o1, o2 = np.ones(len(XI), int), np.full(len(XI), 2)
@@ -42,11 +44,13 @@ def run(factory, kappas, geometry, h_list=(0.2, 0.1, 0.05, 0.025), wrong_kappa=8
     Dn1 = -p.eps1 * np.sum(g1 * NI, 1); Dn2 = -p.eps2 * np.sum(g2 * NI, 1)
     for c in (1e-3, 0.02):
         def jp(X, side, c=c):
+            """Exact solution with a constant potential jump c added in material 2."""
             f, g = p.exact(X, side); return f + c * (np.asarray(side) == 2), g
         m = evaluate(p, jp); exp = np.sqrt(np.sum(WI * (je + c)**2) / np.sum(WI)) / p.Vc
         out.append(_c("T6_interface", f"[phi]={c}", m["phi_jump_rel"], f"== {exp:.6g}", abs(m["phi_jump_rel"] - exp) < 1e-12 and m["D_jump_rel"] < 1e-12))
     for s in (0.01, 0.1):
         def jd(X, side, s=s):
+            """Exact solution with the material-2 field scaled by (1 + s)."""
             f, g = p.exact(X, side); return f, g * np.where((np.asarray(side) == 2)[:, None], 1 + s, 1.0)
         m = evaluate(p, jd); exp = s * np.sqrt(np.sum(WI * Dn2**2) / np.sum(WI * Dn1**2))
         out.append(_c("T6_interface", f"[D_n] scale {s}", m["D_jump_rel"], f"== {exp:.6g}; flag=={s > 0.05}",

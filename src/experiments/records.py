@@ -43,10 +43,12 @@ STATUS_COMPLETE = "complete"
 
 
 def config_id(cfg: dict) -> str:
+    """Short stable hash of a configuration dictionary."""
     return hashlib.sha1(json.dumps(cfg, sort_keys=True, default=str).encode()).hexdigest()[:12]
 
 
 def append_row(path, row: dict, columns):
+    """Append one row to a CSV database, refusing rows with missing or unknown columns."""
     missing = [c for c in columns if c not in row]
     extra = [c for c in row if c not in columns]
     if missing or extra:
@@ -60,6 +62,7 @@ def append_row(path, row: dict, columns):
 
 
 def completed_ids(path, id_col="run_id"):
+    """Set of run identifiers already marked complete in a database file."""
     path = pathlib.Path(path)
     if not path.exists(): return set()
     with path.open() as f:
@@ -67,4 +70,5 @@ def completed_ids(path, id_col="run_id"):
 
 
 def run_id(problem, formulation, kappa, seed, run_type, variant="base"):
+    """Canonical run identifier: problem-formulation-k<kappa>-s<seed>-<run_type>-<variant>."""
     return f"{problem}-{formulation}-k{kappa:g}-s{seed}-{run_type}-{variant}"
