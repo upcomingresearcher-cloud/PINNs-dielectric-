@@ -32,7 +32,8 @@ def loss_visibility():
 
 def fem_records():
     out = ROOT / "results/raw/fem_runs_2d.csv"
-    if out.exists(): return pd.read_csv(out)
+    if out.exists():
+        f = pd.read_csv(out); return f[f.problem_id == "P2"]      # bug fix 2026-10-16: file also holds P3-P5 rows
     from src.problems.p2d import P2Cylinder
     from src.fem import fem2d
     from src.evaluator.evaluator2d import evaluate

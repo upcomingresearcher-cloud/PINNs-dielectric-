@@ -182,7 +182,7 @@ def verdicts(P, FC, PT):
         g = P[(P.intervention == iv) & P.prespecified]
         vs = g.verdict.tolist()
         overall = "supported" if all(v == "supported" for v in vs) else "refuted" if all(v == "refuted" for v in vs) else "mixed"
-        V[f"H5_{iv}"] = dict(overall=overall, n_configs=len(vs), counts={v: vs.count(v) for v in set(vs)},
+        V[f"H5_{iv}"] = dict(overall=overall, n_configs=len(vs), counts={v: vs.count(v) for v in sorted(set(vs))},
                              per_config=[dict(comparison=r.comparison, kappa=r.kappa, n_pred=r.n_pred_sign, n_opp=r.n_opposite,
                                               p=r.p_sign_one_sided, p_holm=r.p_holm_within_intervention, verdict=r.verdict)
                                          for r in g.itertuples()])

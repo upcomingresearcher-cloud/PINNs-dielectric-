@@ -184,9 +184,9 @@
   "overall": "mixed",
   "n_configs": 12,
   "counts": {
+   "inconclusive": 1,
    "refuted": 2,
-   "supported": 9,
-   "inconclusive": 1
+   "supported": 9
   },
   "per_config": [
    {

@@ -453,34 +453,34 @@
       "h": 0.2,
       "dofs": 565,
       "primary_field_error": 0.1761264262479984,
-      "relL2_phi_global": 0.007836309907166814,
-      "mesh_plus_solve_s": 0.012483558999974775
+      "relL2_phi_global": 0.0078363099071668,
+      "mesh_plus_solve_s": 0.0124835589999747
     },
     {
       "h": 0.1,
       "dofs": 2093,
-      "primary_field_error": 0.07535203141340255,
-      "relL2_phi_global": 0.002187588956662362,
-      "mesh_plus_solve_s": 0.03196945499985304
+      "primary_field_error": 0.0753520314134025,
+      "relL2_phi_global": 0.0021875889566623,
+      "mesh_plus_solve_s": 0.031969454999853
     },
     {
       "h": 0.05,
       "dofs": 7869,
-      "primary_field_error": 0.029679038442577976,
-      "relL2_phi_global": 0.0005780912371571327,
-      "mesh_plus_solve_s": 0.12573226399990745
+      "primary_field_error": 0.0296790384425779,
+      "relL2_phi_global": 0.0005780912371571,
+      "mesh_plus_solve_s": 0.1257322639999074
     },
     {
       "h": 0.025,
       "dofs": 30337,
-      "primary_field_error": 0.010424040864216616,
-      "relL2_phi_global": 0.00015306566818330561,
+      "primary_field_error": 0.0104240408642166,
+      "relL2_phi_global": 0.0001530656681833,
       "mesh_plus_solve_s": 0.6711617329997352
     },
     {
       "h": 0.0125,
       "dofs": 119697,
-      "primary_field_error": 0.003984515299893768,
+      "primary_field_error": 0.0039845152998937,
       "relL2_phi_global": 3.866478823821008e-05,
       "mesh_plus_solve_s": 4.41175098299982
     }
