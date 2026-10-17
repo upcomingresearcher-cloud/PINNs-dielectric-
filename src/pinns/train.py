@@ -47,6 +47,15 @@ def extra_band_points(seed, problem, n_per_side):
     return strat(problem.a - h, problem.a, n_per_side), strat(problem.a, problem.a + h, n_per_side)
 
 
+def band_quadrature_weights(problem, x1, x2, n_per_material, n_per_side):
+    """Importance weights 1/rho for the union of the stratified interior points (density n/|Omega_i|) and the extra
+    band points (density n_per_side/h inside the band). Sum of weights = |Omega_i| exactly."""
+    h = problem.band_halfwidth; a, L = problem.a, problem.L
+    r1 = n_per_material / a + np.where(x1 >= a - h, n_per_side / h, 0.0)
+    r2 = n_per_material / (L - a) + np.where(x2 <= a + h, n_per_side / h, 0.0)
+    return 1.0 / r1, 1.0 / r2
+
+
 def make_data(problem, x1, x2, dtype):
     """y1, y2: exact potential at the interior points; used ONLY by regression baselines."""
     c = lambda v: jnp.asarray(v, dtype)
@@ -162,7 +171,11 @@ def train_run(fname, kappa, seed, cfg, run_type="pinn", variant="base", out_dir=
     if n_extra:
         b1, b2 = extra_band_points(seed, problem, n_extra)
         x1, x2 = np.sort(np.concatenate([x1, b1])), np.sort(np.concatenate([x2, b2]))
-    d = make_data(problem, x1, x2, dtype); w = F.weights(d)
+    d = make_data(problem, x1, x2, dtype)
+    if n_extra:
+        q1, q2 = band_quadrature_weights(problem, x1, x2, npm, n_extra)
+        d["q1"], d["q2"] = jnp.asarray(q1, dtype), jnp.asarray(q2, dtype)
+    w = F.weights(d)
     params = F.init(jax.random.PRNGKey(seed), width, depth, dtype)
     opt_state = opt.init(params)
     rid = R.run_id("P1", fname, float(kappa), seed, run_type, variant)

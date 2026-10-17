@@ -1,0 +1,85 @@
+{
+ "verdict": "inconclusive",
+ "n_tau_ge_0p6": 8,
+ "n_R_gt_3": 1,
+ "n_variations": 8,
+ "failing_tau": [],
+ "failing_R": [
+  "width16",
+  "width64",
+  "depth2",
+  "depth5",
+  "n32",
+  "n512",
+  "lr3e-3"
+ ],
+ "per_variation": [
+  {
+   "setting": "width16",
+   "kendall_tau_b": 1.0,
+   "median_R": 1.840442364311763,
+   "total_fails": 54
+  },
+  {
+   "setting": "width64",
+   "kendall_tau_b": 1.0,
+   "median_R": 2.3703824369148774,
+   "total_fails": 45
+  },
+  {
+   "setting": "depth2",
+   "kendall_tau_b": 1.0,
+   "median_R": 2.1810510060630075,
+   "total_fails": 52
+  },
+  {
+   "setting": "depth5",
+   "kendall_tau_b": 1.0,
+   "median_R": 2.248732802650827,
+   "total_fails": 47
+  },
+  {
+   "setting": "n32",
+   "kendall_tau_b": 0.8660254037844387,
+   "median_R": 2.280992444248008,
+   "total_fails": 50
+  },
+  {
+   "setting": "n512",
+   "kendall_tau_b": 1.0,
+   "median_R": 2.2374298759577904,
+   "total_fails": 49
+  },
+  {
+   "setting": "lr3e-3",
+   "kendall_tau_b": 0.8660254037844387,
+   "median_R": 2.4858854921476317,
+   "total_fails": 45
+  },
+  {
+   "setting": "steps12000",
+   "kendall_tau_b": 0.6471502289294341,
+   "median_R": 5.623188494427803,
+   "total_fails": 37
+  }
+ ],
+ "extras": [
+  {
+   "setting": "pm_width22",
+   "kendall_tau_b": 1.0,
+   "median_R": 2.2767500037320643,
+   "total_fails": 50
+  },
+  {
+   "setting": "band16",
+   "kendall_tau_b": 0.8660254037844387,
+   "median_R": 2.021697986536299,
+   "total_fails": 54
+  }
+ ],
+ "notes": [
+  "pm_width22 ranking uses baseline F1/F3/F5 with width-22 F2/F4/F6 (descriptive extra)",
+  "boundary sampling: not applicable in 1D (fixed endpoints)",
+  "precision and optimiser: see Phase 11 (C, E)"
+ ]
+}

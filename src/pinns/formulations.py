@@ -40,8 +40,12 @@ def flux_term(phi_fn, d):
 
 
 def energy_term(phi_fn, d):
-    """Ritz energy J = sum_i |Omega_i| * mean_{Omega_i} 0.5 eps_i phi'^2."""
+    """Ritz energy J = sum_i |Omega_i| * mean_{Omega_i} 0.5 eps_i phi'^2.
+    If quadrature weights q1, q2 are present (extra band points, non-uniform density), J = sum_j q_j f(x_j) with
+    q_j = 1/rho(x_j) (bug fix 2026-10-16: an equal-weight mean over non-uniform points biased the functional)."""
     g1 = jax.vmap(_d1(phi_fn, 1))(d["x1"]); g2 = jax.vmap(_d1(phi_fn, 2))(d["x2"])
+    if "q1" in d:
+        return jnp.sum(d["q1"] * 0.5 * d["eps1"] * g1**2) + jnp.sum(d["q2"] * 0.5 * d["eps2"] * g2**2)
     return d["a"] * jnp.mean(0.5 * d["eps1"] * g1**2) + (d["L"] - d["a"]) * jnp.mean(0.5 * d["eps2"] * g2**2)
 
 
