@@ -6,9 +6,9 @@
 
 1. Unzip the attached package into `/home/claude/` (the directory inside is `pinn_dielectric_project/`).
 2. Run the environment setup and verification in Section 4.
-3. Continue with **Phase 13** (Phases 11-12 complete; read `docs/phase11_interventions_findings.md` and `docs/phase12_robustness_findings.md`).
+3. Continue with **Phase 14** (Phases 11-13 complete; read `docs/phase11_interventions_findings.md`, `docs/phase12_robustness_findings.md`, `docs/phase13_remedy_vs_fem_findings.md`).
 
-Do not redo Phases 1–12. Do not change frozen settings without a change-log entry. Report progress after each phase.
+Do not redo Phases 1–13. Do not change frozen settings without a change-log entry. Report progress after each phase.
 
 ---
 
@@ -297,7 +297,14 @@ Boundary sampling is not applicable in 1D (fixed endpoints); report it as such. 
 
 **H6:** supported if Kendall τ ≥ 0.6 between the baseline and varied formulation ranking (by failure count) in ≥6/8 variations, and H2's median R > 3 in ≥6/8. Refuted if τ < 0.6 in ≥3/8. Retain the baseline as the reference for every comparison. About 2 turns.
 
-## 11. PHASE 13 — Remedy comparison against FEM (brief Sec. 20; protocol Sec. 12)
+## 11a. PHASE 13 RESULTS (complete)
+
+- H7 supported excluding the degenerate kappa = 1 (64/64 configurations satisfy both clauses; none refutes); including kappa = 1: "supported at logging resolution" (10 kappa = 1 configurations reach 1% by the first 250-step record, so the 10x margin cannot be resolved; logged ratios 21-139x).
+- No PINN (baseline, L-BFGS, Adam 20k) reaches 1% at any kappa != 1 on P2 or P5. Only P5 F2/F6 reach 5% at kappa = 80 (L-BFGS 4.8-5.0 s vs FEM 0.042 s).
+- P2 remedies: no rescue at kappa >= 80 (F2/F6 plateau ~0.635 for Adam 3k, L-BFGS, Adam 20k) - unlike P1.
+- New: 2D L-BFGS (`overrides optimiser=lbfgs` in src/pinns/train2d.py); `sh scripts/run_remedies.sh BUDGET` (20k-step 2D runs need ~152 s each: one per tool call).
+
+## 11. PHASE 13 — Remedy comparison against FEM (brief Sec. 20; protocol Sec. 12) — DONE, kept for reference
 
 Test **H7** on **P2 and P5**. P1 is degenerate: its exact piecewise-linear solution lies in the FEM space.
 
