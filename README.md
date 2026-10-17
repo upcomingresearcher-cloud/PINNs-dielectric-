@@ -1,6 +1,6 @@
 # PINNs Across Dielectric Interfaces: Failure Mechanisms, Robustness, and Computational Cost
 
-Research project status: **all 14 phases complete.** Paper: `manuscript/paper.md`. Reproduction: `docs/REPRODUCTION_GUIDE.md`. Tutorial: `educational_resource/tutorial.md`.
+Research project status: **all 14 phases complete.** Paper (formatted, with figures): [`manuscript/final/PINN_dielectric_interfaces_paper.md`](manuscript/final/PINN_dielectric_interfaces_paper.md) (also [PDF](manuscript/final/PINN_dielectric_interfaces_paper.pdf) and [Word](manuscript/final/PINN_dielectric_interfaces_paper.docx)); working draft `manuscript/paper.md`. Plain-language explainer: [`educational_resource/PINN_project_explained_simply.pdf`](educational_resource/PINN_project_explained_simply.pdf). Reproduction: `docs/REPRODUCTION_GUIDE.md`. Tutorial: `educational_resource/tutorial.md`.
 
 | Phase | Status |
 |---|---|
