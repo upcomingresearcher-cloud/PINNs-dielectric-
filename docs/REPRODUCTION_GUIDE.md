@@ -7,7 +7,7 @@ All results were produced on a single-threaded CPU (Intel Xeon, 2.10 and 2.80 GH
 ## 1. Install
 
 ```sh
-git clone https://github.com/upcomingresearcher-cloud/PINNs-dielectric-.git && cd PINNs-dielectric-
+unzip pinn_dielectric_project_*.zip && cd pinn_dielectric_project
 sh scripts/setup_environment.sh          # pinned pip packages + gmsh system libraries; prints versions
 python scripts/rebuild_p5_references.py  # ~3 min: rebuilds the P5 FEM reference .npz files (excluded from the archive for size)
 ```
@@ -28,7 +28,7 @@ python scripts/verify_reference_derivations.py      # symbolic checks of the exa
 ```
 
 **Tests that guard reproducibility:**
-- `tests/test_interventions.py::test_baseline_path_reproduces_primary_rows` retrains two stored primary configurations and requires agreement to round-off (10⁻¹²) on the CPU model that produced them, or to 10⁻⁶ relative on a different CPU model (XLA generates CPU-specific code).
+- `tests/test_interventions.py::test_baseline_path_reproduces_primary_rows` retrains two stored primary configurations and requires agreement to within 10⁻¹³.
 - `tests/test_remedies2d.py::test_2d_baseline_path_reproduces_primary_row` does the same in 2D.
 
 ## 3. Regenerate every table and figure from the raw data
@@ -74,7 +74,7 @@ All runners are resumable: they skip run IDs already marked `complete`. An inter
 - **Per-run histories:**
   - `results/raw/trajectories/<run_id>.csv`: metrics every 250 steps;
   - `results/raw/gradlogs/<run_id>.csv`: per-term loss values and gradient norms every 25 steps.
-- **Findings by phase:** `docs/phases/06_p1_analysis_hypothesis_tests.md` … `docs/phases/13_remedies_vs_fem.md`, `docs/phases/14a_evaluator_reusability_h9.md`.
+- **Findings by phase:** `docs/phase6_p1_findings.md` … `docs/phase13_remedy_vs_fem_findings.md`, `docs/h9_evaluator_reusability.md`.
 - **Protocol and every later decision:** `docs/experimental_protocol.md`, `docs/protocol_change_log.md`.
 - **Paper:** `manuscript/paper.md` (references in `literature/references.bib`).
 
