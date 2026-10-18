@@ -1,0 +1,132 @@
+0000000000000000000000000000000000000000 54b504659b9c1f4e3852f5fd3b8ad76a55902a96 research-agent <agent@local> 1792124063 +0000	commit (initial): Phase 1: literature database, review, gap analysis, environment record
+54b504659b9c1f4e3852f5fd3b8ad76a55902a96 cc8c84e8ffa9b8bfb4f20e1f010fff04f549c2c2 research-agent <agent@local> 1792124083 +0000	commit: Phase 1 progress report
+cc8c84e8ffa9b8bfb4f20e1f010fff04f549c2c2 e5908b12d4530d60bd4e002bf288a446180f4213 research-agent <agent@local> 1792126713 +0000	commit: Phase 2: targeted searches, derivation checks, hypotheses, frozen protocol v1.0.0
+e5908b12d4530d60bd4e002bf288a446180f4213 aabfd4454e35ef78166fdf1ea55c3bfb3b918141 research-agent <agent@local> 1792132664 +0000	commit: Phase 3: P1 references, FEM, evaluator, self-tests, schema, mutation tests
+aabfd4454e35ef78166fdf1ea55c3bfb3b918141 bde98f08118f2af725819d656539459572b91021 research-agent <agent@local> 1792132707 +0000	commit: Phase 3 results, report
+bde98f08118f2af725819d656539459572b91021 42b1a3cc6817abc38a68fc3c6efce6ad385cdada research-agent <agent@local> 1792133120 +0000	commit: Phase 4: formulations F1-F6/F4full, instrumented training, gradient logging, Gate 3 tests, sweep runner
+42b1a3cc6817abc38a68fc3c6efce6ad385cdada a9803d45b15587dc98dcc30a0469f1fc34d62d3c research-agent <agent@local> 1792133853 +0000	commit: Phase 4: pilot results, protocol v1.1.0 (lr decision, budget robustness variation), report
+a9803d45b15587dc98dcc30a0469f1fc34d62d3c 3846d02d172eabdb50ea675bf5a1a1fe6ea5a82f research-agent <agent@local> 1792134489 +0000	commit: Phase 5 prep: regression baselines, loss-visibility diagnostic incl. smoothed-problem candidate
+3846d02d172eabdb50ea675bf5a1a1fe6ea5a82f 6ccd902df7d12c119b2dc90477d9cec4b16c8233 research-agent <agent@local> 1792134644 +0000	commit: Gate 3 tests cover regression baselines
+6ccd902df7d12c119b2dc90477d9cec4b16c8233 d98bdaeb5e8f869f81f03c994d783d6fa974d7aa research-agent <agent@local> 1792135518 +0000	commit: Phase 5: primary P1 sweep, extension, regression baselines, loss visibility, failure maps
+d98bdaeb5e8f869f81f03c994d783d6fa974d7aa f06d7e8c09a1ca83dc82a015eaf0c57da408bd8d research-agent <agent@local> 1792135753 +0000	commit: Phase 6: hypothesis analysis; exploratory field-supervised regression
+f06d7e8c09a1ca83dc82a015eaf0c57da408bd8d d5fd78f317fa382214aa3c5a441e1a790100374e research-agent <agent@local> 1792136042 +0000	commit: Phase 6 findings and 2D selection
+d5fd78f317fa382214aa3c5a441e1a790100374e e7e4ae90d8cf48a3ee0fef79fed4ab7e90bb1324 research-agent <agent@local> 1792136612 +0000	commit: Phase 7: P2 problem, 2D evaluator, 2D FEM (gradient bug fixed+regression test), 2D formulations, Gate 1/3 for P2
+e7e4ae90d8cf48a3ee0fef79fed4ab7e90bb1324 dc030765fe93b3b5353079ac69b7eabf35f7f17e research-agent <agent@local> 1792139929 +0000	commit: P2 sweep partial (61 runs)
+dc030765fe93b3b5353079ac69b7eabf35f7f17e 7c19d323c783989d03156a0b3fd452ad2d88f3d9 research-agent <agent@local> 1792141795 +0000	commit: P2 full-contrast sweep complete (165 runs)
+7c19d323c783989d03156a0b3fd452ad2d88f3d9 4ed169a8c7038a78bd82359e2c7237fb1d4b8a28 research-agent <agent@local> 1792143314 +0000	commit: Phase 7 complete: P2 sweep, analysis, FEM records, bug checks
+4ed169a8c7038a78bd82359e2c7237fb1d4b8a28 8561d552c60c664d0f3990526ff1a61c1d52242a research-agent <agent@local> 1792143624 +0000	commit: P3 setup (pre-run): problem, matsub variant, FEM interface load, selftests
+8561d552c60c664d0f3990526ff1a61c1d52242a bc80d8f918a31b90be553c03c53952d71dbbfada research-agent <agent@local> 1792143653 +0000	commit: P3: matsub flux sign fix, gate-3 tests for P3, runner --problem-class
+bc80d8f918a31b90be553c03c53952d71dbbfada 9961b1b1d3601152fd43c3afcc34c9742cdede2c research-agent <agent@local> 1792143942 +0000	commit: fix: AOT cache keyed on data shapes (P3 boundary split varies by seed)
+9961b1b1d3601152fd43c3afcc34c9742cdede2c 41ee65a96a3ad0b24b7b745a2d4ae8f00f8340b6 research-agent <agent@local> 1792145826 +0000	commit: P3 sweep partial
+41ee65a96a3ad0b24b7b745a2d4ae8f00f8340b6 a2a17de04b6017578a61c8b690d38a846ae5720b research-agent <agent@local> 1792148394 +0000	commit: P3 full grid + partial reduced
+a2a17de04b6017578a61c8b690d38a846ae5720b 54b5c120d57a401e46a4c493b645d9dca04b3e26 research-agent <agent@local> 1792149361 +0000	commit: Phase 8 complete: P3 sweeps, sensitivity variant, analysis, FEM
+54b5c120d57a401e46a4c493b645d9dca04b3e26 3d0100c807751114728df7f7ddd94e719b68f9bd research-agent <agent@local> 1792149555 +0000	commit: Phase 9 setup: P4 corner problem, exact singular reference, corner metrics, selftests
+3d0100c807751114728df7f7ddd94e719b68f9bd 2c243b6b4be201f5b07140676cb856aabdbd7b58 research-agent <agent@local> 1792150017 +0000	commit: P4 partial
+2c243b6b4be201f5b07140676cb856aabdbd7b58 a85c33da2665ca5ca9c83498b4484a1ca3a01f52 research-agent <agent@local> 1792150626 +0000	commit: P4 partial
+a85c33da2665ca5ca9c83498b4484a1ca3a01f52 485e58bd14cce7bc5a60579fa56884cea9c2c64a research-agent <agent@local> 1792152849 +0000	commit: P4 partial
+485e58bd14cce7bc5a60579fa56884cea9c2c64a 32fffe817fd11cc1d2420031b342e08d1d0289e5 research-agent <agent@local> 1792154678 +0000	commit: P4 full grid + partial reduced
+32fffe817fd11cc1d2420031b342e08d1d0289e5 10ad43a2e3277cffe737764c995831848335b8a7 research-agent <agent@local> 1792155743 +0000	commit: Phase 9 complete: P4 corner sweeps, regression, FEM, H10 analysis
+10ad43a2e3277cffe737764c995831848335b8a7 ee9d13f4bbe612290c71238774dbc5ca1519f600 research-agent <agent@local> 1792157517 +0000	commit: Phase 10 setup: P5 film, graded FEM, slab check, reference convergence
+ee9d13f4bbe612290c71238774dbc5ca1519f600 c220ffceeab515bc5ce42998f58dc6a5f4b402fd research-agent <agent@local> 1792157744 +0000	commit: Phase 10: P5 selftests (reference-aware), thin-film convergence, references built
+c220ffceeab515bc5ce42998f58dc6a5f4b402fd bda38c9634f15d1f5968914ac71977bbee12f7a5 research-agent <agent@local> 1792157758 +0000	commit: add configs/p5.yaml
+bda38c9634f15d1f5968914ac71977bbee12f7a5 2beb8dfca3fab9ffd3266ed01f7197d2f4a5782b research-agent <agent@local> 1792158038 +0000	commit: P5 partial
+2beb8dfca3fab9ffd3266ed01f7197d2f4a5782b d941b26f63259b1a250bbcab3d3496526ae9eb96 research-agent <agent@local> 1792160477 +0000	commit: P5 partial
+d941b26f63259b1a250bbcab3d3496526ae9eb96 ff5c662c2b1bfd73f5f841466fac2ad19828477d research-agent <agent@local> 1792162502 +0000	commit: P5 full grid + partial reduced
+ff5c662c2b1bfd73f5f841466fac2ad19828477d 6a2b765f612e0dccc70020e85c718a525e57dcfe research-agent <agent@local> 1792164416 +0000	commit: P5 reduced, regression, thickness partial
+6a2b765f612e0dccc70020e85c718a525e57dcfe 129f39b7c21a31d8529fb997f3180cdaf76dc370 research-agent <agent@local> 1792166576 +0000	commit: P5 thickness + density partial
+129f39b7c21a31d8529fb997f3180cdaf76dc370 59deb5724a1285e7a81b9c175869353e37798bcd research-agent <agent@local> 1792167303 +0000	commit: Phase 10 complete: P5 sweeps, thickness/density studies, analysis; cross-problem hypothesis status
+59deb5724a1285e7a81b9c175869353e37798bcd d7b8759b2fb07743869a22baca9b48bc0961ea92 research-agent <agent@local> 1792167647 +0000	commit: Handover document, environment setup and reference rebuild scripts
+d7b8759b2fb07743869a22baca9b48bc0961ea92 ab9383ad6144816c3e06590963504983fb6c79d8 research-agent <agent@local> 1792168279 +0000	commit: Phase 11 start: environment re-verified (pytest 121, Gate1 98/98, 2D 17/17 x4)
+ab9383ad6144816c3e06590963504983fb6c79d8 6397aa9e8789a54dce49d9a1ba3f47d1587a6217 research-agent <agent@local> 1792168901 +0000	commit: Phase 11: interventions A/B/E code, F1norm/F2norm, tests, runner --max-seconds; operationalisation logged (v1.6.0) before runs
+6397aa9e8789a54dce49d9a1ba3f47d1587a6217 c179f4c5768f6648d3d4590f76d47da79dc0b761 research-agent <agent@local> 1792169685 +0000	commit: Phase 11 partial: baseline seeds 5-9 (135), A_rebal 37/120
+c179f4c5768f6648d3d4590f76d47da79dc0b761 abdb4f35e5004f3579bffc210e6461e387802ff5 research-agent <agent@local> 1792169880 +0000	commit: A kappa=1 investigation: verified against independent reference; regression test
+abdb4f35e5004f3579bffc210e6461e387802ff5 c6082af807898ab4b4e1b2da5c5f6389f6c96b1f research-agent <agent@local> 1792170310 +0000	commit: A complete (120)
+c6082af807898ab4b4e1b2da5c5f6389f6c96b1f e604fe3863815b0265d646c47b611524ba390fd1 research-agent <agent@local> 1792170683 +0000	commit: B complete
+e604fe3863815b0265d646c47b611524ba390fd1 845060bccbfd08971e15715e5acb79c6b32588fe research-agent <agent@local> 1792170869 +0000	commit: D complete
+845060bccbfd08971e15715e5acb79c6b32588fe b4357b9a6b86433e009c89f9e2008a5a67e7c66c research-agent <agent@local> 1792171382 +0000	commit: C replica partial
+b4357b9a6b86433e009c89f9e2008a5a67e7c66c 6d978bbf42355b2a54f3e3719e94fd53f12e3076 research-agent <agent@local> 1792171994 +0000	commit: C replica partial (122/180)
+6d978bbf42355b2a54f3e3719e94fd53f12e3076 687d1de718206cedd3ded341e71f4cf8bf2e24c5 research-agent <agent@local> 1792172260 +0000	commit: C replica complete
+687d1de718206cedd3ded341e71f4cf8bf2e24c5 8fb0b6d6629e9acbd5eeddd2076cdbf773bbe343 research-agent <agent@local> 1792172528 +0000	commit: C Adam-f64 complete; E started
+8fb0b6d6629e9acbd5eeddd2076cdbf773bbe343 9348ccc3efb436215b603cc3d1d5fca45b33b2cf research-agent <agent@local> 1792173020 +0000	commit: E_lbfgs complete
+9348ccc3efb436215b603cc3d1d5fca45b33b2cf ad52912d57ed437964479deac43e82d686cfaa0f research-agent <agent@local> 1792173456 +0000	commit: E hybrid
+ad52912d57ed437964479deac43e82d686cfaa0f 4d61ecb2f0d3ee144d4a4a89c917803e70318d6b research-agent <agent@local> 1792173719 +0000	commit: C lbfgs f64 partial
+4d61ecb2f0d3ee144d4a4a89c917803e70318d6b 109968e648e24f5a0354154da775a12da27af525 research-agent <agent@local> 1792174617 +0000	commit: C lbfgs f64 35/60
+109968e648e24f5a0354154da775a12da27af525 f3ec18ee6da85cd303499da8a8e43cc40e049b9f research-agent <agent@local> 1792174869 +0000	commit: Phase 11 runs complete
+f3ec18ee6da85cd303499da8a8e43cc40e049b9f bef801f5b44a1f55c194a142131e5c15621a530a research-agent <agent@local> 1792175170 +0000	commit: BUG FIX: float64 init now equals float32 init (Intervention C confound); regression tests; investigations logged; analysis v1
+bef801f5b44a1f55c194a142131e5c15621a530a 61e898b62fedd8735526e8c92632bee8c9b4b763 research-agent <agent@local> 1792175432 +0000	commit: C v2 partial
+61e898b62fedd8735526e8c92632bee8c9b4b763 45802cb941c4539b1a9db739df8b492830045798 research-agent <agent@local> 1792175691 +0000	commit: C v2 partial
+45802cb941c4539b1a9db739df8b492830045798 05d9e186825298078056aaeee853ec23f162867c research-agent <agent@local> 1792175995 +0000	commit: C v2 140/270
+05d9e186825298078056aaeee853ec23f162867c a06683c356c2842ee36476f37a453f7d59deeaea research-agent <agent@local> 1792176346 +0000	commit: C v2 Adam
+a06683c356c2842ee36476f37a453f7d59deeaea d8c757d699c24357509b3f0e520383d5e96e80e6 research-agent <agent@local> 1792176620 +0000	commit: C v2 lbfgs partial
+d8c757d699c24357509b3f0e520383d5e96e80e6 4efd09325578f17d204e75bce43d9df94f03ae69 research-agent <agent@local> 1792176884 +0000	commit: C v2 lbfgs partial
+4efd09325578f17d204e75bce43d9df94f03ae69 af7371db76473adcc9a4fdf525b02e17f6843970 research-agent <agent@local> 1792177106 +0000	commit: C v2 reruns complete (270)
+af7371db76473adcc9a4fdf525b02e17f6843970 ffa635823ee4c9abc36f8509a4db62cc59c56887 research-agent <agent@local> 1792177669 +0000	commit: Phase 11 complete: C reruns after init bug fix, analysis, figures, findings; tests 161/161
+ffa635823ee4c9abc36f8509a4db62cc59c56887 773b41e57895c201d5d13ad15ea93985a5d5c137 research-agent <agent@local> 1792211495 +0000	commit: Phase 12: extra band points, tests, operationalisation logged before runs
+773b41e57895c201d5d13ad15ea93985a5d5c137 c1496a131730ce3f8028add66d498a0556056799 research-agent <agent@local> 1792211754 +0000	commit: robustness partial
+c1496a131730ce3f8028add66d498a0556056799 0b788dd4ffded1e2c33ae4aa56ed5950289eedfe research-agent <agent@local> 1792212020 +0000	commit: robustness partial
+0b788dd4ffded1e2c33ae4aa56ed5950289eedfe 9a4fc1aa8af5d3811129ec3de86ef3748bc193b2 research-agent <agent@local> 1792212279 +0000	commit: robustness partial
+9a4fc1aa8af5d3811129ec3de86ef3748bc193b2 361807203a71cc4be1a3272c0c2679682db84918 research-agent <agent@local> 1792212541 +0000	commit: robustness partial
+361807203a71cc4be1a3272c0c2679682db84918 5cf31ccd16f3f145a9dd3420ab86ae2afa636d22 research-agent <agent@local> 1792212801 +0000	commit: robustness partial
+5cf31ccd16f3f145a9dd3420ab86ae2afa636d22 c5bd5d4398d2088cfc2a55ac94a9b30be13e6ede research-agent <agent@local> 1792213065 +0000	commit: robustness partial; driver skips complete variants
+c5bd5d4398d2088cfc2a55ac94a9b30be13e6ede b11b9c650346d32c6afcaadfe2b5ef88ba8c3f88 research-agent <agent@local> 1792213341 +0000	commit: robustness partial (532/855)
+b11b9c650346d32c6afcaadfe2b5ef88ba8c3f88 3f03239242ec840afef09dd6dc8196909dd2bba9 research-agent <agent@local> 1792213553 +0000	commit: robustness partial
+3f03239242ec840afef09dd6dc8196909dd2bba9 def1dba42733cb6fb2fa6eaf7d205e2a48cd763e research-agent <agent@local> 1792213819 +0000	commit: robustness partial
+def1dba42733cb6fb2fa6eaf7d205e2a48cd763e 14c40a58fb29130b30a7025286ed6995cc4f76d2 research-agent <agent@local> 1792214123 +0000	commit: robustness partial; analysis module
+14c40a58fb29130b30a7025286ed6995cc4f76d2 cac6e1d55272d8ac8c1f39386aa2c68f40ca9ce2 research-agent <agent@local> 1792214389 +0000	commit: robustness partial
+cac6e1d55272d8ac8c1f39386aa2c68f40ca9ce2 52d0b32efef5d504765c954e080fedf5a018b27a research-agent <agent@local> 1792214658 +0000	commit: robustness partial
+52d0b32efef5d504765c954e080fedf5a018b27a 7dbf41823315f1dc31280e2a2268884dd931ee49 research-agent <agent@local> 1792214931 +0000	commit: robustness partial
+7dbf41823315f1dc31280e2a2268884dd931ee49 45ba8874e70c02113918e9f7ebeb7eb8fc01adf2 research-agent <agent@local> 1792215263 +0000	commit: robustness 768/855
+45ba8874e70c02113918e9f7ebeb7eb8fc01adf2 5bb81099bc9c0a352ab67912f2cfa200f9185ec9 research-agent <agent@local> 1792215488 +0000	commit: robustness partial
+5bb81099bc9c0a352ab67912f2cfa200f9185ec9 cbc757343afdbe0893c28d7c95d76bab054e2ab6 research-agent <agent@local> 1792215760 +0000	commit: robustness partial
+cbc757343afdbe0893c28d7c95d76bab054e2ab6 e2ade03a433ba1abcca955a6dbce770f8ee38a39 research-agent <agent@local> 1792216049 +0000	commit: robustness partial
+e2ade03a433ba1abcca955a6dbce770f8ee38a39 99c26651c6b143a7e0a5941367a501f19aa2184c research-agent <agent@local> 1792216328 +0000	commit: robustness partial
+99c26651c6b143a7e0a5941367a501f19aa2184c 7dd52a006d1650f8dfe011ad738057e6673a3098 research-agent <agent@local> 1792216487 +0000	commit: Phase 12 runs complete (855)
+7dd52a006d1650f8dfe011ad738057e6673a3098 e493b162537c7954656641af3031c3790ad5b89d research-agent <agent@local> 1792216591 +0000	commit: BUG FIX: F5 energy quadrature weights with extra band points; regression tests; logged
+e493b162537c7954656641af3031c3790ad5b89d 6828b34801ae2d1ead5113e26cc89b1dae155a9d research-agent <agent@local> 1792217268 +0000	commit: Phase 12 complete: F5 band reruns, analysis, figures, findings; handover updated; tests 166/166
+6828b34801ae2d1ead5113e26cc89b1dae155a9d 398f93b81600e486cb55b3a8adedfc0381c00db2 research-agent <agent@local> 1792217365 +0000	commit: Phase 13 design frozen before runs
+398f93b81600e486cb55b3a8adedfc0381c00db2 cf9182957690c2ee8bbe5ef46a0f8f7b96430373 research-agent <agent@local> 1792217452 +0000	commit: Phase 13: 2D L-BFGS remedy path, string overrides, tests
+cf9182957690c2ee8bbe5ef46a0f8f7b96430373 29c1644530ba4b77b17083fe66e6328706b30daf research-agent <agent@local> 1792217785 +0000	commit: remedy runs 8/110
+29c1644530ba4b77b17083fe66e6328706b30daf a7b7b8058cfcbd1271861ffafc31cd7743a9e8b1 research-agent <agent@local> 1792218006 +0000	commit: remedy partial
+a7b7b8058cfcbd1271861ffafc31cd7743a9e8b1 46bd1dadba56cfffab5e129a9b05f9589c3c0ed0 research-agent <agent@local> 1792218265 +0000	commit: remedy partial
+46bd1dadba56cfffab5e129a9b05f9589c3c0ed0 d5b65cd8b3b94366d1da847b8663efc263977f59 research-agent <agent@local> 1792218555 +0000	commit: remedy partial
+d5b65cd8b3b94366d1da847b8663efc263977f59 eb722722db8ef1fb991fb9dbe80b24938f3e7022 research-agent <agent@local> 1792218837 +0000	commit: remedy partial
+eb722722db8ef1fb991fb9dbe80b24938f3e7022 8d1e8668fd70e3f4c045ac9dcc6dcad22b1902cb research-agent <agent@local> 1792219151 +0000	commit: remedy partial; analysis module
+8d1e8668fd70e3f4c045ac9dcc6dcad22b1902cb ed1c59634ecc6400c34c2084076e6bda567a6f6c research-agent <agent@local> 1792219435 +0000	commit: remedy partial
+ed1c59634ecc6400c34c2084076e6bda567a6f6c 81fcdfd47a869fa5c354c2ea9b5a1134e8e3255f research-agent <agent@local> 1792219715 +0000	commit: remedy runs 65/110
+81fcdfd47a869fa5c354c2ea9b5a1134e8e3255f 1830b0fa7f25c41d81fee623fa2e9345a65ea5d9 research-agent <agent@local> 1792219917 +0000	commit: remedy partial
+1830b0fa7f25c41d81fee623fa2e9345a65ea5d9 a7ecaaf3b88851acf21767d039f7473a2feffb40 research-agent <agent@local> 1792220193 +0000	commit: remedy partial
+a7ecaaf3b88851acf21767d039f7473a2feffb40 44174a0b98efab4bdc0c2736a31fe787bc2ddde7 research-agent <agent@local> 1792220474 +0000	commit: remedy partial
+44174a0b98efab4bdc0c2736a31fe787bc2ddde7 0b1dfdf21f4240b5d6fc602d53eed21374d8f028 research-agent <agent@local> 1792220795 +0000	commit: P5 lbfgs done; driver margin for 20k runs
+0b1dfdf21f4240b5d6fc602d53eed21374d8f028 718be6287be35a655ea28df4260ec97aa44328f3 research-agent <agent@local> 1792220959 +0000	commit: adam20k partial
+718be6287be35a655ea28df4260ec97aa44328f3 438007d2061be8625676353de1e9b151b2953dde research-agent <agent@local> 1792221119 +0000	commit: adam20k partial
+438007d2061be8625676353de1e9b151b2953dde 19781600a18199fe77560f9e07f09f9bf73ca33a research-agent <agent@local> 1792221276 +0000	commit: adam20k partial
+19781600a18199fe77560f9e07f09f9bf73ca33a 4e69523413cf85e1efc5395fd7ef7a35292075dc research-agent <agent@local> 1792221431 +0000	commit: adam20k partial
+4e69523413cf85e1efc5395fd7ef7a35292075dc bdb450d851e435056c9025b9a51c2fa1a8910f81 research-agent <agent@local> 1792222140 +0000	commit: remedy 95/110
+bdb450d851e435056c9025b9a51c2fa1a8910f81 7cff89b7756c88aabe88523c6197ab89c27dcb4b research-agent <agent@local> 1792222318 +0000	commit: adam20k
+7cff89b7756c88aabe88523c6197ab89c27dcb4b 1287c8cd8492987e7dc0c50d6e97aec6aee27e05 research-agent <agent@local> 1792222470 +0000	commit: adam20k
+1287c8cd8492987e7dc0c50d6e97aec6aee27e05 04df0be8deef2d39bb226dc2b617f5513cf457b6 research-agent <agent@local> 1792222621 +0000	commit: adam20k
+04df0be8deef2d39bb226dc2b617f5513cf457b6 4635814a176dee299d3cdd11db87e706e5599dca research-agent <agent@local> 1792222771 +0000	commit: adam20k P2 done
+4635814a176dee299d3cdd11db87e706e5599dca d5aeb8a2db136d5eafb05b939d4c7f94d31cfa10 research-agent <agent@local> 1792222929 +0000	commit: adam20k
+d5aeb8a2db136d5eafb05b939d4c7f94d31cfa10 f6d00c833b3eaeeca7609d961e44a9550ff58e15 research-agent <agent@local> 1792222954 +0000	commit: analysis: logging-resolution bounds for time-to-target
+f6d00c833b3eaeeca7609d961e44a9550ff58e15 1fb5c4baf65362dad13f00b3ed0fe2027d2347be research-agent <agent@local> 1792223115 +0000	commit: log resolution addition
+1fb5c4baf65362dad13f00b3ed0fe2027d2347be cfd1bcc5cf02bfb8f4cbd22274011c1a65a05964 research-agent <agent@local> 1792223278 +0000	commit: adam20k
+cfd1bcc5cf02bfb8f4cbd22274011c1a65a05964 724e67023c6f3fc607dcaf3451f4028941abe236 research-agent <agent@local> 1792223436 +0000	commit: adam20k
+724e67023c6f3fc607dcaf3451f4028941abe236 d2c1a90f214eca2c7870e689c57c0482c3340da5 research-agent <agent@local> 1792223682 +0000	commit: remedy 105/110
+d2c1a90f214eca2c7870e689c57c0482c3340da5 3f2a657e293f5fe71ceb3e89d789da4faa01c450 research-agent <agent@local> 1792223854 +0000	commit: adam20k
+3f2a657e293f5fe71ceb3e89d789da4faa01c450 3cb531efaf69d61a16d4eede6074942c01696e44 research-agent <agent@local> 1792224010 +0000	commit: adam20k
+3cb531efaf69d61a16d4eede6074942c01696e44 ce538b699dd69018a33917b67eafb76708fda272 research-agent <agent@local> 1792224166 +0000	commit: adam20k
+ce538b699dd69018a33917b67eafb76708fda272 0570ed9f27337d3593380de758190cae0577c34b research-agent <agent@local> 1792224322 +0000	commit: adam20k
+0570ed9f27337d3593380de758190cae0577c34b 07e20d9f924f830cfa1bdd586e129911870c3589 research-agent <agent@local> 1792224481 +0000	commit: Phase 13 runs complete (110)
+07e20d9f924f830cfa1bdd586e129911870c3589 aa1060f556d20b1b73e80e3a433dcc0491b00458 research-agent <agent@local> 1792224562 +0000	commit: Phase 13 analysis, figure fix, findings
+aa1060f556d20b1b73e80e3a433dcc0491b00458 87bb686a7c2386c34e94131528ba67203f2dcee9 research-agent <agent@local> 1792225032 +0000	commit: Phase 13 complete: H7 analysis, findings, handover; tests 168/168
+87bb686a7c2386c34e94131528ba67203f2dcee9 9ac8afff1a97dbd2332fa5c470b6e3a11ea458af research-agent <agent@local> 1792225886 +0000	commit: Phase 14: final_figures module, make_all pipeline
+9ac8afff1a97dbd2332fa5c470b6e3a11ea458af 4671e15db3d4180813b17184a24035b0c4b9b9a2 research-agent <agent@local> 1792226022 +0000	commit: make_all verified against committed outputs; p2 FEM filter bug fixed; deterministic key order
+4671e15db3d4180813b17184a24035b0c4b9b9a2 8930f428b5218a11cc57664efeabca4b0c0c2e11 research-agent <agent@local> 1792226442 +0000	commit: figure labels: colorbars, units
+8930f428b5218a11cc57664efeabca4b0c0c2e11 b526e8877352e718a95d6eec32c274cc5361d492 research-agent <agent@local> 1792226476 +0000	commit: H9 assessment
+b526e8877352e718a95d6eec32c274cc5361d492 554442adc0db5cddbc94316fb5c4896f83543d52 research-agent <agent@local> 1792226516 +0000	commit: references: 3 VERIFY entries resolved from publisher pages; 2 marked UNRESOLVED
+554442adc0db5cddbc94316fb5c4896f83543d52 203d7592686547d2dd1cbc660a4859bb7bccfe7c research-agent <agent@local> 1792226633 +0000	commit: bib: precision papers L31/L32
+203d7592686547d2dd1cbc660a4859bb7bccfe7c f4184c4fab57ee793ed1b91a1863876cf5a7f9b9 research-agent <agent@local> 1792226771 +0000	commit: Manuscript draft v1 (paper.md); verified run counts
+f4184c4fab57ee793ed1b91a1863876cf5a7f9b9 a3e1c461334e3dbefd06e8382f90bcfaa82ded16 research-agent <agent@local> 1792226777 +0000	commit: paper: precise run-count wording
+a3e1c461334e3dbefd06e8382f90bcfaa82ded16 eb045b1e3e8b431046961ec9145af8e60e2c2885 research-agent <agent@local> 1792226882 +0000	commit: Reproduction guide, README, requirements
+eb045b1e3e8b431046961ec9145af8e60e2c2885 284ae9d7226fd8f414eb6b5e9d8acb443642c457 research-agent <agent@local> 1792226957 +0000	commit: Tutorial (from actual results), companion script, final acceptance checklist
+284ae9d7226fd8f414eb6b5e9d8acb443642c457 5a8b51d12b8f413d1ca1d8b80992f23b9fc6e161 research-agent <agent@local> 1792227426 +0000	commit: Phase 14 complete: all deliverables; tests 169/169
